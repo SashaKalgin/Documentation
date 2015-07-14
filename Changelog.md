@@ -1,17 +1,10 @@
-# Change log for v2.0
+# Changelog for Version 2.0
+## Major Changes in this Release
+- This is a major version release, breaking API compatibility in some cases
+- Major refactoring and addition of a new extensible API that makes it easier to add features
+- Maintains full interoperability with v1.x (legacy clients are not forced to upgrade)
 
-Changes in this release:
-
-Features:
-=========
-Support for plugins – effects, sources and sinks
-
-Hardware accelerated video on iOS and lower CPU usage
-
-Better audio quality and lower end to end delay
-
-overall changes:
-================
-Major release – breaking API compatibility, (New extensible API that would allow to add more feature)
-Full backward compatibility (in terms of 1.5 – 2.0 interoperability), (not requiered force upgrade to old clients)
-
+## Features
+- Added framework to support video plugins – filters, effects, sources and sinks
+- Hardware accelerated video on iOS and lower CPU usage
+- Greatly improved audio quality and lower end to end delay
