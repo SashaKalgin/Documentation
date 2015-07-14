@@ -105,17 +105,23 @@ Build it for your simulator or your connected device and run it.
 
 To authenticate, you can either pre-populate the `LoginParameters.h` file with your credentials or insert them in the app settings.
 
-![enter image description here](https://code.oovoo.com/native/docs/ios/5_sample.png)
+![enter image description here](https://code.oovoo.com/native/docs/ios/ios_sample/10.png)
 
 •    **"App Token"** – Created by you for your App in the developer portal. Pay special attention when pasting this as there are often copy/paste issues.
 
-Now go back to your home page and run the app. Fill in:
+Now go back to your home page and run the app. Fill in your user ID and click login:
 
-![enter image description here](https://code.oovoo.com/native/docs/ios/6_sample.png)
+![enter image description here](https://code.oovoo.com/native/docs/ios/ios_sample/6.jpg)
+
+Fill in your conference ID and Display name:
+
+![enter image description here](https://code.oovoo.com/native/docs/ios/ios_sample/7.jpg)
 
 •    **"Conference ID"** – the name of the ooVoo video conference you want to join. If this is a new name under a specific Application ID a new conference will be created and you will be the first participant in the conference. To have other "ooVooSample" app users to join the conference, simply have them enter the same Conference ID string.
 
 Hit the **"Join"** button and enjoy!
+
+![enter image description here](https://code.oovoo.com/native/docs/ios/ios_sample/8.jpg)
 
 ## Developing With the iOS SDK
 > Note: Check out our new developer portal and dashboard at [http://developer.oovoo.com](http://developer.oovoo.com). There you can generate AppIDs, tokens and track usage statistics. **Beginning v2.0, existing AppIDs created prior to v2.0, that now wish to upgrade to v2.0, must generate a new token in the dashboard for use with the new version of the SDK.**
