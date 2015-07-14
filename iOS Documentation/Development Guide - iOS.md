@@ -127,9 +127,8 @@ In ooVoo a video call is named as _"conference"_. Each conference is identified 
 The ooVoo SDK uses completion block extensively to notify your application to just about everything that is happening when exercising the functionalities provided by the SDK. For some of asyncronous events it is not possible so we provide you with protocols you need to implement and register with ooVoo SDK so it can notify you.
 
 ```objective-c
-    ...
-    self.sdk.AVChat.delegate = self;
-    self.sdk.Account.delegate = self;
+self.sdk.AVChat.delegate = self;
+self.sdk.Account.delegate = self;
 ```
 
 ## How do I initialize ooVoo SDK?
@@ -205,33 +204,26 @@ Other participants in the conference will also get notified that a new user, ide
     }};
 ```
 
-```
-If audio was inited successfull the means that audio capture and playback activated on the device and you will see     red panel on top of device if your application goes to backround
-```
+If audio was inited successful the means that audio capture and playback activated on the device and you will see a red panel on top of device if your application goes to background.
 
 ## How can I configure the audio mode (i.e. Enable audio only calls)?
    General difference between voice only and video chat mode are initial audio route direction.    For audio only conference the audio route on start set to earpice or one from headphones or bluetooth if the accessories    are connected to device. For video chat mode the initial audio route set to speakers or one from headphones or bluetooth     if the accessories are connected to the device.
 
-````
 ```objective-c
-````
-
    [sdk.AVChat.AudioController setConfig:OOVOOAudioModeVoiceChat forKey:ooVooAudioControllerConfigKeyAudioSetMode];
+```
 
-````
 ## How do I use the VideoPanel object?
-  The `VideoPanel` object is our implementation for rendering a video stream for a participant, it is subclass of `UIView`.
-  You can construct your own look and feel for by inheritance or aggregation of the object.
+  The `VideoPanel` object is our implementation for rendering a video stream for a participant, it is subclass of `UIView`.   You can construct your own look and feel for by inheritance or aggregation of the object.
 
 ## How do I display my local preview video in my app?
-
 There are separate API calls to turn the camera on/off, for preview control and video transmission. See below. In order to display preview you must turn on camera first.
 
 ```objective-c
     @property (retain, nonatomic) ooVooClient* sdk;
     self.sdk = [ooVooClient sharedInstance];
     [self.sdk.AVChat.VideoController openCamera];
-````
+```
 
 Once you receive the proper notification that the camera has started (see diagram below) you can now call:
 
@@ -264,9 +256,7 @@ To stop the camera call:
     [self.sdk.AVChat.VideoController closeCamera];
 ```
 
-This will stop preview too if it was displayed – you will also get notified about that. <!--The sequence diagram below describes how to create video preview.
-
-![enter image description here](https://code.oovoo.com/native/docs/ios/7_flow.png) -->
+This will stop preview too if it was displayed – you will also get notified about that. <!--The sequence diagram below describes how to create video preview.--> <!--![enter image description here](https://code.oovoo.com/native/docs/ios/7_flow.png)-->
 
 ## How do I start/stop sending my audio and video streams to a conference?
 There are separate API calls to turn the camera on/off, for preview control and video transmission. See below. When you are in a conference, you can decide whether to send your own AV streams into the current conference. Other participants in the conference will get notification when your AV stream becomes available or unavailable.
@@ -315,9 +305,7 @@ To **stop** receiving a participant's video stream:
 ```
 
 ## How do I display a remote participant’s video in my app?
-To display a participant's video stream you should follow the same procedure as described in the previous section for displaying the preview video, with the only difference being that you should receive a participant id in the `OOVOOParticipantDidJoinNotification` notification you receive when a remote participant has connected to the conference.  You should connect this participant id to the desired `ooVooVideoRender` object. <!--See the sequence diagram bellow.
-
-![enter image description here](https://code.oovoo.com/native/docs/ios/9_flow2.png) -->
+To display a participant's video stream you should follow the same procedure as described in the previous section for displaying the preview video, with the only difference being that you should receive a participant id in the `OOVOOParticipantDidJoinNotification` notification you receive when a remote participant has connected to the conference.  You should connect this participant id to the desired `ooVooVideoRender` object.  <!--See the sequence diagram bellow.--> <!--![enter image description here](https://code.oovoo.com/native/docs/ios/9_flow2.png) -->
 
 ## Can I control the layout of the video windows?
 In general video rendering is handled by object created within the ooVoo SDK. It is then up to the developer to place this object in your app's UI with the desired location, aspect ratio and size.
