@@ -115,7 +115,7 @@ Table of Content <!-- TOC depth:6 withLinks:1 updateOnSave:1 -->
 
 ![enter image description here](https://CODE.OOVOO.COM/native/docs/android/Android_public_API_1.png)
 
-![enter image description here](https://CODE.OOVOO.COM/native/docs/android/Android_public_API_2.png)
+![enter image description here](https://CODE.OOVOO.COM/native/docs/android/Android_public_API_2.1.png)
 
 ![enter image description here](https://CODE.OOVOO.COM/native/docs/android/Android_public_API_3.png)
 
