@@ -3,7 +3,9 @@
 
 - [Eclipse Integration](#eclipse-integration)
 - [Android Studio Integration](#android-studio-integration)
-- <!-- /MarkdownTOC -->
+
+<!-- /MarkdownTOC -->
+
 
 
 # Eclipse Integration

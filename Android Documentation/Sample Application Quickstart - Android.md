@@ -6,7 +6,9 @@
   - [Android Studio](#android-studio)
   - [Eclipse](#eclipse)
   - [How do I build and run the ooVoo sample app included in the SDK download package in Eclipse?](#how-do-i-build-and-run-the-oovoo-sample-app-included-in-the-sdk-download-package-in-eclipse)
-  - <!-- /MarkdownTOC -->
+
+<!-- /MarkdownTOC -->
+
 
 
 ## What is included in the ooVoo Video Chat SDK for Android download package?

@@ -31,7 +31,8 @@
 - [How do I check if specific resolution level supported by all devices in call?](#how-do-i-check-if-specific-resolution-level-supported-by-all-devices-in-call)
 - [How do I check if specific resolution level supported by my device?](#how-do-i-check-if-specific-resolution-level-supported-by-my-device)
 - [How do I change the output device for audio playback?](#how-do-i-change-the-output-device-for-audio-playback)
-- <!-- /MarkdownTOC -->
+
+<!-- /MarkdownTOC -->
 
 
 ## What is included in the ooVoo Video Chat SDK for iOS download package?
