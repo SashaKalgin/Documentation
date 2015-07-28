@@ -9,7 +9,7 @@
 
 
 # Eclipse Integration
-> Important: Support for the Android Developer Tools (ADT) in Eclipse is ending, per [Google's announcement](http://android-developers.blogspot.com/2015/06/an-update-on-eclipse-android-developer.html). You should migrate your app development projects to Android Studio as soon as possible. For more information on transitioning to Android Studio, see [Migrating to Android Studio](http://developer.android.com/sdk/installing/migrate.html).
+> Important: Support for the Android Developer Tools (ADT) in Eclipse is ending, per [Google's announcement](http://android-developers.blogspot.com/2015q/06/an-update-on-eclipse-android-developer.html). You should migrate your app development projects to Android Studio as soon as possible. For more information on transitioning to Android Studio, see [Migrating to Android Studio](http://developer.android.com/sdk/installing/migrate.html).
 
 **Step #1**
 

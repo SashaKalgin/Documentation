@@ -106,6 +106,7 @@ Table of Contents
 		- [onTransmitStateChanged](#ontransmitstatechanged)
 		- [onVideoPreviewStateChanged](#onvideopreviewstatechanged)
 		- [onCameraChanged](#oncamerachanged)
+
 <!-- /TOC -->
 
 

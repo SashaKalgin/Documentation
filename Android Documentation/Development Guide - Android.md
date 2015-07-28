@@ -31,7 +31,8 @@
 - [How do I get list of video cameras on my device?](#how-do-i-get-list-of-video-cameras-on-my-device)
 - [How do I change camera from one to other ?](#how-do-i-change-camera-from-one-to-other-)
 - [How do I enable bluetooth audio ?](#how-do-i-enable-bluetooth-audio-)
-- <!-- /MarkdownTOC -->
+
+<!-- /MarkdownTOC -->
 
 
 ## How can I get an Application ID and Application Token?
