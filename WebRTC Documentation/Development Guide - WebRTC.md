@@ -40,7 +40,6 @@
 	- [Error Codes](#error-codes)
 	- [Server-to-Server Login](#server-to-server-login)
 
-
 <!-- /TOC -->
 
 ## Introduction
