@@ -628,7 +628,7 @@ private string GetUserToken()
         using(WebClient client = new WebClient())
         {  
           string origin = "YOUR APP DOMAIN"
-          string postUrl ="https://connect.dev.oovoo.com/1.0/sso/app/login?at={Your) App Token, (WEB type)} &ct=1&cst=2&sv=1.8&cv=0.2";
+          string postUrl ="https://connect.dev.oovoo.com/1.0/sso/app/login/s2s?at={Your App Token-(WEB type)} &ct=1&cst=2&sv=1.8&cv=0.2";
 
            string content = "{ \"payload\": { \"user_id\":'foofoo'} }";
            //request
