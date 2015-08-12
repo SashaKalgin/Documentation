@@ -635,9 +635,11 @@ AudioControllerListener | listener | The async listener which allows to set hand
 **Return a value: no result.**
 
 ## initAudio
+
 The method audio record/playback module. It's recommended to call this method before calling to join method.
 
 **Gets a parameters list:** 
+
 Type                    | Name     | Description
 ----------------------- | -------- | ------------------------------------------------------------------------------
 ooVooSdkResultListener | completion | The async listener which allows to get result on request.
