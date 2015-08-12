@@ -66,6 +66,7 @@ Table of Contents
 	- [setRecordMuted](#setrecordmuted)
 	- [setPlaybackMuted](#setplaybackmuted)
 	- [getAudioRouteController](#getaudioroutecontroller)
+	- [setAudioRouteMode](#setaudioroutemode)
 	- [AudioControllerListener](#audiocontrollerlistener)
 		- [onAudioTransmitStateChanged](#onaudiotransmitstatechanged)
 		- [onAudioReceiveStateChanged](#onaudioreceivestatechanged)
@@ -699,6 +700,20 @@ Type                 | Name | Description
 -------------------- | ---- | ----------------------------
 AudioRouteController | ---- | Returns audio route manager.
 
+##setAudioRouteMode
+The method allows to set audio route mode, exists two modes *AudioRouteModeVideoChat* and *AudioRouteModeVoiceChat*.
+
+*AudioRouteModeVoiceChat - audio will start with audio directed to earpiece.
+
+*AudioRouteModeVideoChat - audio will start with audio directed to speaker.
+
+**Gets a parameters list:**
+
+Type	       | Name      | Description
+-------------- | --------- | -----------------------------------------
+AudioRouteMode | mode 	   | This is mode for audio routes.
+
+**Return a value:** no result.
  
 
 ## AudioControllerListener
