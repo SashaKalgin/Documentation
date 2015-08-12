@@ -703,9 +703,9 @@ AudioRouteController | ---- | Returns audio route manager.
 ##setAudioRouteMode
 The method allows to set audio route mode, exists two modes *AudioRouteModeVideoChat* and *AudioRouteModeVoiceChat*.
 
-*AudioRouteModeVoiceChat - audio will start with audio directed to earpiece.
+*AudioRouteModeVoiceChat* - audio will start with audio directed to earpiece.
 
-*AudioRouteModeVideoChat - audio will start with audio directed to speaker.
+*AudioRouteModeVideoChat* - audio will start with audio directed to speaker.
 
 **Gets a parameters list:**
 
