@@ -597,7 +597,6 @@ Item | Description
 ---- | -----------------------------
 VoIP | This is a type Voice over IP.
 
-PSTN    This is a type Public Switched Telephone Network.
 
 ## getID
 The method allows to get participant ID in conference.
