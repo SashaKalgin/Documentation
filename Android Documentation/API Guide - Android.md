@@ -644,16 +644,6 @@ ooVooSdkResultListener | completion | The async listener which allows to get res
 
 **Return a value:** no result.
 
-## uninitAudio
-The method allows to stop the audio stream. It's recommended to call this method before to leave conference.
-
-**Gets a parameters list:** 
-Type                    | Name     | Description
------------------------ | -------- | ------------------------------------------------------------------------------
-ooVooSdkResultListener | completion | The async listener which allows to get result on request.
-
-**Return a value:** no result.
-
 ## isPlaybackMuted
 The method allows to check if playback current state of audio stream mute or unmute.
 
