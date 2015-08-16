@@ -47,6 +47,7 @@ Table of Contents
 	- [send](#send)
 	- [registerPlugin](#registerplugin)
 	- [isInCallMessagesPermit](#isincallmessagespermit)
+	- [getAvailableResolutions](#getavailableresolutions)
 	- [getVideoController](#getvideocontroller)
 	- [getAudioController](#getaudiocontroller)
 	- [AVChatListener](#avchatlistener)
@@ -518,6 +519,17 @@ The method allows to check if you can send a message via conference.
 Type            | Name | Description
 --------------- | ---- | ---------------------------------------------
 boolean		| ---- | Returns boolean value, if you can send a message.
+
+## getAvailableResolutions
+The method allows to get available a resolution list in current a call.
+
+**Gets a parameters list:** without parameters.
+
+**Return a value:**
+
+Type            			   | Name | Description
+------------------------------------------ | ---- | ---------------------------------------------
+ArrayList\<VideoController.ResolutionLevel\> | ---- | Returns a list resolutions. 
 
 ## getVideoController
 The method allows to get to video controller interface.
