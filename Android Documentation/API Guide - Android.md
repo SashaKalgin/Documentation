@@ -13,6 +13,8 @@ Table of Contents
 	- [getAVChat](#getavchat)
 	- [setContext](#setcontext)
 	- [isTablet](#istablet)
+	- [setSslPeerVerify](#setsslpeerverify)
+	- [isSslPeerVerify](#issslpeerverify)
 	- [authorizeClient](#authorizeclient)
 	- [setLogger](#setlogger)
 	- [setLogLevel](#setloglevel)
@@ -181,6 +183,30 @@ The static method allows to detect if this a device is tablet.
 Type        | Name | Description
 ----------- | ---- | --------------------------------------------------
 **boolean** | ---- | Returns Boolean value, if this a device is tablet.
+
+## setSslPeerVerify
+The native method allows to set checking for of a secure connection.
+An SSL certificate - a unique digital signature necessary for the organization of a secure connection between the client and the server.
+
+**Gets a parameters list:**
+
+Type        | Name | Description
+----------- | ---- | ------------------------
+**boolean** | state  | Define a secure connection.
+
+ **Return a value:** no result.
+ 
+## isSslPeerVerify
+ 
+ The native method allows to detect if this a connection used a SSL verification.
+
+**Gets a parameters list:** without parameters.
+
+**Return a value:**
+
+Type        | Name | Description
+----------- | ---- | --------------------------------------------------
+**boolean** | ---- | Returns Boolean value, if this a connection is a secure.
 
 ## authorizeClient
 The method allows to authorize access to ooVooClient SDK. This is async method, event will raised on main thread.
