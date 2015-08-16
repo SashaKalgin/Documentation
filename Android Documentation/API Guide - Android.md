@@ -46,6 +46,7 @@ Table of Contents
 	- [send](#send)
 	- [send](#send)
 	- [registerPlugin](#registerplugin)
+	- [isInCallMessagesPermit](#isincallmessagespermit)
 	- [getVideoController](#getvideocontroller)
 	- [getAudioController](#getaudiocontroller)
 	- [AVChatListener](#avchatlistener)
@@ -182,7 +183,7 @@ The static method allows to detect if this a device is tablet.
 
 Type        | Name | Description
 ----------- | ---- | --------------------------------------------------
-**boolean** | ---- | Returns Boolean value, if this a device is tablet.
+**boolean** | ---- | Returns boolean value, if this a device is tablet.
 
 ## setSslPeerVerify
 The native method allows to set checking for of a secure connection.
@@ -496,8 +497,6 @@ Type      | Name | Description
 --------- | ---- | -------------------------------
 sdk_error | ---- | Returns a status about sending.
 
- 
-
 ## registerPlugin
 The method allows to register a custom plugin implementation for use in AVChat.
 
@@ -508,6 +507,17 @@ Type          | Name   | Description
 PluginFactory | plugin | The interface allow transfer custom plugin implementation to our SDK
 
 **Return a value:** no result.
+
+## isInCallMessagesPermit
+The method allows to check if you can send a message via conference.
+
+**Gets a parameters list:** without parameters.
+
+**Return a value:**
+
+Type            | Name | Description
+--------------- | ---- | ---------------------------------------------
+boolean		| ---- | Returns boolean value, if you can send a message.
 
 ## getVideoController
 The method allows to get to video controller interface.
