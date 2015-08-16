@@ -48,6 +48,7 @@ Table of Contents
 	- [registerPlugin](#registerplugin)
 	- [isInCallMessagesPermit](#isincallmessagespermit)
 	- [getAvailableResolutions](#getavailableresolutions)
+	- [isResolutionSupported](#isresolutionsupported)
 	- [getVideoController](#getvideocontroller)
 	- [getAudioController](#getaudiocontroller)
 	- [AVChatListener](#avchatlistener)
@@ -530,6 +531,21 @@ The method allows to get available a resolution list in current a call.
 Type            			   | Name | Description
 ------------------------------------------ | ---- | ---------------------------------------------
 ArrayList\<VideoController.ResolutionLevel\> | ---- | Returns a list resolutions. 
+
+## isResolutionSupported
+The method allows to check, if this a resolution is supported.
+
+**Gets a parameters list:**
+
+Type          			| Name   | Description
+------------------------------- | ------ | --------------------------------------------------------------------
+VideoController.ResolutionLevel | level  | This is a resolution for checking.
+
+**Return a value:** 
+
+Type    | Name | Description
+------- | ---- | ---------------------------------------------
+boolean | ---- | Returns boolean value, If there is support for the requested resolution. 
 
 ## getVideoController
 The method allows to get to video controller interface.
