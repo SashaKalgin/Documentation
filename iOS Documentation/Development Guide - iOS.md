@@ -92,7 +92,7 @@ Do not forget to import additional frameworks used by ooVooSDK and provided by X
 Just add following line to your Podfile:
 
 ```objective-c
-    pod ‘ooVooSDK-iOS’, ~>‘2.0.0’
+    pod ‘ooVooSDK2’, ~>‘2.0’
 ```
 
 ## How do I build and run the ooVoo sample app included in the SDK download package?
