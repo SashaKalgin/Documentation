@@ -526,11 +526,9 @@ The method allows to get to video controller interface.
 
 **Return a value:**
 
-Type | Name | Description
----- | ---- | -----------
-     |      |
-
-VideoController    |----    |Returns the interface of a video controller.|
+Type		   | Name   | Description
+------------------ | ------ | -----------
+VideoController    |  ----  |Returns the interface of a video controller.|
 
 ## getAudioController
 The method allows to get to audio controller interface.
