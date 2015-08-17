@@ -183,7 +183,8 @@ To display preview you need to first create or add to xml layout com.oovoo.sdk.a
 
 Before you join a conference, you may call `openCamera()` method of `VideoController` interface to turn on your camera and then `OpenPreview()` to turn on the video preview. You may call `closeCamera()` to turn off preview.
 
-To assign view `com.oovoo.sdk.api.ui.VideoPanel` you call `bindPreviewRender("your_user_id",view)` method of `VideoController`. <!-- The sequence diagram below describes how to create video preview.-->
+To assign view `com.oovoo.sdk.api.ui.VideoPanel` you call `bindPreviewRender("your_user_id",view)` method of `VideoController`. 
+<!-- The sequence diagram below describes how to create video preview.-->
 
 ## How do I start/stop sending my audio and video streams to a conference?
 There are separate APIs to turn the camera on/off, preview control and video transmission. Please update your code accordingly as follows.
