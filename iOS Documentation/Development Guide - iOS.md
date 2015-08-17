@@ -263,7 +263,9 @@ To stop the camera call:
     [self.sdk.AVChat.VideoController closeCamera];
 ```
 
-This will stop preview too if it was displayed – you will also get notified about that. <!--The sequence diagram below describes how to create video preview.--> <!--![enter image description here](https://code.oovoo.com/native/docs/ios/7_flow.png)-->
+This will stop preview too if it was displayed – you will also get notified about that. 
+<!-- The sequence diagram below describes how to create video preview. 
+[enter image description here](https://code.oovoo.com/native/docs/ios/7_flow.png)-->
 
 ## How do I start/stop sending my audio and video streams to a conference?
 There are separate API calls to turn the camera on/off, for preview control and video transmission. See below. When you are in a conference, you can decide whether to send your own AV streams into the current conference. Other participants in the conference will get notification when your AV stream becomes available or unavailable.
@@ -312,7 +314,9 @@ To **stop** receiving a participant's video stream:
 ```
 
 ## How do I display a remote participant’s video in my app?
-To display a participant's video stream you should follow the same procedure as described in the previous section for displaying the preview video, with the only difference being that you should receive a participant id in the `OOVOOParticipantDidJoinNotification` notification you receive when a remote participant has connected to the conference.  You should connect this participant id to the desired `ooVooVideoRender` object.  <!--See the sequence diagram bellow.--> <!--![enter image description here](https://code.oovoo.com/native/docs/ios/9_flow2.png) -->
+To display a participant's video stream you should follow the same procedure as described in the previous section for displaying the preview video, with the only difference being that you should receive a participant id in the `OOVOOParticipantDidJoinNotification` notification you receive when a remote participant has connected to the conference.  You should connect this participant id to the desired `ooVooVideoRender` object.  
+<!--See the sequence diagram bellow.--> 
+<!--![enter image description here](https://code.oovoo.com/native/docs/ios/9_flow2.png)-->
 
 ## Can I control the layout of the video windows?
 In general video rendering is handled by object created within the ooVoo SDK. It is then up to the developer to place this object in your app's UI with the desired location, aspect ratio and size.
