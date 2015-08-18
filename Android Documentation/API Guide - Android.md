@@ -95,8 +95,6 @@ Table of Contents
 	- [startTransmit](#starttransmit)
 	- [stopTransmit](#stoptransmit)
 	- [isTransmited](#istransmited)
-	- [bindPriviewRender](#bindpriviewrender)
-	- [unbindPriviewRender](#unbindpriviewrender)
 	- [bindRender](#bindrender)
 	- [unbindRender](#unbindrender)
 	- [registerRemote](#registerremote)
@@ -993,28 +991,6 @@ The method allows to check if the video is transmitted at the moment.
 Type    | Name | Description
 ------- | ---- | -----------------------------------------------------
 boolean | ---- | Returns the boolean value about transmission a video.
-
-## bindPriviewRender
-The method allows to add a video stream from device, the video stream locally from camera of device.
-
-**Gets a parameters list:**
-
-Type         | Name   | Description
------------- | ------ | ---------------------------------------------------------
-IVideoRender | render | Defines the VideoView in which will be show video stream.
-
-**Return a value:** no result.  
-
-## unbindPriviewRender
-The method allows to remove a video stream from device, the video stream locally from camera of device.
-
-**Gets a parameters list:**
-
-Type         | Name   | Description
------------- | ------ | ------------------------------------------------------------
-IVideoRender | render | Defines the VideoView in which will be removed video stream.
-
-**Return a value:** no result.
 
 ## bindRender
 The method allows to add the specified video stream at a particular VideoView from a   particular user in conference.
