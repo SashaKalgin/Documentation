@@ -101,6 +101,7 @@ Table of Contents
 	- [unregisterRemote](#unregisterremote)
 	- [getDeviceList](#getdevicelist)
 	- [getEffectList](#geteffectlist)
+	- [sizeToResolutionLevel](#sizetoresolutionlevel)
 	- [VideoControllerListener](#videocontrollerlistener)
 		- [RemoteVideoState](#remotevideostate)
 		- [onAvailableResolutionInCallChanged](#onavailableresolutionincallchanged)
@@ -1060,6 +1061,22 @@ The method allows to get available effect list for video.
 Type             | Name | Description
 ---------------- | ---- | ----------------------------------------------
 `Array<IEffect>` | ---- | Returns array all available effects for video.
+
+## sizeToResolutionLevel
+The method allows to get the resolution level from size of video.
+
+**Gets a parameters list:**
+
+Type       | Name   | Description
+---------- | ----   | ------------------------------------------------------------------
+int 	   | width  | This is a width of video.
+int	   | height | This is a height of video.
+
+**Return a value:**
+
+Type             		| Name | Description
+------------------------------- | ---- | ----------------------------------------------
+VideoController.ResolutionLevel | ---- | Returns an enum of resolution level.
 
 
 ## VideoControllerListener
