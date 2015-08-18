@@ -1024,7 +1024,7 @@ The method allows to add the specified video stream at a particular VideoView fr
 Type             | Name   | Description
 ---------------- | ------ | -----------------------------------------------------------
 **String**       | uid    | Specifies the user ID to which belongs to the video stream.
-**IVideoRender** | render | Defines the VideoView in which will be show video stream.
+**VideoRender** | render | Defines the VideoView in which will be show video stream.
 
 **Return a value:** no result.
 
@@ -1036,7 +1036,7 @@ The method allows to remove the specific video stream at a particular VideoView 
 Type             | Name   | Description
 ---------------- | ------ | ------------------------------------------------------------
 **String**       | uid    | Specifies the user ID to which belongs to the video stream.
-**IVideoRender** | render | Defines the VideoView in which will be removed video stream.
+**VideoRender** | render | Defines the VideoView in which will be removed video stream.
 
 **Return a value:** no result.
 
