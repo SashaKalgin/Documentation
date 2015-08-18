@@ -101,7 +101,6 @@ Table of Contents
 	- [unregisterRemote](#unregisterremote)
 	- [getDeviceList](#getdevicelist)
 	- [getEffectList](#geteffectlist)
-	- [getAvailableResolutionInCall](#getavailableresolutionincall)
 	- [VideoControllerListener](#videocontrollerlistener)
 		- [RemoteVideoState](#remotevideostate)
 		- [onAvailableResolutionInCallChanged](#onavailableresolutionincallchanged)
@@ -1062,18 +1061,6 @@ Type             | Name | Description
 ---------------- | ---- | ----------------------------------------------
 `Array<IEffect>` | ---- | Returns array all available effects for video.
 
-## getAvailableResolutionInCall
-The method allows to get available resolution for video with respect to each device. All resolution which supported the device.
-
-**Gets a parameters list:** without parameters.
-
-**Return a value:**
-
-Type                               | Name | Description
----------------------------------- | ---- | --------------------------------------------------
-`ArrayList<CameraResolutionLevel>` | ---- | Returns array all available resolutions for video.
-
- 
 
 ## VideoControllerListener
 ### RemoteVideoState
