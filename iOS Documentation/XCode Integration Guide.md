@@ -184,5 +184,5 @@ Open `ViewController.h` file and add property `ooVooClient`:
 To have the SDK integrated into your project using Cocoapods just insert the following into your Podfile:
 
 ```ruby
-pod ‘ooVooSDK-iOS’, ~>‘2.0.0’
+pod ‘ooVooSDK-iOS’, ~>‘2.0’
 ```
