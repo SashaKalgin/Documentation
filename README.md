@@ -15,6 +15,7 @@ This is released under an Apache 2.0 License.
 |    +-- Development Guide - iOS.md - In-depth development guide with lots of technical detail
 |    +-- Sample Application Quickstart.md - iOS - Quick guide to getting up and running with the sample application
 |    +-- XCode Integration Guide.md - Quick guide to embedding the platform SDK into your XCode project
+|    +-- Swift Integration Guide.md - Quick guide to using the ooVoo SDK in swift projects
 +-- Android Documentation
 |    +-- API Guide - Android.md - API reference
 |    +-- Development Guide - Android.md - In-depth development guide with lots of technical detail
