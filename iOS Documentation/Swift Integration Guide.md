@@ -99,8 +99,8 @@ func authorize()
             var err :sdk_error!=result.Result;
             if (err==sdk_error.OK)
             {
-		NSLog("authorization ok");
-		………………..
+	       NSLog("authorization ok");
+               ………………..
             }
             else
             {
