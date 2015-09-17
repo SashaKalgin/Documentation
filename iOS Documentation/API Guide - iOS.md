@@ -244,7 +244,7 @@ Attribute | Type         | Description
 Attribute  | Type         | Description
 ---------- | ------------ | ------------------------
 **uid**    | `NSString *` | User id
-**Buffer** | `NSString *` | Buffer with data to send
+**Buffer** | `NSData *` | Buffer with data to send
 
 **Result**: no result
 
@@ -255,7 +255,7 @@ Attribute  | Type         | Description
 
 Attribute  | Type         | Description
 ---------- | ------------ | ------------------------
-**Buffer** | `NSString *` | Buffer with data to send
+**Buffer** | `NSData *` | Buffer with data to send
 
 **Result**: no result
 
