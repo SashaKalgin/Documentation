@@ -43,8 +43,8 @@ Table of Contents
 	- [setListener](#setlistener)
 	- [join](#join)
 	- [leave](#leave)
-	- [send](#send)
-	- [send](#send)
+	- [sendData](#sendData)
+	- [sendData](#sendData)
 	- [registerPlugin](#registerplugin)
 	- [isInCallMessagesPermit](#isincallmessagespermit)
 	- [getAvailableResolutions](#getavailableresolutions)
@@ -466,15 +466,15 @@ The method allows to perform a leave from conference call.
 
 **Return a value:** no result.
 
-## send
-The method allows to send a message to the user specification.
+## sendData
+The method allows to send a buffer of characters to the user specification.
 
 **Gets a parameters list:**
 
 Type   | Name | Description
 ------ | ---- | -------------------------------------------------
-String | uid  | Specifies the user, to which the message is sent.
-byte[] | msg  | The message for sending.
+String | uid  | Specifies the user, to which will send the buffer of characters.
+byte[] | data  | The buffer of characters for sending.
 
 **Return a value:**
 
@@ -482,14 +482,14 @@ Type      | Name | Description
 --------- | ---- | -------------------------------
 sdk_error | ---- | Returns a status about sending.
 
-## send
-The method allows to send a message to all users in conference session.
+## sendData
+The method allows to send a buffer of characters to all users in conference session.
 
 **Gets a parameters list:**
 
 Type   | Name | Description
 ------ | ---- | ------------------------
-byte[] | msg  | The message for sending.
+byte[] | data  | The buffer of characters for sending.
 
 **Return a value:**
 
