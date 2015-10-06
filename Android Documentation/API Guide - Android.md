@@ -11,6 +11,8 @@ Table of Contents
 	- [sharedInstance](#sharedinstance)
 	- [getAccount](#getaccount)
 	- [getAVChat](#getavchat)
+	- [isAuthorized](#isauthorized)
+	- [isDeviceSupported](#isdevicesupported)
 	- [setContext](#setcontext)
 	- [isTablet](#istablet)
 	- [setSslPeerVerify](#setsslpeerverify)
@@ -27,6 +29,17 @@ Table of Contents
 	- [login](#login)
 	- [getID](#getid)
 	- [logout](#logout)
+- [Device](#device)
+	- [getID](#getid)
+	- [getName](#getname)
+- [Effect](#effect)
+	- [getCategory](#getcategory)
+	- [getIconUrl](#geticonurl)
+	- [getID](#getid)
+	- [getName](#getname)
+	- [getPurchaseId](#getpurchaseid)
+- [PluginFactory](#pluginfactory)
+	- [createPluginInstance](#createplugininstance)
 - [ooVooSdkResultListener](#oovoosdkresultlistener)
 	- [onResult](#onresult)
 - [ooVooSdkResult](#oovoosdkresult)
@@ -40,19 +53,20 @@ Table of Contents
 	- [fromString](#fromstring)
 	- [OnLog](#onlog)
 - [AVChat](#avchat)
+	- [ConferenceState](#conferencestate)
 	- [setListener](#setlistener)
 	- [join](#join)
 	- [leave](#leave)
-	- [sendData](#sendData)
-	- [sendData](#sendData)
+	- [send](#send)
+	- [send](#send)
 	- [registerPlugin](#registerplugin)
+	- [unregisterPlugin](#unregisterplugin)
 	- [isInCallMessagesPermit](#isincallmessagespermit)
 	- [getAvailableResolutions](#getavailableresolutions)
 	- [isResolutionSupported](#isresolutionsupported)
 	- [getVideoController](#getvideocontroller)
 	- [getAudioController](#getaudiocontroller)
 	- [AVChatListener](#avchatlistener)
-		- [ConferenceState](#conferencestate)
 		- [onParticipantJoined](#onparticipantjoined)
 		- [onParticipantLeft](#onparticipantleft)
 		- [onConferenceStateChanged](#onconferencestatechanged)
@@ -64,8 +78,10 @@ Table of Contents
 	- [getID](#getid)
 	- [getType](#gettype)
 - [AudioController](#audiocontroller)
+	- [AudioRouteMode](#audioroutemode)
 	- [setListener](#setlistener)
 	- [initAudio](#initaudio)
+	- [uninitAudio](#uninitaudio)
 	- [isPlaybackMuted](#isplaybackmuted)
 	- [isRecordMuted](#isrecordmuted)
 	- [setRecordMuted](#setrecordmuted)
@@ -77,8 +93,21 @@ Table of Contents
 		- [onAudioReceiveStateChanged](#onaudioreceivestatechanged)
 		- [onMicrophoneStateChange](#onmicrophonestatechange)
 		- [onSpeakerStateChange](#onspeakerstatechange)
+- [AudioRoute](#audioroute)
+	- [getName](#getname)
+	- [getRouteId](#getrouteid)
+	- [isActive](#isactive)
+- [AudioRouteController](#audioroutecontroller)
+	- [getRoutes](#getroutes)
+	- [setListener](#setlistener)
+	- [setRoute](#setRoute)
+	- [AudioRouteControllerListener](#audioroutecontrollerlistener)
+		- [onAudioRouteChanged](#onaudioroutechanged)
 - [VideoController](#videocontroller)
-	- [CameraResolutionLevel](#cameraresolutionlevel)
+	- [ResolutionLevel](#resolutionlevel)
+	- [VideoConfigKey](#videoconfigkey)
+	- [getConfig](#getconfig)
+	- [setConfig](#setconfig)
 	- [setListener](#setlistener)
 	- [setActiveResolution](#setactiveresolution)
 	- [getActiveResolution](#getactiveresolution)
@@ -104,23 +133,16 @@ Table of Contents
 	- [sizeToResolutionLevel](#sizetoresolutionlevel)
 	- [VideoControllerListener](#videocontrollerlistener)
 		- [RemoteVideoState](#remotevideostate)
-		- [onAvailableResolutionInCallChanged](#onavailableresolutionincallchanged)
 		- [onRemoteVideoStateChanged](#onremotevideostatechanged)
 		- [onCameraStateChanged](#oncamerastatechanged)
 		- [onTransmitStateChanged](#ontransmitstatechanged)
 		- [onVideoPreviewStateChanged](#onvideopreviewstatechanged)
 		- [onCameraChanged](#oncamerachanged)
+- [VideoDevice](#videodevice)
+	- [getAvailableResolutions](#getavailableresolutions)
+	- [isResolutionSupported](#isresolutionsupported)
 
 <!-- /TOC -->
-
-
-#Classes
-
-![enter image description here](https://CODE.OOVOO.COM/native/docs/android/Android_public_API_1_1.png)
-
-![enter image description here](https://CODE.OOVOO.COM/native/docs/android/Android_public_API_2.1.1.png)
-
-![enter image description here](https://CODE.OOVOO.COM/native/docs/android/Android_public_API_3.1.png)
 
 # ooVooClient
 ## Constructor
@@ -163,6 +185,27 @@ Type       | Name | Description
 ---------- | ---- | ------------------------------------------------
 **AVChat** | NA   | Returns interface to ooVoo client AVChat service
 
+## isAuthorized
+The method allows define if was performed authorizing.
+
+**Parameters:** without parameters.
+
+**Return a value:**
+
+Type          | Name | Description
+------------- | ---- | ------------------------------------------------
+**boolean** | NA   | Returns true if was performed authorizing.
+
+## isDeviceSupported
+The method allows to define if ooVoo SDK support this device.
+
+**Parameters:** without parameters.
+
+**Return a value:**
+
+Type          | Name | Description
+------------- | ---- | ------------------------------------------------
+**boolean**      | NA   | Returns true if supported.
 ## setContext
 The static method allows to set application context.
 
@@ -196,9 +239,9 @@ Type        | Name | Description
 **boolean** | state  | Define a secure connection.
 
  **Return a value:** no result.
- 
+
 ## isSslPeerVerify
- 
+
  The native method allows to detect if this a connection used a SSL verification.
 
 **Gets a parameters list:** without parameters.
@@ -267,17 +310,77 @@ Type                       | Name     | Description
 
 **Return a value:** no result.
 
+# GLPerformanceUtlis
+## getCurrentCpuFrequency
+The method allows to get the current frequency of CPU in Hz.
+
+**Gets a parameters list:** without parameters.
+
+**Return a value:**
+
+Type        | Name | Description
+----------- | ---- | ----------------------------------
+**int** | ---- | Returns frequency in Hz.
+
+## getEnableThreshold
+The method allows to get the maximum time for perform action with the current resolution. If the return value from getPerfValue is bigger than the value from getEnableThreshold, GPU buffer reading for that resolution is not suggested to be used in the app.
+
+**Gets a parameters list:** without parameters.
+
+**Return a value:**
+
+Type        | Name | Description
+----------- | ---- | ----------------------------------
+**long** | ---- | Returns suggested value about the acceptable threshold in microseconds.
+
+## getNumCore
+The method allows to get the number of the CPU core.
+
+**Gets a parameters list:** without parameters.
+
+**Return a value:**
+
+Type        | Name | Description
+----------- | ---- | ----------------------------------
+**int** 		| ---- | Returns the number of cores.
+
+## getPerfValue
+The method allows to get the test result for specific resolution. CIF would only be tested if the VGA cannot meet the "suggested enable threshold" If the resolution was not been test function will return -1.
+
+**Gets a parameters list:**
+
+Type        | Name | Description
+----------- | ---- | ----------------------------------
+**String**  | resolution | Available resolution VGA_PERFORMANCE / CIF_PERFORMANCE
+
+**Return a value:**
+
+Type        | Name | Description
+----------- | ---- | ----------------------------------
+**long** 		| ---- | Returns average time in microsecond of GPU buffer reading.
+
+## isTegraDetected
+The method allows to get the number of the CPU core.
+
+**Gets a parameters list:** without parameters.
+
+**Return a value:**
+
+Type        		| Name | Description
+--------------- | ---- | ----------------------------------
+**boolean** 		| ---- | Returns boolean value if this is Tegra.
+
 # JNIObject
 ## isValid
 The method allows to check if the object is valid.
 
 **Gets a parameters list:** without parameters.
 
+**Return a value:**
+
 Type        | Name | Description
 ----------- | ---- | ----------------------------------
 **Boolean** | ---- | Returns Boolean value if is valid.
-
-**Return a value:**
 
 ## release
 The method allows to release JNI object.
@@ -297,7 +400,7 @@ Type                       | Name     | Description
 **String**                 | uid      | The ID an existing user in ooVoo.
 **ooVooSdkResultListener** | listener | The async listener which allows to get result on request.
 
-**Return a value: no result.**
+**Return a value:** no result.
 
 ## getID
 The method allows to get logged in account id.
@@ -315,7 +418,101 @@ The method allows to perform logout an existing user.
 
 **Gets a parameters list:** without parameters.
 
-**Return a value: no result.**  
+**Return a value:** no result.
+
+#Device 
+
+## getID
+The method allows to get ID of device.
+
+**Gets a parameters list:** without parameters.
+
+**Return a value:**
+
+Type       | Name | Description
+---------- | ---- | -------------------
+**String** | ---- | Returns a device ID.
+
+## getName
+The method allows to get name of device.
+
+**Gets a parameters list:** without parameters.
+
+**Return a value:**
+
+Type       | Name | Description
+---------- | ---- | -------------------
+**String** | ---- | Returns a name ID.
+
+#Effect
+
+## getCategory
+The method allows to get category of the effect.
+
+**Gets a parameters list:** without parameters.
+
+**Return a value:**
+
+Type       | Name | Description
+---------- | ---- | -------------------
+**String** | ---- | Returns a category of the effect.
+
+## getIconUrl
+The method allows to get URL to icon for the effect.
+
+**Gets a parameters list:** without parameters.
+
+**Return a value:**
+
+Type       | Name | Description
+---------- | ---- | -------------------
+**String** | ---- | Returns URL to icon for the effect.
+
+## getID
+The method allows to get unique ID of the effect.
+
+**Gets a parameters list:** without parameters.
+
+**Return a value:**
+
+Type       | Name | Description
+---------- | ---- | -------------------
+**String** | ---- | Returns ID of the effect.
+
+## getName
+The method allows to get name of the effect.
+
+**Gets a parameters list:** without parameters.
+
+**Return a value:**
+
+Type       | Name | Description
+---------- | ---- | -------------------
+**String** | ---- | Returns name of the effect.
+
+## getPurchaseId
+The method allows to get unique static ID of the effect.
+
+**Gets a parameters list:** without parameters.
+
+**Return a value:**
+
+Type       | Name | Description
+---------- | ---- | -------------------
+**String** | ---- | Returns static ID of the effect.
+
+# PluginFactory
+
+## createPluginInstance
+The method allows to create a custom plugin and integrate him in ooVoo SDK.
+
+**Gets a parameters list:** without parameters.
+
+**Return a value:**
+
+Type       | Name | Description
+---------- | ---- | -------------------
+**long** | ---- | Returns unique ID of instance.
 
 # ooVooSdkResultListener
 ## onResult
@@ -437,6 +634,11 @@ Type         | Name    | Description
 **Return a value:** no result.
 
 # AVChat
+## ConferenceState
+The enum allows to get the different the conference state.
+
+**Parameters list:** Joined, Disconnected
+
 ## setListener
 The method allows to set handler for receiving conference event from SDK.
 
@@ -466,15 +668,15 @@ The method allows to perform a leave from conference call.
 
 **Return a value:** no result.
 
-## sendData
-The method allows to send a buffer of characters to the user specification.
+## send
+The method allows to send a message to the user specification.
 
 **Gets a parameters list:**
 
 Type   | Name | Description
 ------ | ---- | -------------------------------------------------
-String | uid  | Specifies the user, to which will send the buffer of characters.
-byte[] | data  | The buffer of characters for sending.
+String | uid  | Specifies the user, to which the message is sent.
+byte[] | msg  | The message for sending.
 
 **Return a value:**
 
@@ -482,14 +684,14 @@ Type      | Name | Description
 --------- | ---- | -------------------------------
 sdk_error | ---- | Returns a status about sending.
 
-## sendData
-The method allows to send a buffer of characters to all users in conference session.
+## send
+The method allows to send a message to all users in conference session.
 
 **Gets a parameters list:**
 
 Type   | Name | Description
 ------ | ---- | ------------------------
-byte[] | data  | The buffer of characters for sending.
+byte[] | msg  | The message for sending.
 
 **Return a value:**
 
@@ -505,6 +707,17 @@ The method allows to register a custom plugin implementation for use in AVChat.
 Type          | Name   | Description
 ------------- | ------ | --------------------------------------------------------------------
 PluginFactory | plugin | The interface allow transfer custom plugin implementation to our SDK
+
+**Return a value:** no result.
+
+## unregisterPlugin
+The method allows to un-register a custom plugin for use in AVChat.
+
+**Gets a parameters list:**
+
+Type          | Name   | Description
+------------- | ------ | --------------------------------------------------------------------
+PluginFactory | plugin | The interface allow to cancel custom plugin to our SDK
 
 **Return a value:** no result.
 
@@ -528,7 +741,7 @@ The method allows to get available a resolution list in current a call.
 
 Type            			   | Name | Description
 ------------------------------------------ | ---- | ---------------------------------------------
-ArrayList\<VideoController.ResolutionLevel\> | ---- | Returns a list resolutions. 
+ArrayList\<VideoController.ResolutionLevel\> | ---- | Returns a list resolutions.
 
 ## isResolutionSupported
 The method allows to check, if this a resolution is supported.
@@ -539,11 +752,11 @@ Type          			| Name   | Description
 ------------------------------- | ------ | --------------------------------------------------------------------
 VideoController.ResolutionLevel | level  | This is a resolution for checking.
 
-**Return a value:** 
+**Return a value:**
 
 Type    | Name | Description
 ------- | ---- | ---------------------------------------------
-boolean | ---- | Returns boolean value, If there is support for the requested resolution. 
+boolean | ---- | Returns boolean value, If there is support for the requested resolution.
 
 ## getVideoController
 The method allows to get to video controller interface.
@@ -570,16 +783,6 @@ AudioController | ---- | Returns the interface of an audio controller.
  
 
 ## AVChatListener
-### ConferenceState
-The enum allows to get a different a status of conference.
-
-**Parameters list:**
-
-Type         | Name  | Description
------------- | ----- | -----------------------------------------------------------
-Joined       | Local | user joined to conference.
-Disconnected | Local | user disconnect form conference, see error code for reason.
-
 ### onParticipantJoined
 The method allows to receive an event listener that a participant joined to av chat session.
 
@@ -651,12 +854,7 @@ int  | score | This is a network state.
 ## ParticipantType
 The enum allows to get a different a types of participant.
 
-**Parameters list:**
-
-Item | Description
----- | -----------------------------
-VoIP | This is a type Voice over IP.
-
+**Parameters list:** VoIP
 
 ## getID
 The method allows to get participant ID in conference.
@@ -683,6 +881,11 @@ ParticipantType | ---- | Returns type of connect.
  
 
 # AudioController
+## AudioRouteMode
+The enum allows to get the different an audio routes.
+
+**Parameters list:** AudioRouteModeVoiceChat, AudioRouteModeVideoChat
+
 ## setListener
 The method allows to set handler for receiving conference event from audio controller.
 
@@ -698,7 +901,19 @@ AudioControllerListener | listener | The async listener which allows to set hand
 
 The method audio record/playback module. It's recommended to call this method before calling to join method.
 
-**Gets a parameters list:** 
+**Gets a parameters list:**
+
+Type                    | Name     | Description
+----------------------- | -------- | ------------------------------------------------------------------------------
+ooVooSdkResultListener | completion | The async listener which allows to get result on request.
+
+**Return a value:** no result.
+
+## uninitAudio
+
+The method allows to perform un-init audio record/playback module.
+
+**Gets a parameters list:**
 
 Type                    | Name     | Description
 ----------------------- | -------- | ------------------------------------------------------------------------------
@@ -824,19 +1039,130 @@ sdk_error | error | This is an error code about changing.
 
 **Return a value:** no result.  
 
+# AudioRoute
+
+## getName
+The method allows to get name of audio route.
+
+**Gets a parameters list:** without parameters.
+
+**Return a value:**
+
+Type                 | Name | Description
+-------------------- | ---- | ----------------------------
+String 							 | ---- | Returns name of audio route .
+
+## getRouteId
+The method allows to get ID of audio route.
+
+**Gets a parameters list:** without parameters.
+
+**Return a value:**
+
+Type                 | Name | Description
+-------------------- | ---- | ----------------------------
+int 							 | ---- | Returns ID of audio route .
+
+## isActive
+The method allows to check if current route is active.
+
+**Gets a parameters list:** without parameters.
+
+**Return a value:**
+
+Type                 | Name | Description
+-------------------- | ---- | ----------------------------
+int 							 	 | ---- | Returns true if audio route is active.
+
+# AudioRouteController
+
+## getRoutes
+The method allows to get list available of audio routes.
+
+**Gets a parameters list:** without parameters.
+
+**Return a value:**
+
+Type                 | Name | Description
+-------------------- | ---- | ----------------------------
+ArrayList<AudioRoute> | ---- | Returns list of audio routes.
+
+## setListener
+The method allows to set handler for receiving the event from the audio route controller.
+
+**Gets a parameters list:**
+
+Type                    | Name     | Description
+----------------------- | -------- | ------------------------------------------------------------------------------
+AudioRouteControllerListener | listener | The async listener which allows to set handler for receiving the event.
+
+**Return a value:** no result.
+
+## setRoute
+The method allows to select an audio route.
+
+**Gets a parameters list:**
+
+Type                 | Name | Description
+-------------------- | ---- | ----------------------------
+AudioRoute 					 | route | Audio route for setting.
+
+**Return a value:**  no result.
+
+## AudioRouteControllerListener
+
+### onAudioRouteChanged
+
+The method allows to receive an event listener, that an audio route has been changed.
+
+**Gets a parameters list:**
+
+Type      | Name  | Description
+--------- | ----- | --------------------------------------------------------
+AudioRoute | old_route | This is show previous position of audio route.
+AudioRoute | new_route | This is show current position of audio route.
+
+**Return a value:** no result.
+
 # VideoController
-## CameraResolutionLevel
-The enum allows to get the different resolution of camera.
 
-**Parameters list:**
+## ResolutionLevel
+The enum allows to get the different resolution.
 
-| Values
-| ------
-| 1.
-| 2.
-| 3.
-| 4.
-| 5.
+**Parameters list:** ResolutionLevelNotSpecified, ResolutionLevelLow, ResolutionLevelMed, ResolutionLevelHigh, ResolutionLevelHD
+
+## VideoConfigKey
+The enum allows to get the key of video configuration.
+
+**Parameters list:** kVideoCfgCaptureDeviceId, kVideoCfgResolution, kVideoCfgFps, kVideoCfgEffectId
+
+## getConfig
+
+The method allows to get configuration according to with a key.
+
+**Gets a parameters list:**
+
+Type                 | Name | Description
+-------------------- | ---- | ----------------------------
+VideoConfigKey 			 | key | Key of the video configuration.
+
+**Return a value:**
+
+Type         | Name | Description
+------------ | ---- | ----------------------------
+String 			 | ---- | Returns configuration key.
+
+## setConfig
+
+The method allows to set configuration according to with a key.
+
+**Gets a parameters list:**
+
+Type                 | Name | Description
+-------------------- | ---- | ----------------------------
+VideoConfigKey 			 | key | Key of the video configuration.
+
+**Return a value:** no result.
 
 ## setListener
  The method allows to set handler for receiving conference event from video controller.
@@ -865,6 +1191,12 @@ CameraResolutionLevel | level | Defines the resolution of camera.
 ## getActiveResolution
 The method allows to get the resolution current the camera in uses.
 
+**The method is depricated :**
+
+Use instead
+
+setConfig( VideoConfigKey.kVideoCfgResolution.ordinal(), ""+level.ordinal() );
+
 **Gets a parameters list:** without parameters. **Return a value:**
 
 Type                  | Name | Description
@@ -873,6 +1205,12 @@ CameraResolutionLevel | ---- | Returns the resolution of current camera.
 
 ## setFps
  The method allows to define the frames per second for a video.
+
+**The method is depricated :**
+
+Use instead
+
+setConfig( VideoConfigKey.kVideoCfgFps, "" + fps );.
 
 **Gets a parameters list:**
 
@@ -884,6 +1222,14 @@ int  | fps  | Defines the frames per second for a video.
 
 ## getFps
  The method allows to get the frames per second for a video.
+
+**The method is depricated :**
+
+Use instead
+
+String fps_value = getConfig( VideoConfigKey.kVideoCfgFps);
+
+int fps    =   Integer.parseInt( fps_value.trim() );
 
 **Gets a parameters list:** without parameters.
 
@@ -898,6 +1244,13 @@ int  | ---- | Returns the frames per second for a video.
 ## setActiveEffect
  The method allows to define the effect for a video.
 
+
+**The method is depricated :**
+
+Use instead
+
+setConfig( VideoConfigKey.kVideoCfgEffectId, effect.getID() );
+
 **Gets a parameters list:**
 
 Type    | Name   | Description
@@ -909,7 +1262,40 @@ IEffect | effect | Defines the effect for a video.
 ## getActiveEffect
  The method allows to get the effect for a video.
 
+**The method is depricated :**
+
+Use instead
+
+ 	 String effect_id = getConfig( VideoConfigKey.kVideoCfgEffectId);
+
+  	if( effect_id != null ) {
+
+            ArrayList<Effect> effects = getEffectList();
+
+            LogSdk.d( TAG, "Application -> effects " + effects );
+
+            if( effects != null ) {
+
+                for( Effect effect : effects )
+
+                    {
+                        if( effect.getID().equalsIgnoreCase( effect_id )) {
+
+                            return effect;
+
+                        }
+
+                    }
+
+            }
+
+        }
+
+
 **Gets a parameters list:** without parameters.
+
+
+
 
 **Return a value:**
 
@@ -919,6 +1305,13 @@ IEffect | ---- | Returns the effect for a video.
 
 ## setActiveDevice
  The method allows to define type of camera for current use, a front camera or a back camera.
+
+**The method is depricated :**
+
+Use instead
+
+ setConfig( VideoConfigKey.kVideoCfgCaptureDeviceId, device.getID() );
+
 
 **Gets a parameters list:**
 
@@ -932,6 +1325,34 @@ IDevice    device    Defines type of camera for use. |      |
 
 ## getActiveDevice
 The method allows to get the type of camera used at the moment.
+
+
+**The method is depricated :**
+
+Use instead
+
+
+ 	String device_id = getConfig( VideoConfigKey.kVideoCfgCaptureDeviceId );
+
+        if( device_id != null ) {
+
+            ArrayList<VideoDevice> devices = getDeviceList();
+
+            if( devices != null ) {
+
+                for( VideoDevice device : devices ) {
+
+                    if( device.getID().equalsIgnoreCase( device_id )) {
+
+                        return device;
+
+                    }
+
+                }
+
+            }
+
+        }
 
 **Gets a parameters list:** without parameters.
 
@@ -1092,12 +1513,6 @@ RVS_Stopped | Remote video stopped.
 RVS_Paused  | Remote video paused by QOS/hold.
 RVS_Resumed | Remote video resumed by QOS.
 
-### onAvailableResolutionInCallChanged
-The method allows to receive an event listener, when list of available resolution for current call has been changed. Call getAvailableResolutionInCall() from video controller for obtain a up-to-date list.
-
-**Gets a parameters list:** without parameters.
-
-**Return a value:** no result. 
 
 ### onRemoteVideoStateChanged
  The method allows to receive an event listener, when remote video state has been changed.
@@ -1166,4 +1581,30 @@ sdk_error | errorCode | This is an error code about changing in conference.
 
 **Return a value:** no result.
 
- 
+# VideoDevice
+
+## getAvailableResolutions
+The method allows to get a list available the resolutions of video.
+
+**Gets a parameters list:** without parameters.
+
+**Return a value:**
+
+Type            			   | Name | Description
+------------------------------------------ | ---- | ---------------------------------------------
+ArrayList\<VideoController.ResolutionLevel\> | ---- | Returns a list resolutions.
+
+## isResolutionSupported
+The method allows to check, if this a resolution level is supported.
+
+**Gets a parameters list:**
+
+Type          			| Name   | Description
+------------------------------- | ------ | --------------------------------------------------------------------
+VideoController.ResolutionLevel | level  | This is a resolution for checking.
+
+**Return a value:**
+
+Type    | Name | Description
+------- | ---- | ---------------------------------------------
+boolean | ---- | Returns boolean value, If there is support for the requested resolution.

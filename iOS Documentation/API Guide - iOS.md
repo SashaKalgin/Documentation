@@ -10,35 +10,51 @@ Table Of Contents
 	- [setLogLevel](#setloglevel)
 	- [setClientVersion](#setclientversion)
 	- [authorizeClient](#authorizeclient)
+	- [getSdkVersion](#getsdkversion)
+	- [updateConfig](#updateconfig)
 	- [Properties](#properties)
+		- [setSslVerifyPeer](#setsslverifypeer)
+		- [isSslVerifyPeer](#issslverifypeer)
 		- [IsAuthorized](#isauthorized)
+		- [app_token](#app_token)
 		- [Account](#account)
 		- [AVChat](#avchat)
 - [ooVooClientLogger Protocol](#oovooclientlogger-protocol)
 	- [onLog](#onlog)
-- [Account Protocol](#account-protocol)
+- [ooVooAccount Protocol](#oovooaccount-protocol)
 	- [login](#login)
 	- [logout](#logout)
 	- [Properties](#properties)
+		- [delegate](#delegate)
 		- [uid](#uid)
 		- [state](#state)
-- [AVChat Protocol](#avchat-protocol)
+	- [ooVooAccountDelegate Protocol](#oovooaccountdelegate-protocol)
+		- [didAccountLogIn](#didaccountlogin)
+		- [didAccountLogOut](#didaccountlogout)
+- [ooVooAVChat Protocol](#oovooavchat-protocol)
 	- [join](#join)
 	- [leave](#leave)
 	- [sendData](#senddata)
 	- [sendData](#senddata)
+	- [registerPlugin](#registerplugin)
+	- [unregisterPlugin](#unregisterplugin)
+	- [getUserFullName](#getuserfullname)
+	- [isResolutionSupported](#isresolutionsupported)
 	- [Properties](#properties)
 		- [VideoController](#videocontroller)
 		- [AudioController](#audiocontroller)
+		- [isInCallMessagePermit](#isincallmessagepermit)
 		- [delegate](#delegate)
-	- [AVChatDelegate](#avchatdelegate)
-		- [didParticipantJoined](#didparticipantjoined)
-		- [didParticipantLeft](#didparticipantleft)
+	- [ooVooAVChatDelegate](#oovooavchatdelegate)
+		- [didParticipantJoin](#didparticipantjoin)
+		- [didParticipantLeave](#didparticipantleave)
 		- [didConferenceStateChanged](#didconferencestatechanged)
 		- [didReceiveData](#didreceivedata)
-- [VideoController](#videocontroller)
+		- [didConferenceError](#didconferenceerror)
+		- [didNetworkReliabilityChange](#didnetworkreliabilitychange)
+- [ooVooVideoController Protocol](#oovoovideocontroller-protocol)
 	- [setConfig](#setconfig)
-	- [setConfig](#setconfig)
+	- [getConfig](#getconfig)
 	- [getDevicesList](#getdeviceslist)
 	- [getEffectsList](#geteffectslist)
 	- [bindVideoRender](#bindvideorender)
@@ -47,53 +63,69 @@ Table Of Contents
 	- [unregisterRemoteVideo](#unregisterremotevideo)
 	- [startTransmitVideo](#starttransmitvideo)
 	- [stopTransmitVideo](#stoptransmitvideo)
-	- [isVideoTransmitted](#isvideotransmitted)
+	- [isVideoTransmited](#isvideotransmited)
 	- [openCamera](#opencamera)
 	- [closeCamera](#closecamera)
 	- [openPreview](#openpreview)
 	- [closePreview](#closepreview)
+	- [sizeToCameraResolutionLevel](#sizetocameraresolutionlevel)
 	- [Properties](#properties)
-		- [VideoSources](#videosources)
+		- [getActiveDevice](#getactivedevice)
+		- [setActiveDevice](#setactivedevice)
 		- [delegate](#delegate)
-	- [VideoControllerDelegate Protocol](#videocontrollerdelegate-protocol)
+	- [ooVooVideoControllerDelegate Protocol](#oovooVideoControllerdelegate-protocol)
 		- [didCameraStateChanged](#didcamerastatechanged)
 		- [didVideoTransmitStateChanged](#didvideotransmitstatechanged)
 		- [didRemoteVideoStateChanged](#didremotevideostatechanged)
 		- [didVideoPreviewStateChanged](#didvideopreviewstatechanged)
-		- [didActiveDeviceChanged](#didactivedevicechanged)
-- [AudioController Protocol](#audiocontroller-protocol)
+- [ooVooAudioController Protocol](#oovooaudiocontroller-protocol)
 	- [initAudio](#initaudio)
+	- [unInitAudio](#uninitaudio)
 	- [setConfig](#setconfig)
 	- [getConfig](#getconfig)
 	- [isPlaybackMuted](#isplaybackmuted)
 	- [setPlaybackMute](#setplaybackmute)
 	- [isRecordMuted](#isrecordmuted)
-	- [setRecordMute](#setrecordmute)
-	- [getRecorderDevicesList](#getrecorderdeviceslist)
-	- [getPlaybackDevicesList](#getplaybackdeviceslist)
+	- [setRecordMuted](#setrecordmuted)
+	- [hold](#hold)
+	- [unhold](#unhold)
 	- [Properties](#properties)
 		- [delegate](#delegate)
-		- [MicVolume](#micvolume)
-		- [SpeakerVolume](#speakervolume)
-	- [AudioControllerDelegate](#audiocontrollerdelegate)
-		- [didAudioTransmitStateChanged](#didaudiotransmitstatechanged)
-		- [didAudioReceiveStateChanged](#didaudioreceivestatechanged)
-		- [didActiveDeviceChanged](#didactivedevicechanged)
-		- [didAudioDeviceStateChanged](#didaudiodevicestatechanged)
-	- [AudioControllerConfigKey](#audiocontrollerconfigkey)
-- [Effect Protocol](#effect-protocol)
+	- [ooVooAudioControllerDelegate](#oovooaudiocontrollerdelegate)
+		- [didAudioTransmitStateChange](#didaudiotransmitstatechange)
+		- [didAudioReceiveStateChange](#didaudioreceivestatechange)
+- [ooVooEffect Protocol](#oovooeffect-protocol)
 	- [Properties](#properties)
 		- [effectName](#effectname)
-		- [effectId](#effectid)
+		- [effectID](#effectid)
 		- [iconUrl](#iconurl)
+		- [category](#category)
+		- [purchaseID](#purchaseid)
 	- [VideoConfigKey](#videoconfigkey)
-- [Device Protocol](#device-protocol)
+- [ooVooDevice Protocol](#oovoodevice-protocol)
 	- [Properties](#properties)
 	- [deviceName](#devicename)
-	- [deviceId](#deviceid)
+	- [deviceID](#deviceid)
+- [ooVooVideoDevice Protocol](#oovoovideodevice)
+	- [isResolutionSupported](#isresolutionsupported)
+	- [isFront](#isfront)
+	- [getAvailableResolutions](#getavailableresolutions)
+- [ooVooParticipant Protocol](#oovooparticipant-protocol)
+	- [Properties](#properties)
+		- [participantID](#participantid)
+		- [type](#type)
+- [Enumerators](#enumerators)
+	- [ooVooDeviceState](#oovoodevicestate)
+	- [ooVooAudioRouteType](#oovooaudioroutetype)
+	- [ooVooVideoControllerConfigKey](#oovoovideocontrollerconfigkey)
+	- [ResolutionLevel](#resolutionlevel)
+	- [ooVooPstnState](#oovoopstnstate)
+	- [ooVooAudioControllerConfigKey](#oovooaudiocontrollerconfigkey)
+	- [ooVooAVChatState](#oovooavchatstate)
+	- [ooVooAVChatRemoteVideoState](#oovooavchatremotevideostate)
+	- [ooVooAVParticipantType](#oovooavparticipanttype)
 
 <!-- /TOC -->
-
 
 # ooVooClient Interface
 ## sharedInstance
@@ -146,13 +178,58 @@ completion        | `CompletionHandler` | Required     | Answer result callback
 
 **Result**: no result.
 
+## getSdkVersion
+**Description**: the method allows to get current version of SDK.
+
+**Parameters**: N/A
+
+**Result**: return string SDK version.
+
+## updateConfig
+**Description**: Use this method to update config list.
+
+**Parameters**:
+
+Attribute | Type       | Requirements | Description
+--------- | ---------- | ------------ | ------------------------------------------------
+completion | `CompletionHandler` | Required     | The handler notifies about operation completion .
+
+**Result**: no result.
+
 ## Properties
+
+### setSslVerifyPeer
+**Description**: the property allows to set SSL verification.
+
+**Parameters**:
+
+Attribute 		| Type         | Requirements | Description
+------------- | ------------ | ------------ | ---------------------------------
+sslVerifyPeer |`BOOL`  			 | Required    	| Define SSL verification.
+
+**Result**: no parameters.
+
+### isSslVerifyPeer
+**Description**: the property allows to check, if performed SSL verification.
+
+**Parameters**: no parameters.
+
+**Result**: boolean value, true when performed SSL verification.
+
 ### IsAuthorized
 **Description**: atomic and read only property. Return if current client is authorized.
 
 **Parameters**: no parameters.
 
 **Result**: authorization status: true for yes otherwise false.
+
+### app_token
+
+**Description**: atomic and read only property. The application token received from web site.
+
+**Parameters**: no parameters.
+
+**Result**: string of application token.
 
 ### Account
 **Description**: Get read only ooVoo client account property. Use account object to perform operations such as: login, logout.
@@ -181,7 +258,7 @@ Log       | `NSString *` | Required     | Answer result callback
 
 **Result**: N/A
 
-# Account Protocol
+# ooVooAccount Protocol
 ## login
 **Description**: Login with an existing user.
 
@@ -202,6 +279,18 @@ completion | `CompletionHandler` | Required     | Answer result callback
 **Result**: no results.
 
 ## Properties
+
+### delegate
+**Description**: sdk user must set id<ooVooAccountDelegate> in order to receive completion events of ooVooAccount methods such as login, loguot.
+
+**Parameters**:
+
+Attribute    | Type             			| Description
+------------ | ------------------ | -----------------------------------------------------
+**delegate** | `ooVooAccountDelegate` | user object, which implements ooVooAccountDelegate protocol
+
+**Result**: N/A
+
 ### uid
 **Description**: read only property which returns account id.
 
@@ -214,9 +303,33 @@ completion | `CompletionHandler` | Required     | Answer result callback
 
 **Parameters**: no parameters
 
-**Result**: account id.
+**Result**: Returns the status of user, Login or Logout.
 
-# AVChat Protocol
+## ooVooAccountDelegate Protocol
+
+### didAccountLogIn
+**Description**: Event occurs when user performs login.
+
+**Parameters**:
+
+Attribute    | Type         | Description
+------------ | ------------ | -----------
+**account**      | `ooVooAccount` | This protocol of ooVooAccount.
+
+**Result**: No Results
+
+### didAccountLogOut
+**Description**: Event occurs when user performs logout.
+
+**Parameters**:
+
+Attribute    | Type         | Description
+------------ | ------------ | -----------
+**account**      | `ooVooAccount` | This protocol of ooVooAccount.
+
+**Result**: No Results
+
+# ooVooAVChat Protocol
 ## join
 **Description**: Join conference call.
 
@@ -224,7 +337,7 @@ completion | `CompletionHandler` | Required     | Answer result callback
 
 Attribute | Type         | Description
 --------- | ------------ | -------------
-**cID**   | `NSString *` | Conference id
+**cid**   | `NSString *` | Conference id
 **data**  | `NSString *` | User data
 
 **Result**: N/A
@@ -244,7 +357,7 @@ Attribute | Type         | Description
 Attribute  | Type         | Description
 ---------- | ------------ | ------------------------
 **uid**    | `NSString *` | User id
-**Buffer** | `NSData *` | Buffer with data to send
+**Buffer** | `NSString *` | Buffer with data to send
 
 **Result**: no result
 
@@ -255,9 +368,49 @@ Attribute  | Type         | Description
 
 Attribute  | Type         | Description
 ---------- | ------------ | ------------------------
-**Buffer** | `NSData *` | Buffer with data to send
+**Buffer** | `NSString *` | Buffer with data to send
 
 **Result**: no result
+
+## registerPlugin
+**Description**: The method allows to register a custom plugin in ooVoo SDK.
+
+**Parameters**:
+
+Attribute  | Type         | Description
+---------- | ------------ | ------------------------
+**plugin** | `ooVooPluginFactory` | Plugin for registration.
+
+**Result**: no result
+
+## unregisterPlugin
+**Description**: The method allows you to cancel the custom plugin in ooVoo SDK.
+
+**Parameters**:
+
+Attribute  | Type         | Description
+---------- | ------------ | ------------------------
+**plugin** | `ooVooPluginFactory` | Plugin for unregistration.
+
+**Result**: no result
+
+## getUserFullName
+**Description**: The method allows to get the full name of user.
+
+**Parameters**: N/A
+
+**Result**: returns full name of user.
+
+## isResolutionSupported
+**Description**: The method allows to check supporting the resolution in AVChat.
+
+**Parameters**:
+
+Attribute        | Type              				| Description
+---------------- | ------------------------ | ------------------------------
+**resolution**   | `ResolutionLevel`        | This is a level of resolution.
+
+**Result**: Returns boolean value, if supported by the requested resolution.
 
 ## Properties
 ### VideoController
@@ -265,48 +418,55 @@ Attribute  | Type         | Description
 
 **Parameters**: N/A
 
-**Result**: returns reference to object that implements VideoController protocol.
+**Result**: returns reference to object that implements ooVooVideoController protocol.
 
 ### AudioController
 **Description**: Get read only audio controller property. Use video controller to perform operations such as: open mute speaker/microphone, get device list...
 
 **Parameters**: N/A
 
-**Result**: returns reference to object that implements AudioController protocol.
+**Result**: returns reference to object that implements ooVooAudioController protocol.
+
+### isInCallMessagePermit
+**Description**: Get read only in call message permit property. Used for perform check the permission.
+
+**Parameters**: N/A
+
+**Result**: returns boolean value.
 
 ### delegate
-**Description**: sdk user must set id<AVChatDelegate> in order to receive completion events of AVChat methods such as join, leave...
+**Description**: sdk user must set id<ooVooAVChatDelegate> in order to receive completion events of AVChat methods such as join, leave...
 
 **Parameters**:
 
 Attribute    | Type             | Description
 ------------ | ---------------- | -----------------------------------------------------
-**delegate** | `AVChatDelegate` | user object, which implements AVChatDelegate protocol
+**delegate** | `ooVooAVChatDelegate` | user object, which implements ooVooAVChatDelegate protocol
 
 **Result**: N/A
 
-## AVChatDelegate
-### didParticipantJoined
+## ooVooAVChatDelegate
+### didParticipantJoin
 **Description**: Event occurs when participant joined conference.
 
 **Parameters**:
 
 Attribute    | Type         | Description
 ------------ | ------------ | -----------
-**uid**      | `NSString *` | User id
-**userData** | `NSString *` | UserData
+**participant**      | `ooVooParticipant` | This participant added to conference.
+**user_data** | `NSString *` | User data
 
 **Result**: No Results
 
-### didParticipantLeft
-**Description**: Event occurs when participant left conference.
+### didParticipantLeave
+**Description**: Event occurs when participant leave conference.
 
 **Parameters**:
 
 Attribute    | Type         | Description
 ------------ | ------------ | -----------
-**uid**      | `NSString *` | User id
-**userData** | `NSString *` | UserData
+**participant**      | `ooVooParticipant` |  This participant is disconnected from the conference.
+
 
 **Result**: No Results
 
@@ -317,8 +477,8 @@ Attribute    | Type         | Description
 
 Attribute     | Type         | Description
 ------------- | ------------ | ------------------------------------------------
-**state**     | `NSString *` | Enumerator which indicates conference new state.
-**errorCode** | `NSString *` | Conference error code
+**state**     | `ooVooAVChatState` | Enumerator which indicates conference new state.
+**code** 			| `sdk_error` | Conference error code
 
 **Result**: No Results
 
@@ -332,7 +492,29 @@ Attribute | Type         | Description
 **uid**   | `NSString *` | User id
 **data**  | `NSData*`    | message
 
-# VideoController
+### didConferenceError
+**Description**: Event occurs when conference error is received.
+
+**Parameters**:
+
+Attribute     | Type         | Description
+------------- | ------------ | ------------------------------------------------
+**code** 			| `sdk_error`  | Conference error code
+
+**Result**: No Results
+
+### didNetworkReliability
+**Description**: Event occurs when network reliability change.
+
+**Parameters**:
+
+Attribute     | Type         | Description
+------------- | ------------ | ------------------------------------------------
+**scope** 			| `NSString *`  | A number from 1-4, 1 indicate that network is worse 4 network is best.
+
+**Result**: No Results
+
+# ooVooVideoController Protocol
 ## setConfig
 **Description**: User can set configuration of the following: capture device, resolution, FPS, effect.
 
@@ -341,18 +523,18 @@ Attribute | Type         | Description
 Attribute | Type                       | Description
 --------- | -------------------------- | --------------------
 **val**   | `NSString *`               | value
-**key**   | `VideoControllerConfigKey` | Configuration option
+**key**   | `ooVooVideoControllerConfigKey` | Configuration option
 
 **Result**: N/A
 
-## setConfig
+## getConfig
 **Description**: User can find configuration of the following: capture device, resolution, FPS, effect.
 
 **Parameters**:
 
 Attribute | Type                       | Description
 --------- | -------------------------- | --------------------
-**key**   | `VideoControllerConfigKey` | Configuration option
+**key**   | `ooVooVideoControllerConfigKey` | Configuration option
 
 **Result**: value of chosen configuration
 
@@ -430,7 +612,7 @@ Attribute | Type         | Description
 
 **Result**: no result.
 
-## isVideoTransmitted
+## isVideoTransmited
 **Description**: Get video transmitted current state
 
 **Parameters**: no parameters.
@@ -465,37 +647,66 @@ Attribute | Type         | Description
 
 **Result**: no result.
 
-## Properties
-### VideoSources
-**Description**: Get a dictionary of current VideoSources (key is the UID of the VideoSource). This property also allows subscribing for list changes.
+## sizeToCameraResolutionLevel
+**Description**: the method allows to define the resolution level of video.
 
-**Result**: list of VideoSources.
+**Parameters**:
+
+Attribute 	| Type                       | Description
+----------- | -------------------------- | --------------------
+**width**   | `int`      								 | This width of video.
+**height**  | `int`     								 | This height of video.
+
+**Result**: matches the resolution level to the width and the height.
+
+## Properties
+## getActiveDevice
+**Description**: Get the current active video camera.
+
+**Parameters**: N/A
+
+**Result**: Device/camera object. The object holds the current active video camera.
+
+## setActiveDevice
+**Description**: the method allows to set the active camera.
+
+**Parameters**:
+
+Attribute | Type                       | Description
+--------- | -------------------------- | --------------------
+**device**   | `ooVooVideoDevice`      | The active camera.
+
+**Result**: N/A
 
 ### delegate
-**Description**: sdk user must set id<VideoControllerDelegate> in order to receive completion events of VideoController methods such as join, leave...
+**Description**: sdk user must set id<ooVooVideoControllerDelegate> in order to receive completion events of ooVooVideoController methods such as join, leave...
 
 **Parameters**:
 
 Attribute    | Type                      | Description
 ------------ | ------------------------- | -----------------------------
-**delegate** | `VideoControllerDelegate` | user object, which implements | VideoControllerDelegate protocol
+**delegate** | `ooVooVideoControllerDelegate` | user object, which implements | ooVooVideoControllerDelegate protocol
 
 **Result**: N/A
 
-## VideoControllerDelegate Protocol
-### didCameraStateChanged
+## ooVooVideoControllerDelegate Protocol
+### didCameraStateChange
 **Description**: Event fired when system detects that camera state was changed.
 
 **Parameters**:
 
 Attribute     | Type       | Description
 ------------- | ---------- | ----------------
-**state**     | `BOOL`     | Camera new state
-**errorCode** | `uint32_t` | Error code
+**state**     | `ooVooDeviceState`     | Camera new state
+**devId**     | `NSString *` | Device ID
+**width**     | `const int`  | This width of video.
+**height**    | `const int`  | This height of video.
+**fps**     	| `const int`  | This Frame Per Second of video.
+**code** 			| `sdk_error` | Error code
 
 **Result**: no result.
 
-### didVideoTransmitStateChanged
+### didVideoTransmitStateChange
 **Description**: Event fired when video transmit state was changed.
 
 **Parameters**:
@@ -503,24 +714,27 @@ Attribute     | Type       | Description
 Attribute     | Type       | Description
 ------------- | ---------- | ------------------------
 **state**     | `BOOL`     | Video transmit new state
-**errorCode** | `uint32_t` | Error code
+**devId**     | `NSString *` | Device ID
+**code** 			| `sdk_error` | Error code
 
 **Result**: no result.
 
-### didRemoteVideoStateChanged
+### didRemoteVideoStateChange
 **Description**: Event fired when remote user video transmit state was changed.
 
 **Parameters**:
 
 Attribute     | Type         | Description
 ------------- | ------------ | ------------------------
-uid           | `NSString *` | Remote user id
-**state**     | `BOOL`       | Video transmit new state
-**errorCode** | `uint32_t`   | Error code
+**uid**       | `NSString *` | Remote user id
+**state**     | `ooVooAVChatRemoteVideoState`       | Video transmit new state
+**width**     | `const int`  | This width of video.
+**height**    | `const int`  | This height of video.
+**code** 			| `sdk_error`  | Error code
 
 **Result**: no result.
 
-### didVideoPreviewStateChanged
+### didVideoPreviewStateChange
 **Description**: Event fired when preview video state was changed.
 
 **Parameters**:
@@ -528,25 +742,21 @@ uid           | `NSString *` | Remote user id
 Attribute     | Type       | Description
 ------------- | ---------- | ------------------------
 **state**     | `BOOL`     | Video transmit new state
-**errorCode** | `uint32_t` | Error code
+**devId**     | `NSString *` | Device ID
+**code** 			| `sdk_error` | Error code
 
 **Result**: no result.
 
-### didActiveDeviceChanged
-**Description**: Event fired when current active device has changed.
-
-**Parameters**:
-
-Attribute     | Type         | Description
-------------- | ------------ | -----------
-**deviceId**  | `NSString *` | Device Id
-**errorCode** | `uint32_t`   | Error code
-
-**Result**: no result.
-
-# AudioController Protocol
+# ooVooAudioController Protocol
 ## initAudio
-**Description**: call this method to open playback and record devices. It's recommended to call this method before calling to join method.
+**Description**: call this method to open playback and record devices. It's recommended to call this method before calling "join" the method.
+
+**Parameters**: N/A
+
+**Result**: OK for successful otherwise error code.
+
+## unInitAudio
+**Description**: call this method to close playback and stop record devices. It's recommended to call this method before calling "leave" the method.
 
 **Parameters**: N/A
 
@@ -560,7 +770,7 @@ Attribute     | Type         | Description
 Attribute | Type                       | Description
 --------- | -------------------------- | --------------------
 **val**   | `NSString *`               | Value
-**key**   | `AudioControllerConfigKey` | Configuration option
+**key**   | `ooVooAudioControllerConfigKey` | Configuration option
 
 **Result**: N/A
 
@@ -571,7 +781,7 @@ Attribute | Type                       | Description
 
 Attribute | Type                       | Description
 --------- | -------------------------- | --------------------
-**key**   | `AudioControllerConfigKey` | Configuration option
+**key**   | `ooVooAudioControllerConfigKey` | Configuration option
 
 **Result**: value of chosen configuration.
 
@@ -600,7 +810,7 @@ Attribute       | Type   | Requirements | Description
 
 **Result**: true for mute otherwise unmute.
 
-## setRecordMute
+## setRecordMuted
 **Description**: Set recorder current state.
 
 **Parameters**:
@@ -611,37 +821,31 @@ Attribute         | Type   | Requirements | Description
 
 **Result**: no result.
 
-## getRecorderDevicesList
-**Description**: Get list of connected microphone devices.
+## hold
+**Description**: The method allows to set the mode on hold.
 
 **Parameters**: N/A
 
-**Result**: NSArray * array. The array holds the current connected microphone devices.
+**Result**: N/A.
 
-## getPlaybackDevicesList
-**Description**: Get list of connected speaker devices.
+## unhold
+**Description**: The method allows to set the mode unhold.
 
 **Parameters**: N/A
 
-**Result**: NSArray * array. The array holds the current connected speaker devices.
+**Result**: N/A.
 
 ## Properties
 ### delegate
-**Description**: sdk user must set id<AudioControllerDelegate> in order to receive completion events of AudioContoller methods such as join, leave...
+**Description**: sdk user must set id<ooVooAudioControllerDelegate> in order to receive completion events of AudioContoller methods such as join, leave...
 
 **Parameters**:
 
 Attribute    | Type                      | Description
 ------------ | ------------------------- | --------------------------------------------------------------
-**delegate** | `VideoControllerDelegate` | user object, which implements VideoControllerDelegate protocol
+**delegate** | `ooVooAudioControllerDelegate` | user object, which implements ooVooAudioControllerDelegate protocol
 
-### MicVolume
-**Description**: Property to get/set the volume of the microphone.
-
-### SpeakerVolume
-**Description**: Property to get/set the volume of the speakers.
-
-## AudioControllerDelegate
+## ooVooAudioControllerDelegate
 ### didAudioTransmitStateChanged
 **Description**: Event fired when audio transmit state was changed.
 
@@ -650,7 +854,7 @@ Attribute    | Type                      | Description
 Attribute     | Type     | Description
 ------------- | -------- | ------------------------
 **state**     | `BOOL`   | Audio transmit new state
-**errorCode** | uint32_t | Error code
+**code** 			| `sdk_error` | Error code
 
 **Result**: no result.
 
@@ -662,50 +866,18 @@ Parameters:
 Attribute     | Type     | Description
 ------------- | -------- | -----------------------
 **state**     | `BOOL`   | Audio receive new state
-**errorCode** | uint32_t | Error code
+**code** 			| `sdk_error` | Error code
 
 **Result**: no result.
 
-### didActiveDeviceChanged
-**Description**: Event fired when current active device has changed.
-
-**Parameters**:
-
-Attribute      | Type              | Description
--------------- | ----------------- | ---------------------------
-**deviceType** | `MediaDeviceType` | Recorder or playback device
-**deviceId**   | `NSString *`      | Device Id
-**errorCode**  | `uint32_t`        | Error code
-
-**Result**: no result.
-
-### didAudioDeviceStateChanged
-**Description**: Event fired when audio device power is changed.
-
-**Parameters**:
-
-Attribute      | Type              | Description
--------------- | ----------------- | ------------------------------
-**deviceId**   | `NSString *`      | Device Id
-**deviceType** | `MediaDeviceType` | Recorder or playback device
-**state**      | `BOOL`            | True for open otherwise closed
-**errorCode**  | `uint32_t`        | Error code
-
-**Result**: no result.
-
-## AudioControllerConfigKey
-The enum of configuration keys:
-- AudioRenderDeviceId
-- AudioCaptureDeviceId
-
-# Effect Protocol
+# ooVooEffect Protocol
 ## Properties
 ### effectName
 **Description**: read only property. Effect name.
 
 **Result**: Return effect name.
 
-### effectId
+### effectID
 **Description**: read only property. Effect id.
 
 **Result**: Return effect id.
@@ -717,17 +889,105 @@ The enum of configuration keys:
 
 **Result**: Return icon URL.
 
-## VideoConfigKey
-The enum of configuration keys: kCaptureDeviceId, kResolution, kFps, kEffectId
+### category
+**Description**: read only property. This is a type of category.
 
-# Device Protocol
+**Parameters**: N/A
+
+**Result**: Return a type of category.
+
+### purchaseID
+**Description**: read only property. This is ID for each purchase of Effect.
+
+**Parameters**: N/A
+
+**Result**: Return ID of purchase.
+
+# ooVooDevice Protocol
 ## Properties
 ## deviceName
 **Description**: read only property. Device name.
 
 **Result**: Return device name.
 
-## deviceId
-**Description**: read only property. Effect id.
+## deviceID
+**Description**: read only property. Device id.
 
 **Result**: Return device id.
+
+# ooVooVideoDevice Protocol
+
+## isResolutionSupported
+**Description**: The method allows to check supporting the resolution of device.
+
+**Parameters**:
+
+Attribute        | Type              				| Description
+---------------- | ------------------------ | ------------------------------
+**resolution**   | `ResolutionLevel`        | This is a level of resolution.
+
+
+**Result**: Returns boolean value, if supported by the requested resolution.
+
+## isFront
+**Description**: The method allows to check, if this is the front camera.
+
+**Parameters**: N/A
+
+**Result**: Returns boolean value.
+
+## getAvailableResolutions
+**Description**: The method allows to get all available resolutions.
+
+**Parameters**: N/A
+
+**Result**: Returns a array of available resolutions.
+
+# ooVooParticipant Protocol
+## Properties
+### participantID
+**Description**: read only property. Participant ID.
+
+**Result**: Return ID of participant.
+
+### type
+**Description**: read only property. This type of participant.
+
+**Result**: Return ooVooAVParticipatType.
+
+# Enumerators
+### ooVooDeviceState
+	The enum used in the method didCameraStateChange :
+	ooVooNotCreated, ooVooTurningOn, ooVooTurnedOn, ooVooTurningOff, ooVooTurnedOff, ooVooRestarting, ooVooOnHold.
+
+### ooVooAudioRouteType
+	The enum used for define an audio route :
+	ooVooAudiotoEarpiece, ooVooAudioRouteToHeadphone, ooVooAudioRouteToBluetooth, ooVooAudioRouteToSpeaker
+
+### ooVooVideoControllerConfigKey
+	The enum used in the methods setConfig/getConfig for define configuration of video :
+	 ooVooVideoControllerConfigKeyCaptureDeviceId, ooVooVideoControllerConfigKeyResolution, ooVooVideoControllerConfigKeyFps, ooVooVideoControllerConfigKeyEffectId
+
+### ResolutionLevel
+	The enum used in the methods isResolutionSupported/sizeToCameraResolutionLevel for define resolution of video :
+	ResolutionLevelNotSpecified, ResolutionLevelLow, ResolutionLevelMed, ResolutionLevelHigh, ResolutionLevelHD
+
+### ooVooPstnState
+	The enum used in the method didPhonePstnCallStateChange for define status of call :
+	 ooVooPstnStateStartCall, ooVooPstnStateEndCall, ooVooPstnStateInProgress, ooVooPstnStateRinging, ooVooPstnStateCallIsBeingForwarded, ooVooPstnStateQueued, ooVooPstnStateSessionInProgress, ooVooPstnStateOK, ooVooPstnStateBadRequest, ooVooPstnStatePaymentRequired, ooVooPstnStateNotFound, ooVooPstnStateRequestTimedOut, ooVooPstnStateConnectionTimedOut, ooVooPstnStateTooManyPstnClients, ooVooPstnStateInvalidPhoneNumber, ooVooPstnStateInfrastructureError
+
+### ooVooAudioControllerConfigKey
+	The enum used in the methods setConfig/getConfig for define configuration of audio :
+	 ooVooAudioControllerConfigKeyRenderDeviceId, ooVooAudioControllerConfigKeyCaptureDeviceId, ooVooAudioControllerConfigKeyAudioSetMode
+
+### ooVooAVChatState
+	The enum used in the method didConferenceStateChange for define status of AVChat :
+	 ooVooAVChatStateJoined, ooVooAVChatStateDisconnected
+
+## ooVooAVChatRemoteVideoState
+	The enum used in the method didRemoteVideoStateChange for define when remote video state has changed :
+	 ooVooAVChatRemoteVideoStateStated, ooVooAVChatRemoteVideoStateStopped, ooVooAVChatRemoteVideoStatePaused, ooVooAVChatRemoteVideoStateResumed
+
+## ooVooAVParticipantType
+	The enum used in the property ooVooAVParticipantType for define the type of participant :
+	 ooVooAVParticipantTypeVOIP, ooVooAVParticipantTypePSTN
