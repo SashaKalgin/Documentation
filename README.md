@@ -1,7 +1,7 @@
 # ooVoo Video Platform Documentation for SDK v2.1
 The following is the documentation repository for the ooVoo Video Platform for SDK v2.1.
 
-Documentation for SDK 2.0 can be found in branch 2.0.
+Documentation for previous version can be found under the appropriate branches (i.e. SDK 2.0 can be found in branch 2.0).
 
 Documentation is released under an Apache 2.0 License.
 

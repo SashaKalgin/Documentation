@@ -1,5 +1,12 @@
 # XCode Integration Guide
-## Manual Integration:
+<!-- TOC depth:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+- [XCode Integration Guide](#xcode-integration-guide)
+	- [Manual Integration](#manual-integration)
+	- [Integration using Cocoapods](#integration-using-cocoapods)
+<!-- /TOC -->
+
+## Manual Integration
 **Step #1**
 
 Open XCode and click on new project from file menu Choose your application type: single view application and click next:
