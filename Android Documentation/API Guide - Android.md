@@ -77,8 +77,8 @@ Table of Contents
 	- [setListener](#setlistener)
 	- [join](#join)
 	- [leave](#leave)
-	- [send](#send)
-	- [send](#send)
+	- [sendData](#senddata)
+	- [sendData](#senddata)
 	- [registerPlugin](#registerplugin)
 	- [unregisterPlugin](#unregisterplugin)
 	- [isDataChannelPermit](#isdatachannelpermit)
@@ -873,9 +873,8 @@ The method allows to perform a leave from conference call.
 
 **Return a value:** no result.
 
-### send
-The method allows to send a message to the user specification.
-
+### sendData
+The method allows to send the message to specifies user.
 **Gets a parameters list:**
 
 Type   | Name | Description
@@ -889,9 +888,9 @@ Type      | Name | Description
 --------- | ---- | -------------------------------
 sdk_error | ---- | Returns a status about sending.
 
-### send
-The method allows to send a message to all users in conference session.
 
+### sendData
+The method allows to send the message.
 **Gets a parameters list:**
 
 Type   | Name | Description
