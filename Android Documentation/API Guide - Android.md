@@ -988,7 +988,7 @@ Type            | Name | Description
 
 ## AVChatListener
 ### onParticipantJoined
-The method allows to receive an event listener that a participant joined to av chat session.
+The method allows to receive the event listener that a participant joined to av chat session.
 
 **Gets a parameters list:**
 
@@ -1000,7 +1000,7 @@ Type        | Name        | Description
 **Return a value**: no result.
 
 ### onParticipantLeft
-The method allows to receive an event listener that a participant left the session.
+The method allows to receive the event listener that a participant left the session.
 
 **Gets a parameters list:**
 
@@ -1011,7 +1011,7 @@ Type        | Name        | Description
 **Return a value:** no result.  
 
 ### onConferenceStateChanged
-The method allows to receive an event listener about changing in session.
+The method allows to receive the event listener about changing in session.
 
 **Gets a parameters list:**
 
@@ -1033,7 +1033,7 @@ Type       | Name   | Description
 **Return a value:** no result.
 
 ### onConferenceError
-The method allows to receive an event listener about error in conference session.
+The method allows to receive the event listener about error in conference session.
 
 **Gets a parameters list:**
 
@@ -1208,7 +1208,7 @@ Type	       | Name      | Description
 
 ## AudioControllerListener
 ### onAudioTransmitStateChanged
-The method allows to receive an event listener, that an audio transmitter has been changed.
+The method allows to receive the event listener, that an audio transmitter has been changed.
 
 **Gets a parameters list:**
 
@@ -1220,7 +1220,7 @@ Type      | Name  | Description
 **Return a value:** no result.
 
 ### onAudioReceiveStateChanged
-The method allows to receive an event listener, that audio receiver has been changed.
+The method allows to receive the event listener, that audio receiver has been changed.
 
 **Gets a parameters list:**
 
@@ -1232,7 +1232,7 @@ Type      | Name  | Description
 **Return a value: no result.**
 
 ### onMicrophoneStateChange
-The method allows to receive an event listener, that microphone status has been changed.
+The method allows to receive the event listener, that microphone status has been changed.
 
 **Gets a parameters list:**
 
@@ -1244,7 +1244,7 @@ Type      | Name  | Description
 **Return a value:** no result.
 
 ### onSpeakerStateChange
-The method allows to receive an event listener, that speaker status has been changed.
+The method allows to receive the event listener, that speaker status has been changed.
 
 **Gets a parameters list:**
 
@@ -1329,7 +1329,7 @@ Type                 | Name | Description
 
 ### onAudioRouteChanged
 
-The method allows to receive an event listener, that an audio route has been changed.
+The method allows to receive the event listener, that an audio route has been changed.
 
 **Gets a parameters list:**
 
@@ -1706,7 +1706,7 @@ This enum type is a special data type that enables define about existing a statu
 **Parameters list:** ***RVS_Started*** - this remote video started, ***RVS_Stopped*** - this remote video stopped, ***RVS_Paused*** - this remote video paused by QOS/hold, ***RVS_Resumed*** - this remote video resumed by QOS.
 
 ### onRemoteVideoStateChanged
- The method allows to receive an event listener, when remote video state has been changed.
+ The method allows to receive the event listener, when remote video state has been changed.
 
 **Gets a parameters list:**
 
@@ -1721,7 +1721,7 @@ Type             | Name   | Description
 **Return a value:** no result.  
 
 ### onCameraStateChanged
- The method allows to get an event listener, when camera state has been exchanged.
+ The method allows to get the event listener, when camera state has been exchanged.
 
 **Gets a parameters list:**
 
@@ -1737,7 +1737,7 @@ Type      | Name     | Description
 **Return a value:** no result.
 
 ### onTransmitStateChanged
-The method allows to get an event listener, when video transmit state has been exchanged.
+The method allows to get the event listener, when video transmit state has been exchanged.
 
 **Gets a parameters list:**
 
@@ -1749,7 +1749,7 @@ Type      | Name  | Description
 **Return a value:** no result.  
 
 ### onVideoPreviewStateChanged
-The method allows to get an event listener, when preview video state has been exchanged.
+The method allows to get the event listener, when preview video state has been exchanged.
 
 **Gets a parameters list:**
 
@@ -1761,7 +1761,7 @@ Type      | Name  | Description
 **Return a value:** no result.
 
 ### onCameraChanged
-The method allows to get an event listener, when active device has been exchanged.
+The method allows to get the event listener, when active device has been exchanged.
 
 **Gets a parameters list:**
 
@@ -1895,7 +1895,7 @@ public static final String MessageSentStateKey = "MessageSentStateKey" ;
 # MessagingListener
 
 ### onMessageReceive
-The method allows to receive an event listener, when obtained a message.
+The method allows to receive the event listener, when obtained a message.
 
 **Gets a parameters list:**
 
@@ -2159,7 +2159,7 @@ Type       | Name | Description
 # VideoRender
 
 ### onProcessVideoFrame
-The method allows to receive an event listener, when obtained a message.
+The method allows to receive the event listener, before coding video frame or after decoding video frame.
 
 **Gets a parameters list:**
 
