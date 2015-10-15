@@ -19,6 +19,10 @@ Table Of Contents
 		- [app_token](#app_token)
 		- [Account](#account)
 		- [AVChat](#avchat)
+		- [PushService](#pushservice)
+		- [Messaging](#messaging)
+		- [set_enableMessaging](#set_enablemessaging)
+		- [get_enableMessaging](#get_enablemessaging)
 - [ooVooClientLogger Protocol](#oovooclientlogger-protocol)
 	- [onLog](#onlog)
 - [ooVooAccount Protocol](#oovooaccount-protocol)
@@ -43,7 +47,7 @@ Table Of Contents
 	- [Properties](#properties)
 		- [VideoController](#videocontroller)
 		- [AudioController](#audiocontroller)
-		- [isInCallMessagePermit](#isincallmessagepermit)
+		- [isDataChannelPermit ](#isdatachannelpermit )
 		- [delegate](#delegate)
 	- [ooVooAVChatDelegate](#oovooavchatdelegate)
 		- [didParticipantJoin](#didparticipantjoin)
@@ -52,6 +56,7 @@ Table Of Contents
 		- [didReceiveData](#didreceivedata)
 		- [didConferenceError](#didconferenceerror)
 		- [didNetworkReliabilityChange](#didnetworkreliabilitychange)
+		- [didSecurityState](#didsecuritystate)
 - [ooVooVideoController Protocol](#oovoovideocontroller-protocol)
 	- [setConfig](#setconfig)
 	- [getConfig](#getconfig)
@@ -101,11 +106,10 @@ Table Of Contents
 		- [iconUrl](#iconurl)
 		- [category](#category)
 		- [purchaseID](#purchaseid)
-	- [VideoConfigKey](#videoconfigkey)
 - [ooVooDevice Protocol](#oovoodevice-protocol)
 	- [Properties](#properties)
-	- [deviceName](#devicename)
-	- [deviceID](#deviceid)
+		- [deviceName](#devicename)
+		- [deviceID](#deviceid)
 - [ooVooVideoDevice Protocol](#oovoovideodevice)
 	- [isResolutionSupported](#isresolutionsupported)
 	- [isFront](#isfront)
@@ -114,6 +118,58 @@ Table Of Contents
 	- [Properties](#properties)
 		- [participantID](#participantid)
 		- [type](#type)
+- [ooVooVideoData Protocol](#oovoovideodata)
+	- [getPlane](#getplane)
+	- [getPlanePitch](#getplanepitch)
+	- [Property](#property)
+		- [data](#data)
+		- [dataLength](#datalength)
+		- [width](#width)
+		- [height](#height)
+		- [colorFormat](#colorformat)
+		- [planeCount](#planecount)
+- [ooVooVideoFrame Protocol](#oovoovideoframe)
+	- [Property](#property)
+		- [videoData](#videodata)
+		- [width](#width)
+		- [height](#height)
+		- [frameNumber](#framenumber)
+		- [isKeyFrame](#iskeyframe)
+		- [isMirror](#ismirror)
+		- [rotationAngle](#rotationangle)
+		- [deviceRotationAngle](#devicerotationangle)
+		- [colorFormat](#colorformat)
+- [ooVooVideoRender Protocol](#oovoovideorender)
+	- [onProcessVideoFrame](#onprocessvideoframe)
+- [ooVooPushService Protocol](#oovoopushservice)
+	- [subscribe](#subscribe)
+	- [unSubscribe](#unsubscribe)
+	- [sendPushMessage](#sendpushmessage)
+- [ooVooPushNotificationMessage Interface](#oovoopushnotificationmessage)
+	- [initMessageWithArrayUsers](#initmessagewitharrayusers)
+	- [Property](#property)
+		- [get_to](#get_to)
+		- [get_body](#get_body)
+		- [get_property](#get_property)
+		- [get_messageId](#get_messageId)
+- [ooVooMessaging Protocol](#oovoomessaging)
+	- [sendMessage](#sendmessage)
+	- [sendAcknowledgement](#sendacknowledgement)
+	- [Property](#property)
+		- [delegate](#delegate)
+- [ooVooMessagingDelegate Protocol](#oovoomessagingdelegate)
+	- [didMessageReceive](#didmessagereceive)
+	- [didMessageReceiveAcknowledgement](#didmessagereceiveacknowledgement)
+- [ooVooMessage Interface](#oovoomessage)
+	- [initMessage](#initmessage)
+	- [initMessageWithData](#initmessagewithdata)
+	- [initMessageWithArrayUsers](#initmessagewitharrayusers)
+	- [Property](#property)
+		- [get_from](#get_from)
+		- [get_to](#get_to)
+		- [get_body](#get_body)
+		- [get_messageId](#get_messageId)
+		- [get_timestamp](#get_timestamp)
 - [Enumerators](#enumerators)
 	- [ooVooDeviceState](#oovoodevicestate)
 	- [ooVooAudioRouteType](#oovooaudioroutetype)
@@ -124,6 +180,9 @@ Table Of Contents
 	- [ooVooAVChatState](#oovooavchatstate)
 	- [ooVooAVChatRemoteVideoState](#oovooavchatremotevideostate)
 	- [ooVooAVParticipantType](#oovooavparticipanttype)
+	- [ooVooColorFormat](#oovoocolorformat)
+	- [ooVooMessageSendState](#oovoomessagesendstate)
+	- [ooVooMessageAcknowledgeState](#oovooMessageacknowledgestate)
 
 <!-- /TOC -->
 
@@ -245,6 +304,34 @@ sslVerifyPeer |`BOOL`  			 | Required    	| Define SSL verification.
 
 **Result**: returns reference to object that implements AVChat protocol.
 
+### PushService
+**Description**: Get read only push service property. Use PushService to perform operation such as: sendPushMessage, subscribe ...
+
+**Parameters**: N/A.
+
+**Result**: returns reference to object that implements PushService protocol.
+
+### Messaging
+**Description**: Get read only messaging property. Use Messaging to perform operation such as: send, sendAcknowledgement ...
+
+**Parameters**: N/A.
+
+**Result**: returns reference to object that implements Messaging protocol.
+
+### set_enableMessaging
+**Description**: the property allows to set enable Messaging.
+
+**Parameters**: BOOL value.
+
+**Result**: N/A
+
+### get_enableMessaging
+**Description**: the property allows to get enable Messaging.
+
+**Parameters**: N/A
+
+**Result**: returns BOOL value.
+
 # ooVooClientLogger Protocol
 ## onLog
 **Description**: call back function that should handle the log from SDK.
@@ -286,7 +373,7 @@ completion | `CompletionHandler` | Required     | Answer result callback
 **Parameters**:
 
 Attribute    | Type             			| Description
------------- | ------------------ | -----------------------------------------------------
+------------ | ---------------------- | -----------------------------------------------------
 **delegate** | `ooVooAccountDelegate` | user object, which implements ooVooAccountDelegate protocol
 
 **Result**: N/A
@@ -427,7 +514,7 @@ Attribute        | Type              				| Description
 
 **Result**: returns reference to object that implements ooVooAudioController protocol.
 
-### isInCallMessagePermit
+### isDataChannelPermit
 **Description**: Get read only in call message permit property. Used for perform check the permission.
 
 **Parameters**: N/A
@@ -503,7 +590,7 @@ Attribute     | Type         | Description
 
 **Result**: No Results
 
-### didNetworkReliability
+### didNetworkReliabilityChange
 **Description**: Event occurs when network reliability change.
 
 **Parameters**:
@@ -511,6 +598,17 @@ Attribute     | Type         | Description
 Attribute     | Type         | Description
 ------------- | ------------ | ------------------------------------------------
 **scope** 			| `NSString *`  | A number from 1-4, 1 indicate that network is worse 4 network is best.
+
+**Result**: No Results
+
+### didSecurityState
+**Description**: Event occurs when user changed security  mode.
+
+**Parameters**:
+
+Attribute     | Type         | Description
+------------- | ------------ | ------------------------------------------------
+**is_secure** 			| `bool`  | true for secured otherwise false.
 
 **Result**: No Results
 
@@ -836,6 +934,7 @@ Attribute         | Type   | Requirements | Description
 **Result**: N/A.
 
 ## Properties
+
 ### delegate
 **Description**: sdk user must set id<ooVooAudioControllerDelegate> in order to receive completion events of AudioContoller methods such as join, leave...
 
@@ -955,6 +1054,333 @@ Attribute        | Type              				| Description
 
 **Result**: Return ooVooAVParticipatType.
 
+# ooVooVideoData Protocol
+
+### getPlane
+**Description**:The method allows to obtain a pointer to a specific plane.
+
+**Parameters**:
+
+Attribute | Type 	 | Description
+--------- | ------ | ---------------
+**int**   | `index`| This index of plane.
+
+**Result**: Returns a pointer of indeterminate type.
+
+### getPlanePitch
+**Description**:The method allows to obtain a pitch on a specific plane.
+
+**Parameters**:
+
+Attribute | Type 	 | Description
+--------- | ------ | ---------------
+**int**   | `index`| This index of plane.
+
+**Result**: Returns pitch.
+
+## Properties
+
+### data
+**Description**: read only property. The property allows to get video data.
+
+**Result**: Return pointer of video data.
+
+### dataLength
+**Description**: read only property. The property allows to get size of video data.
+
+**Result**: Return length of video data.
+
+### width
+**Description**: read only property. The property allows to get width of video data.
+
+**Result**: Return width of video data.
+
+### height
+**Description**: read only property. The property allows to get height of video data.
+
+**Result**: Return height of video data.
+
+### colorFormat
+**Description**: read only property. The property allows to get color format of video data.
+
+**Result**: Return color format of video data.
+
+### planeCount
+**Description**: read only property. The property allows to get the number of planes.
+
+**Result**: Return the number of planes.
+
+# ooVooVideoFrame Protocol
+
+## Properties
+
+### videoData
+**Description**: read only property. The property allows to get object ooVooVideoData.
+
+**Result**: Return object of ooVooVideoData.
+
+### width
+**Description**: read only property. The property allows to get width of video frame.
+
+**Result**: Return width of video frame.
+
+### height
+**Description**: read only property. The property allows to get height of video frame.
+
+**Result**: Return height of video frame.
+
+### frameNumber
+**Description**: read only property. The property allows to get number to a video frame.
+
+**Result**: Returns number to a video frame.
+
+### isKeyFrame
+**Description**: read only property. The property allows to get key to a video frame.
+
+**Result**: Returns key to a video frame.
+
+### isMirror
+**Description**: read only property. The property allows to get BOOL value, if a video frame received in a mirror reflection.
+
+**Result**: Returns BOOL value.
+
+### rotationAngle
+**Description**: read only property. The property allows to get rotation angle of video frame.
+
+**Result**: Returns rotation angle in degree.
+
+### deviceRotationAngle
+**Description**: read only property. The property allows to get rotation angle of device.
+
+**Result**: Returns rotation angle in degree.
+
+### colorFormat
+**Description**: read only property. The property allows to get color format of video frame.
+
+**Result**: Returns enum of ooVooColorFormat.
+
+# ooVooVideoRender Protocol
+
+### onProcessVideoFrame
+**Description**:The method allows to obtain video frame and you can process this video frame. In addition perform before coding video frame or after decoding video frame.
+
+**Parameters**:
+
+Attribute | Type 	 | Description
+--------- | ------ | ---------------
+**ooVooVideoFrame**   | `frame`| This video frame for processing.
+
+**Result**: N/A
+
+# ooVooPushService Protocol
+
+### subscribe
+**Description**:The method allows to subscribe on push notification events.
+
+**Parameters**:
+
+Attribute 						| Type 	 			| Description
+--------------------- | ----------- | ---------------
+**token**   					| `NSString *`| This application token
+**deviceUid**   			| `NSString *`| This device ID of user.
+**completion**   			| `CompletionHandler`| The handler notifies about operation completion
+
+**Result**: N/A
+
+### unSubscribe
+**Description**:The method allows to un-subscribe from push notification events.
+
+**Parameters**:
+
+Attribute 						| Type 	 			| Description
+--------------------- | ----------- | ---------------
+**token**   					| `NSString *`| This application token
+**deviceUid**   			| `NSString *`| This device ID of user.
+**completion**   			| `CompletionHandler`| The handler notifies about operation completion
+
+**Result**: N/A
+
+### sendPushMessage
+**Description**: Used for sending text messages between 3rd party users in same application.
+
+**Parameters**:
+
+Attribute 						| Type 	 			| Description
+--------------------- | ----------- | ---------------
+**message**   					| `ooVooPushNotificationMessage`| This a text message for other users.
+**completion**   			| `CompletionHandler`| The handler notifies about operation completion
+
+**Result**: N/A
+
+# ooVooPushNotificationMessage Interface
+
+### initMessageWithArrayUsers
+**Description**: Used for sending text messages between 3rd party users in same application.
+
+**Parameters**:
+
+Attribute 			| Type 	 			| Description
+--------------- | ----------- | ---------------
+**to_list**			| `NSString *`| This a array of users, for receive a text message.
+**body**   			| `NSString *`| This a body of text message.
+**property**   	| `NSString *`| This a property.
+**ttl**   			| `unsigned int`| This a time  in seconds afterwards the message should not be sent.
+
+**Result**: returns instance of object.
+
+## Properties
+
+### get_to
+**Description**: read only property. The property allows to get array of users which received a push notification.
+
+**Result**: Return array of users.
+
+### get_body
+**Description**: read only property. The property allows to get body of message.
+
+**Result**: Returns a body of the message.
+
+### get_property
+**Description**: read only property. The property allows to get a property.
+
+**Result**: Returns a property.
+
+### get_messageId
+**Description**: read only property. The property allows to get ID of message.
+
+**Result**: Returns ID of message.
+
+# ooVooMessaging Protocol
+
+### sendMessage
+**Description**: The method allows to send text message to user(s).
+
+**Parameters**:
+
+Attribute 						| Type 	 			| Description
+--------------------- | ----------- | ---------------
+**message**   					| `ooVooMessage*`| This a text message for other users.
+**completion**   			| `CompletionHandler`| The handler notifies about operation completion
+
+**Result**: N/A
+
+### sendAcknowledgement
+**Description**: The method allows to get a status of send acknowledgement of a text message.
+
+**Parameters**:
+
+Attribute 						| Type 	 			| Description
+--------------------- | ----------- | ---------------
+**state**   					| `ooVooMessageAcknowledgeState`| This a status of acknowledgement.
+**message**   					| `ooVooMessage*`| This a text message for other users.
+**completion**   			| `CompletionHandler`| The handler notifies about operation completion
+
+**Result**: N/A
+
+## Properties
+
+### delegate
+**Description**: user must set id<ooVooMessagingDelegate> in order to receive completion events of ooVooMessage.
+
+**Parameters**:
+
+Attribute    | Type             			| Description
+------------ | ---------------------- | -----------------------------------------------------
+**delegate** | `ooVooMessagingDelegate` | user object, which implements ooVooMessage protocol
+
+**Result**: N/A
+
+# ooVooMessagingDelegate Protocol
+
+### didMessageReceive
+**Description**: Event fired when a text message was received.
+
+**Parameters**:
+
+Attribute     | Type     | Description
+------------- | -------- | ------------------------
+**message**     | `ooVooMessage*`   | This a text message was received.
+
+**Result**: no result.
+
+### didMessageReceiveAcknowledgement
+**Description**: Event fired when was received acknowledgement that the text a message delivered or readed by user.
+
+**Parameters**:
+
+Attribute     | Type     | Description
+------------- | -------- | ------------------------
+**state**     | `ooVooMessageAcknowledgeState`   | This a text message was received.
+**messageId**     | `NSString*`   | This ID of message.
+
+**Result**: no result.
+
+# ooVooMessage Interface
+
+### initMessage
+**Description**:The method allows to initialize the ooVooMessage.
+
+**Parameters**:
+
+Attribute 						| Type 	 			| Description
+--------------------- | ----------- | ---------------
+**to**   					| `NSString *`| The user, who will be sent a text message.
+**message**   			| `NSString *`| This a text message.
+
+**Result**: returns instance of object.
+
+### initMessageWithData
+**Description**:The method allows to initialize the ooVooMessage.
+
+**Parameters**:
+
+Attribute 						| Type 	 			| Description
+--------------------- | ----------- | ---------------
+**to**   					| `NSArray*`| The user(s), who will be sent this a text message.
+**message**   			| `NSData *`| This is a test message in a binary format.
+
+**Result**: returns instance of object.
+
+### initMessageWithArrayUsers
+**Description**:The method allows to initialize the ooVooMessage.
+
+**Parameters**:
+
+Attribute 						| Type 	 			| Description
+--------------------- | ----------- | ---------------
+**to**   					| `NSArray*`| The user(s), who will be sent this a text message.
+**message**   			| `NSString *`| This a text message.
+
+**Result**: returns instance of object.
+
+## Properties
+
+### get_from
+**Description**: read only property. The property allows to get user ID who send a message.
+
+**Result**: Returns user ID.
+
+### get_to
+**Description**: read only property. The property allows to get array of users which received a push notification.
+
+**Result**: Return array of users.
+
+### get_body
+**Description**: read only property. The property allows to get body of message.
+
+**Result**: Returns a body of the message.
+
+### get_messageId
+**Description**: read only property. The property allows to get ID of message.
+
+**Result**: Returns ID of message.
+
+### get_timestamp
+**Description**: read only property. The property allows to get a time last operation with a message.
+
+**Result**: Returns time.
+
+
 # Enumerators
 ### ooVooDeviceState
 	The enum used in the method didCameraStateChange :
@@ -991,3 +1417,15 @@ Attribute        | Type              				| Description
 ## ooVooAVParticipantType
 	The enum used in the property ooVooAVParticipantType for define the type of participant :
 	 ooVooAVParticipantTypeVOIP, ooVooAVParticipantTypePSTN
+
+## ooVooColorFormat
+This enum type is a special data type that enables define about existing color formats :
+ ooVooColorFormatNONE - (value -1), ooVooColorFormatYV12 - (value 100) Planar Y, V, U (4:2:0) (note V,U order!), ooVooColorFormatNV12 - Planar Y, merged U->V (4:2:0), ooVooColorFormatNV21 -       // Planar Y, merged V->U (4:2:0) (note V,U order!), ooVooColorFormatYUY2 - Composite Y->U->Y->V (4:2:2), ooVooColorFormatUYVY - Composite U->Y->V->Y (4:2:2), ooVooColorFormatYUV420 - Planar Y, U, V, ooVooColorFormatRGB32 - Composite R->G->B->A, ooVooColorFormatRGB24 - Composite R->G->B, ooVooColorFormatBGR32 - Composite B->G->R->A, ooVooColorFormatBGR24 - Composite B->G->R, ooVooColorFormatGRAY - Luminance component only, ooVooColorFormatYUV420A - Planar Y, U, V, Alpha, ooVooColorFormatYUV444A - Planar Y, U, V, Alpha, ooVooColorFormatGRAYA - Luminance with Alpha, ooVooColorFormatSURFACE - GPU surface, ooVooColorFormatRAW - Raw data (internal format)N
+
+## ooVooMessageSendState
+ This enum type is a special data type that enables define about existing message send state:
+ 	Sent - marks, that a message was send, RecipientOffline - marks, that recipient off line.
+
+## ooVooMessageAcknowledgeState
+This enum type is a special data type that enables define about existing message acknowledge state:
+Delivered - marks, that message was delivered to recipient, Read - marks, that message was read by recipient.
