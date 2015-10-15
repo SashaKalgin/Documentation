@@ -562,8 +562,8 @@ The method allows to get body of message.
 ### Constructor - PushNotificationMessage(ArrayList<String> users, String payload, String property)
  Construct a new instance of PushNotificationMessage.
 
-  **Gets a parameters list:**
-  
+ **Gets a parameters list:**
+
  Type                      | Name              | Description
  ------------------------- | ----------------- | -----------------------------------
  **ArrayList<String>**         | users           | List of recipients
@@ -575,8 +575,8 @@ The method allows to get body of message.
 ### Constructor - PushNotificationMessage(ArrayList<String> users, String payload)
  Construct a new instance of PushNotificationMessage.
 
-  **Gets a parameters list:**
-  
+ **Gets a parameters list:**
+
  Type                      | Name              | Description
  ------------------------- | ----------------- | ---------------------------------------------------
  **ArrayList<String>**         | users           | List of recipients
@@ -875,6 +875,7 @@ The method allows to perform a leave from conference call.
 
 ### sendData
 The method allows to send the message to specifies user.
+
 **Gets a parameters list:**
 
 Type   | Name | Description
@@ -891,6 +892,7 @@ sdk_error | ---- | Returns a status about sending.
 
 ### sendData
 The method allows to send the message.
+
 **Gets a parameters list:**
 
 Type   | Name | Description
@@ -1023,7 +1025,9 @@ Type            | Name      | Description
 **Return a value:** no result.
 
 ### onReceiveData
-The method allows to receive any data that had been sent to the user. **Gets a parameters list:**
+The method allows to receive any data that had been sent to the user.
+
+**Gets a parameters list:**
 
 Type       | Name   | Description
 ---------- | ------ | -----------------
@@ -1887,7 +1891,7 @@ Type           | Name     | Description
 
 **Return a value:** no result.
 
-###S MessageSentStateKey
+### MessageSentStateKey
 The key for find in user info a hash table recipients states.
 
 public static final String MessageSentStateKey = "MessageSentStateKey" ;
