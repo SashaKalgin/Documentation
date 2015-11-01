@@ -8,6 +8,10 @@ Table Of Contents
 	- [sharedInstance](#sharedinstance)
 	- [setLogger](#setlogger)
 	- [setLogLevel](#setloglevel)
+	- [applicationDidEnterBackground](#applicationDidEnterBackground)
+	- [applicationWillResignActive](#applicationWillResignActive)
+	- [applicationWillEnterForeground](#applicationWillEnterForeground)
+	- [applicationDidBecomeActive](#applicationDidBecomeActive)
 	- [setClientVersion](#setclientversion)
 	- [authorizeClient](#authorizeclient)
 	- [getSdkVersion](#getsdkversion)
@@ -215,6 +219,36 @@ Attribute | Type       | Requirements | Description
 level     | `LogLevel` | Required     | The minimal level of log messages to be received
 
 **Result**: no result.
+
+## applicationDidEnterBackground
+**Description**: Application must call this for correct work camera and video drawing.
+
+**Parameters**: no parameters.
+
+**Result**: no result.
+
+
+## applicationWillResignActive
+**Description**: Application must call this for correct work camera and video drawing.
+
+**Parameters**: no parameters.
+
+**Result**: no result.
+
+## applicationWillEnterForeground
+**Description**: Application must call this for correct work camera and video drawing.
+
+**Parameters**: no parameters.
+
+**Result**: no result.
+
+## applicationDidBecomeActive
+**Description**: Application must call this for correct work camera and video drawing.
+
+**Parameters**: no parameters.
+
+**Result**: no result.
+
 
 ## setClientVersion
 **Description**: set client version (SDK user).
