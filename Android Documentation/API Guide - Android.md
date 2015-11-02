@@ -173,6 +173,7 @@ Table of Contents
 	- [MessageSentStateKey](#MessageSentStateKey)
 	- [MessagingListener](#messaginglistener)
 		- [onMessageReceive](#onmessagereceive)
+		- [onMessageAcknowledgementReceived](#onmessageacknowledgementreceived)
 - [Push](#push)
 	- [subscribe](#subscribe)
 	- [unsubscribe](#unsubscribe)
@@ -1845,7 +1846,7 @@ Type       | Name | Description
 	           states = (Hashtable<String,Messaging.MessageSentState>)user_info.get(Messaging.MessageSentStateKey);
 	           if(receipeint_states != null){
 	                 MessageSentState state = receipeint_states.get("Bob") ;
-	                 if(state == MessageSentState.Delivered){
+	                 if(state == MessageSentState.Sent){
 	                     //The message was sent to Bob
 	                 }
 	                 else if((state == MessageSentState.RecipientOffline){
@@ -1905,9 +1906,23 @@ The method allows to receive the event listener, when obtained a message.
 
 Type             | Name     | Description
 ---------------- | -------- | ---------------------------------
-**Message**      | message  | This is the message received
+**Message**      | message  | This is message received
 
 **Return a value:** no result.  
+
+
+### onMessageAcknowledgementReceived
+The method allows to receive the event listener, when obtained a message with acknowledgement.
+**Gets a parameters list:**
+
+Type                             | Name       | Description
+-------------------------------- | ---------- | ---------------------------------
+**MessageAcknowledgeState**      | state      | This is acknowledgement state 
+**String**                    | messageID  | The message ID 
+
+**Return a value:** no result.  
+
+
 
 # Push
 
