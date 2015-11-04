@@ -22,7 +22,6 @@ Table of Contents
 	- [setLogLevel](#setloglevel)
 	- [getSdkVersion](#getsdkversion)
 	- [updateConfig](#updateconfig)
-	- [enableMessaging](#enablemessaging)
 	- [getMessaging](#getmessaging)
 	- [getPush](#getpush)
 - [GLPerformanceUtils](#glperformanceutils)
@@ -166,14 +165,19 @@ Table of Contents
 	- [getID](#getid)
 	- [getName](#getname)
 - [Messaging](#Messaging)
+	- [MessageSentStateKey](#MessageSentStateKey) 
 	- [MessageSentState](#MessageSentState)
 	- [MessageAcknowledgeState](#messageacknowledgestate)
+	- [ConnectivityState](#connectivitystate)
 	- [sendMessage](#sendmessage)
 	- [setListener](#setlistener)
-	- [MessageSentStateKey](#MessageSentStateKey)
+	- [connect](#connect)
+	- [disconnect](#disconnect)
+	- [isConnected](#isconnected)
 	- [MessagingListener](#messaginglistener)
 		- [onMessageReceive](#onmessagereceive)
 		- [onMessageAcknowledgementReceived](#onmessageacknowledgementreceived)
+		- [onConnectivityStateChange](#onConnectivityStateChange)
 - [Push](#push)
 	- [subscribe](#subscribe)
 	- [unsubscribe](#unsubscribe)
@@ -370,8 +374,7 @@ Type                       | Name     | Description
 
 **Return a value:** no result.
 
-### enableMessaging
-The method allows to set an opportunity the messaging.
+
 
 **Gets a parameters list:**
 
@@ -1870,6 +1873,11 @@ This enum type is a special data type that enables define about existing status 
 
 **Parameters list:** ***Delivered*** - state that the message was delivered to the recipient, ***Readed*** - state that a message was readed by recipient.
 
+### ConnectivityState 
+This enum type is special data type for enables define about existing status of connection of sender.
+
+**Parameters list:** ***Connected*** - state that sender connected to messaging service, ***Disconnected*** - state that sender disconnected from messaging service
+
 ### sendMessage
 The method allows to send text message to user(s) and receive a
  **Gets a parameters list:**
@@ -1891,6 +1899,32 @@ Type           | Name     | Description
 **MessagingListener** | listener | The async listener which allows to set handler for receiving the events about status changes from module messaging.
 
 **Return a value:** no result.
+
+
+
+### connect
+
+The method start connect to messaging service
+
+*Gets a parameters list:**  no parameters.
+
+**Return a value:** no result, calback onConnectivityStateChange will fire.
+
+
+### disconnect
+
+The method start disconnect to messaging service
+
+*Gets a parameters list:**  no parameters.
+
+**Return a value:** no result, calback onConnectivityStateChange will fire.
+
+### isConnected
+
+*Gets a parameters list:**  no parameters.
+
+**Return a value:** boolean value, true mean that sender connected to messaging service, false not connected
+
 
 ### MessageSentStateKey
 The key for find in user info a hash table recipients states.
@@ -1922,6 +1956,18 @@ Type                             | Name       | Description
 
 **Return a value:** no result.  
 
+
+### onConnectivityStateChange
+The method allows to receive the event listener, when obtained a message with acknowledgement.
+**Gets a parameters list:**
+
+Type                             | Name       | Description
+-------------------------------- | ---------- | ---------------------------------
+**ConnectivityState**            | state      | This is connectivity state 
+**sdk_error**                    | error      | The error code
+**String**                       | description | The description , can be null
+
+**Return a value:** no result.  
 
 
 # Push

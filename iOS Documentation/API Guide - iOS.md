@@ -25,8 +25,6 @@ Table Of Contents
 		- [AVChat](#avchat)
 		- [PushService](#pushservice)
 		- [Messaging](#messaging)
-		- [set_enableMessaging](#set_enablemessaging)
-		- [get_enableMessaging](#get_enablemessaging)
 - [ooVooClientLogger Protocol](#oovooclientlogger-protocol)
 	- [onLog](#onlog)
 - [ooVooAccount Protocol](#oovooaccount-protocol)
@@ -46,7 +44,6 @@ Table Of Contents
 	- [sendData](#senddata)
 	- [registerPlugin](#registerplugin)
 	- [unregisterPlugin](#unregisterplugin)
-	- [getUserFullName](#getuserfullname)
 	- [isResolutionSupported](#isresolutionsupported)
 	- [Properties](#properties)
 		- [VideoController](#videocontroller)
@@ -155,15 +152,22 @@ Table Of Contents
 		- [get_to](#get_to)
 		- [get_body](#get_body)
 		- [get_property](#get_property)
-		- [get_messageId](#get_messageId)
+		- [get_messageId](#get_messageId)		
 - [ooVooMessaging Protocol](#oovoomessaging)
+	- [ooVooMessageSentState](#oovoomessagesentstate)
+	- [ooVooMessageAcknowledgeState](#oovoomessageacknowledgestate)
+	
 	- [sendMessage](#sendmessage)
 	- [sendAcknowledgement](#sendacknowledgement)
+	- [connect](#connect)
+	- [disconnect](#disconnect)
+	- [isConnected](#isconnected)
 	- [Property](#property)
 		- [delegate](#delegate)
 - [ooVooMessagingDelegate Protocol](#oovoomessagingdelegate)
 	- [didMessageReceive](#didmessagereceive)
 	- [didMessageReceiveAcknowledgement](#didmessagereceiveacknowledgement)
+	- [didConnectivityStateChange](#didconnectivitystatechange)
 - [ooVooMessage Interface](#oovoomessage)
 	- [initMessage](#initmessage)
 	- [initMessageWithData](#initmessagewithdata)
@@ -187,6 +191,7 @@ Table Of Contents
 	- [ooVooColorFormat](#oovoocolorformat)
 	- [ooVooMessageSendState](#oovoomessagesendstate)
 	- [ooVooMessageAcknowledgeState](#oovooMessageacknowledgestate)
+	- [ooVooMessagingConnectivityState](#oovoomessagingconnectivitystate)
 
 <!-- /TOC -->
 
@@ -352,19 +357,6 @@ sslVerifyPeer |`BOOL`  			 | Required    	| Define SSL verification.
 
 **Result**: returns reference to object that implements Messaging protocol.
 
-### set_enableMessaging
-**Description**: the property allows to set enable Messaging.
-
-**Parameters**: BOOL value.
-
-**Result**: N/A
-
-### get_enableMessaging
-**Description**: the property allows to get enable Messaging.
-
-**Parameters**: N/A
-
-**Result**: returns BOOL value.
 
 # ooVooClientLogger Protocol
 ## onLog
@@ -515,12 +507,6 @@ Attribute  | Type         | Description
 
 **Result**: no result
 
-## getUserFullName
-**Description**: The method allows to get the full name of user.
-
-**Parameters**: N/A
-
-**Result**: returns full name of user.
 
 ## isResolutionSupported
 **Description**: The method allows to check supporting the resolution in AVChat.
@@ -1311,6 +1297,32 @@ Attribute 						| Type 	 			| Description
 
 **Result**: N/A
 
+
+### connect
+
+The method start connect to messaging service
+
+*Gets a parameters list:**  no parameters.
+
+**Return a value:** no result, calback onConnectivityStateChange will fire.
+
+
+### disconnect
+
+The method start disconnect to messaging service
+
+*Gets a parameters list:**  no parameters.
+
+**Return a value:** no result, calback onConnectivityStateChange will fire.
+
+### isConnected
+
+*Gets a parameters list:**  no parameters.
+
+**Return a value:** boolean value, true mean that sender connected to messaging service, false not connected
+
+
+
 ## Properties
 
 ### delegate
@@ -1346,6 +1358,20 @@ Attribute     | Type     | Description
 ------------- | -------- | ------------------------
 **state**     | `ooVooMessageAcknowledgeState`   | This a text message was received.
 **messageId**     | `NSString*`   | This ID of message.
+
+**Result**: no result.
+
+
+### didConnectivityStateChange
+**Description**: Event fired when was  connectivity state was changed.
+
+**Parameters**:
+
+Attribute     | Type     | Description
+------------- | -------- | ------------------------
+**state**     | `ooVooMessageConnectivityState`   | This a connectivity state.
+**error**     | `sdk_error`   | The error code.
+**description** |`NSString*`| The event desciption, can be null
 
 **Result**: no result.
 
@@ -1463,3 +1489,7 @@ This enum type is a special data type that enables define about existing color f
 ## ooVooMessageAcknowledgeState
 This enum type is a special data type that enables define about existing message acknowledge state:
 Delivered - marks, that message was delivered to recipient, Read - marks, that message was read by recipient.
+
+## ooVooMessagingConnectivityState
+This enum type is a special data type for connectivity events:
+Connected - marks, that sender connected to messaging service, Disconnected - marks, that sender disconnected from messaging service
