@@ -154,9 +154,6 @@ Table Of Contents
 		- [get_property](#get_property)
 		- [get_messageId](#get_messageId)		
 - [ooVooMessaging Protocol](#oovoomessaging)
-	- [ooVooMessageSentState](#oovoomessagesentstate)
-	- [ooVooMessageAcknowledgeState](#oovoomessageacknowledgestate)
-	
 	- [sendMessage](#sendmessage)
 	- [sendAcknowledgement](#sendacknowledgement)
 	- [connect](#connect)
@@ -189,7 +186,6 @@ Table Of Contents
 	- [ooVooAVChatRemoteVideoState](#oovooavchatremotevideostate)
 	- [ooVooAVParticipantType](#oovooavparticipanttype)
 	- [ooVooColorFormat](#oovoocolorformat)
-	- [ooVooMessageSendState](#oovoomessagesendstate)
 	- [ooVooMessageAcknowledgeState](#oovooMessageacknowledgestate)
 	- [ooVooMessagingConnectivityState](#oovoomessagingconnectivitystate)
 
@@ -1482,9 +1478,6 @@ Attribute 						| Type 	 			| Description
 This enum type is a special data type that enables define about existing color formats :
  ooVooColorFormatNONE - (value -1), ooVooColorFormatYV12 - (value 100) Planar Y, V, U (4:2:0) (note V,U order!), ooVooColorFormatNV12 - Planar Y, merged U->V (4:2:0), ooVooColorFormatNV21 -       // Planar Y, merged V->U (4:2:0) (note V,U order!), ooVooColorFormatYUY2 - Composite Y->U->Y->V (4:2:2), ooVooColorFormatUYVY - Composite U->Y->V->Y (4:2:2), ooVooColorFormatYUV420 - Planar Y, U, V, ooVooColorFormatRGB32 - Composite R->G->B->A, ooVooColorFormatRGB24 - Composite R->G->B, ooVooColorFormatBGR32 - Composite B->G->R->A, ooVooColorFormatBGR24 - Composite B->G->R, ooVooColorFormatGRAY - Luminance component only, ooVooColorFormatYUV420A - Planar Y, U, V, Alpha, ooVooColorFormatYUV444A - Planar Y, U, V, Alpha, ooVooColorFormatGRAYA - Luminance with Alpha, ooVooColorFormatSURFACE - GPU surface, ooVooColorFormatRAW - Raw data (internal format)N
 
-## ooVooMessageSendState
- This enum type is a special data type that enables define about existing message send state:
- 	Sent - marks, that a message was send, RecipientOffline - marks, that recipient off line.
 
 ## ooVooMessageAcknowledgeState
 This enum type is a special data type that enables define about existing message acknowledge state:

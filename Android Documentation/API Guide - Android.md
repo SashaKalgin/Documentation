@@ -165,8 +165,6 @@ Table of Contents
 	- [getID](#getid)
 	- [getName](#getname)
 - [Messaging](#Messaging)
-	- [MessageSentStateKey](#MessageSentStateKey) 
-	- [MessageSentState](#MessageSentState)
 	- [MessageAcknowledgeState](#messageacknowledgestate)
 	- [ConnectivityState](#connectivitystate)
 	- [sendMessage](#sendmessage)
@@ -1837,36 +1835,21 @@ Type       | Name | Description
 	  Send a message to receiver
 	  @param message to send
 	  @param listener receiver events about send state
-
-	  Enum for get receipent state on sent message
 	  <br>Example: message send to Bob and Carl</br>
 	  ooVooClient.sharedInstance().Messaging.sendMessage(message,new ooVooSdkResultListener() {
 	      @Override
 	         public void onResult(ooVooSdkResult sdkResult) {
-	        if (sdkResult.getResult() == sdk_error.OK) {
-	           Hashtable<String,MessageSendState> states =   null ;
-	           Hashtable user_info = sdkResult.getUserInfo() ;
-	           states = (Hashtable<String,Messaging.MessageSentState>)user_info.get(Messaging.MessageSentStateKey);
-	           if(receipeint_states != null){
-	                 MessageSentState state = receipeint_states.get("Bob") ;
-	                 if(state == MessageSentState.Sent){
-	                     //The message was sent to Bob
-	                 }
-	                 else if((state == MessageSentState.RecipientOffline){
-	                     //The Bob is offline and not received the sent message, use Push serice to resend the message
-	                     PushNotificationMessage pushMessage = new PushNotificationMessage(....);
-	                     ooVooClient.sharedInstance().Push.send(pushMessage);
-	                 }
-	           }
-	        }
-	     }
-	  });
+	         if (sdkResult.getResult() == sdk_error.OK) {
+	         	    //The message was sent successful
+	         }
+	         else
+	         {
+	         	//The message sed faild
+	         }
+	      }
+	    }
+	 });
 
-### MessageSentState
-This enum type is a special data type that enables define about existing status a messages of sender.
-
-**Parameters list:** ***Sent*** - state that a message was sent to the recipient,
-										***RecipientOffline*** - state that a message was not sent to a recipient, because the recipient is offline.
 
 ### MessageAcknowledgeState
 This enum type is a special data type that enables define about existing status a messages of recipient.
@@ -1926,10 +1909,6 @@ The method start disconnect to messaging service
 **Return a value:** boolean value, true mean that sender connected to messaging service, false not connected
 
 
-### MessageSentStateKey
-The key for find in user info a hash table recipients states.
-
-public static final String MessageSentStateKey = "MessageSentStateKey" ;
 
 # MessagingListener
 
