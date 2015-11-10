@@ -226,8 +226,8 @@ When trying to create or join a conference, you must first login in from either 
 
 Afterwards, the starting point for your app will be to call the initialization function `ooVoo.API.init` as described below. This method is used to initialize and setup the SDK. You won't need to re-use this method, but you may want to customize the parameters used. All other SDK related function calls must be called after this one, since they won't exist until you do.
 
-### Client Side Login:
-`ooVoo.API.connect (params)``
+### Client Side Login
+`ooVooClient.authorization(params)`
 
 Parameters:
 
@@ -242,7 +242,7 @@ callbackUrl | string  | The URL you will be redirect post login success. (this u
 Example:
 
 ```javascript
-  ooVoo.API.connect({
+  ooVooClient.authorization({
                 token: “your app token”,
                 isSandbox:true,
                 userId: “unique user ID”,
@@ -258,7 +258,7 @@ For examples of Server-to-Server login please click here:
 Function:
 
 ```javascript
-ooVoo.API.init(params,onInitComplete)
+ooVooClient.connect(params,onInitComplete)
 ```
 
 Parameters:
@@ -266,27 +266,30 @@ Parameters:
 Name           | Type         | Description                                                                                                                                                                                                                | Default
 -------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------
 params         | object       | A collection of initialization parameters that control the setup of the SDK.                                                                                                                                               | required
-userapp_token  | string       | Login using App Token(WEB) to retrieve user session token.<br/>Init from client side – using user session tokenYour application Token. If you don't have one find it in the App dashboard or go there to create a new app. | required
-onInitComplete | InitDelegate | A function that will be called once all data structures in the SDK are initialized; any code that should synchronize with the ooVoo/Conference session should be in onInitComplete().                                      | none, required
+userToken  | string       | Login using App Token(WEB) to retrieve user session token. Init from client side – using user session token Your application Token. If you don't have one find it in the App dashboard or go there to create a new app. | required
+userId | string | application unique participant ID | required
+enableMessaging | bool | Enable messaging | optional
+onInitComplete | InitDelegate | A function that will be called once all data structures in the SDK are initialized; any code that should synchronize with the ooVoo/Conference session should be in onInitComplete(). | none, required
 
 Example:
 
 ```javascript
-ooVoo.API.init {
-     userToken   : '{your-user-session-token}',
-  }}, function(res) {
+ooVooClient.connect({
+                userId: “unique user ID”,
+	              userToken: '{your-user-session-token}',
+                enableMesagging: true/false }, function(res) {
   if(!res.error) {
-     console.log("Api initialize succeeded, now you can initialize new conference");
+   console.log("Api initialize succeeded, now you can initialize new conference");
  }});
 ```
 
 ### Conference Creation
 Once you have initialized the SDK you are ready to create a conference object. The Conference Object provides connection, local stream publication and remote video stream registration  which will be used to manage the conference along with the local/remote AV streams and browser event handling.
 
-`ooVoo.API.Conference.init` creates a new conference object.
+`ooVooClient.AVChat.init` creates a new conference object.
 
 ```javascript
-var conferenceObj = ooVoo.API.Conference.init(params,onInitComplete)
+var avchatObj= ooVooClient.AVChat.init(params,onInitComplete)
 ```
 
 Parameters:
@@ -296,58 +299,36 @@ Name           | Type         | Description                                     
 params         | object       | A collection of initialization parameters that control the setup of the Conference.                                                                       | Can be null
 -audio         | boolean      | Enable local audio stream on the conference For audio only session set false in addition to :params = null in setConfig                                   | true
 -video         | boolean      | Enable local video stream on the conference                                                                                                               | true
+videoResolution | enum | Sets the video resolution of the conference, any resolution up to the following resolutions are supported depending on device.<br/>Enum values:<br/><ul><li>ooVoo.API.VideoResolution.NORMAL(352 x 288)</li><li>ooVoo.API.VideoResolution.HIGH(640 x 480)</li><li>ooVoo.API.VideoResolution.HD(1280 x 720)</li></ul><br/>For audio only session, set `Null` in addition to: `videoFrameRate` & `audio:false` in: `ooVoo.API.Conference.init(params,onInitComplete)` | required
+videoFrameRate | Int[] | Sets the minimum an maximum video frame rate of the conference. Value can be number between 5 and 30. For audio only session, set `Null` in addition to: `videoResolution` & `audio:false` in `ooVoo.API.Conference.init(params,onInitComplete)` | required
 onInitComplete | InitDelegate | A function that will be called once ooVoo.API is initialized; any code that should synchronize with the Conference session should be in onInitComplete(). | none, required
 
 Example:
 
 ```javascript
-var conferenceObj = null;
-conferenceObj = ooVoo.API.Conference.init({ video: true, audio: true }, onConference_init);
-function onConference_init (res) {
+var avchatObj = null;
+avchatObj= ooVooClient.AVChat.init({
+                video: true,
+                audio: true,
+                videoResolution: ooVooClient.VideoResolution["HIGH"],
+                videoFrameRate: new Array(5, 15)
+            }, onAVChatInit);
+function onAVChatInit _init (res) {
 if(!res.error) {
 console.log("Conference initialize succeeded, now it’s a good time to register the conference events");
-   conferenceObj.onParticipantJoined = onParticipantJoined;
-   conferenceObj.onParticipantLeft = onParticipantLeft;
-   conferenceObj.onRecvData = onRecieveData;
-   conferenceObj.onConferenceStateChanged = onConferenceStateChanged
+   avchatObj.onParticipantJoined = onParticipantJoined;
+   avchatObj.onParticipantLeft = onParticipantLeft;
+   avchatObj.onRecvData = onRecieveData;
+   avchatObj.onConferenceStateChanged = onConferenceStateChanged
  }
 }
-```
-
-### How do I configure my local media stream?
-Once you have instantiated a Conference Object you can now use `Conference.setConfig()` to configure your local stream.
-
-```javascript
-conferenceObj.setConfig(params,onConfigComplete);
-```
-
-Parameters:
-
-Name             | Type           | Description                                                                                                                                                                                                                                                                                                                                                                                                                                            | Default
----------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------
-params           | object         | A collection of initialization parameters that control the setup of the Conference.                                                                                                                                                                                                                                                                                                                                                                    | null
-videoResolution  | enum           | Sets the video resolution of the conference, any resolution up to the following resolutions are supported depending on device.<br/>Enum values:<ul><li>ooVoo.API.VideoResolution.NORMAL(352\*288)</li><li>ooVoo.API.VideoResolution.HIGH(640\*480)</li><li>ooVoo.API.VideoResolution.HD(1280\*720)</li></ul>For audio only session, set `Null` in addition to: `videoFrameRate` & `audio:false` in: `ooVoo.API.Conference.init(params,onInitComplete)` | required
-videoFrameRate   | Int[]          | Sets the minimum an maximum video frame rate of the conference. Value can be number between 5 and 30. For audio only session, set `Null` in addition to: `videoResolution` & `audio:false` in `ooVoo.API.Conference.init(params,onInitComplete)`                                                                                                                                                                                                       | 15
-onConfigComplete | ConfigDelegate | A function that will be called once ooVoo.API is initialized; any code that should synchronize with the Conference session should be in onConfigComplete().                                                                                                                                                                                                                                                                                            | none, required
-
-Example:
-
-```javascript
-conferenceObj.setConfig({
-    videoResolution: ooVoo.API.VideoResolution.HIGH,
-    videoFrameRate: 15
-}, function(res) {
-  if(!res.error) {
-     console.log("Video Configuration succeeded, now all set to join a conference session");
- }
-});
 ```
 
 ### How do I join a conference?
 You can join a conference by calling `Conference.join()` as shown below. Calling this function will also trigger some events. We will discuss events more in detail later in this document.
 
 ```javascript
-conferenceObj.join(confid,uid,user_data);
+avchatObj.join(confid,uid,user_data);
 ```
 
 Parameters:
@@ -365,7 +346,7 @@ Triggered Events:
 Example:
 
 ```javascript
-conferenceObj.join('{unique-session-id}', '{unique-user-id}',
+avchatObj.join('{unique-session-id}', '{unique-user-id}',
 {data-to-pass}, function (res) {
   if(res.error) {
      console.log("Error occurred");
@@ -378,7 +359,7 @@ You can control the muting/unmuting of you audio in a conference and also check 
 
 Muting/Unmuting:
 
-`conferenceObj.setLocalAudioMute(bool);`
+`avchatObj.AudioController.setRecorderMute(bool);`
 
 Parameters:
 
@@ -388,7 +369,7 @@ Val  | boolean | true - muted, false - unmuted | required
 
 Checking Status:
 
-`conferenceObj.getLocalAudioMute();`
+`avchatObj.AudioController.isRecorderMuted();`
 
 Returns:
 
@@ -399,7 +380,7 @@ You can control the muting/unmuting of a remote participants audio in a conferen
 
 Muting/Unmuting:
 
-`conferenceObj.setRemoteAudioMute(bool);`
+`avchatObj.AudioController.setPlaybackMute(bool);`
 
  Parameters:
 
@@ -409,7 +390,7 @@ val  | boolean true - muted, false - unmuted | required    |
 
 Checking Status:
 
-`conferenceObj.getRemoteAudioMute();`
+`avchatObj.AudioController.isPlaybackMuted();`
 
 Returns:
 
@@ -418,21 +399,21 @@ Boolean, true - muted, false – unmuted
 ### How do I control my local video stream in a conference?
 You can control the publishing/unpublishing of your video in a conference and also check the status of your own video in a conference using the following functions:
 
-Publish video:  `conferenceObj.playLocalVideo();`
+Start video:  `avchatObj.VideoController.startTransmit();`
 
 Triggered Events:
 - onRemoteVideoStateChanged
 
-Stop publishing:
+Stop video:
 
-`conferenceObj.stopLocalVideo();`
+`avchatObj.VideoController.stopTransmit();`
 
 Triggered Events:
 - onRemoteVideoStateChanged
 
 Check Status:
 
-`conferenceObj.getLocalVideoState();`
+`avchatObj.VideoController.isTransmitted();`
 
 Returns Boolean, true - stopped, false - play
 
@@ -441,7 +422,7 @@ You can control the publishing/unpublishing of participants video in a conferenc
 
 Start Video:
 
-`conferenceObj.registerRemoteVideo(uid);`
+`avchatObj.VideoController.registerRemote(uid);`
 
 Parameters:
 
@@ -454,7 +435,7 @@ uid  | string | Application unique participant id | required
 
 Stop Video:
 
-`conferenceObj.unRegisterRemoteVideo(uid);`
+`avchatObj.VideoController.unRegisterRemote(uid);`
 
 Parameters:
 
@@ -466,18 +447,24 @@ Triggered Events:
 - onRemoteVideoStateChanged
 
 ### How can I send messages while in a conference?
-You can send messages while in a conference by calling the `Conference.sendData()` function.
+You can send messages while in a conference by calling the `avchatObj.sendData()` function.
 
-`conferenceObj.sendData(uid,to_uid,data);`
+`avchatObj.sendData(uid,to_uid,data);`
 
-Parameters: |Name|Type|Description|Default| |-|-|-|-| |uid|String|Application unique sender id|required| |to_uid|String|Application unique participant id or  "" (empty string) value to send for all participants|required| |data|String|Data to Send|required
+Parameters:
+
+Name | Type   | Description                       | Default
+---- | ------ | --------------------------------- | --------
+uid|String|Application unique sender id|required
+to_uid|String|Application unique participant id or  "" (empty string) value to send for all participants|required
+data|String|Data to Send|required
 
 Triggered Events:
 - onRecvData
 
-How do I leave a conference? You can disconnect from a conference by calling `Conference.disconnect()`:
+How do I leave a conference? You can disconnect from a conference by calling `avchatObj.leave():`
 
-`conferenceObj.disconnect();`
+`avchatObj.leave();`
 
 Triggered Events:
 - onConferenceStateChanged
@@ -568,35 +555,18 @@ Code              | Group                      | Name                           
 -30xxx            | **Authentication Failed**  |                                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 -30000            | Authentication             | AuthenticationFailed                          | Login                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 -30001            | Authentication             | InvalidToken                                  | Session Token not provided or invalid<br/><ul><li>Token was not provided</li><li>Token is invalid (or expired, blocked etc) and a new one needs to be requested.                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | Renew Token or Login required
-~~-30002~~        | ~~Authentication~~         | ~~Expired token~~                             | ~~Token has expired and a new one needs to be requested~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | Deprecated. Use -30001
 -30003            | Authentication             | InvalidAvsKey                                 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 -30004            | Authentication             | BlockedAppId                                  | ApplicationId is blocked                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 -30005            | Authentication             | InvalidEnvironment                            | Application reached wrong URL environment                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 -35xxx            | **Authorization Failed**   |                                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 -35001            | Authorization Failed       | NotAuthorized                                 | Authentication succeeded, but Application does not have permission for this action.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-~~-36001~~        | ~~Authorization Failed~~   | ~~ThrottledDown~~                             | ~~User is on blacklist by AppId or ip~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | mistake
 -40xxx<br/>-50xxx | Bad Request                |                                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 -40000            | Bad Request                | BadRequest                                    | <ul><li>The request could not be understood by the application due to malformed syntax or required parameter was missing.</li><li>This is also used if the resource ID in the path is incorrect or parameter in QueryString is incorrect or missing.</li><li>The application is refusing to process the request because the content type of the media is in a format not supported by the requested resource for the requested method.</li><li>Media not supplied in the request or empty.</li><li>The application is refusing to process a request because the request media is larger than allowed for given content type.</li></ul> |
-~~-40001~~        | ~~Bad Request~~            | ~~No content found~~                          | ~~No content found in a body of the request (POST method only).~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Deprecated.<br/>Use -40000
-~~-40002~~        | ~~Bad Request~~            | ~~Missing required parameter in payload.~~    | ~~No parameter found in a body of the request (POST method only).~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Deprecated.<br/>Use -40000
-~~-40003~~        | ~~Bad Request~~            | ~~Missing required parameter in QueryString~~ | ~~No parameter found in a QueryString of the request.~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | Deprecated.<br/>Use -40000
-~~-40004~~        | ~~Bad Request~~            | ~~Invalid value in payload~~                  | ~~One of the arguments provided to method is not valid~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | Deprecated.<br/>Use -40000
-~~-40005~~        | ~~Bad Request~~            | ~~Invalid value in QueryString~~              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Deprecated.<br/>Use -40000
 -50000            | Not Found                  | InvalidApiVersion                             | Requested API version not supported                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 -50001            | Not Found                  | InvalidResource                               | The resource not was found.<br/>Example: given ooVooId doesn't exist.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
--50002            | Not Found                  | InvalidEndpoint                               | Example: trying to access the wrong URI.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-~~-60000~~        | ~~Operation Failed~~       | ~~Requested Entity too large~~                |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Deprecated.<br/>Use -40000
--60001            | Operation Failed           | InvalidOperation                              | Invalid operation                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+-50002            | Not Found                  | InvalidEndpoint                               | Example: trying to access the wrong URI.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 -601XX            | Operation Failed           | Invalid content type of media                 | Error code pattern for media issues.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-~~-60100~~        | ~~Operation Failed~~       | ~~Invalid content type of media~~             | ~~The content type of the media could not be recognized by the application.~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Deprecated.<br/>Use -40000
-~~-60101~~        | ~~Operation Failed~~       | ~~Unsupported Content type of media~~         | ~~The application is refusing to process the request because the content type of the media is in a format not supported by the requested resource for the requested method.~~                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Deprecated.<br/>Use -40000
-~~-60102~~        | ~~Operation Failed~~       | ~~Media too large~~                           | ~~The application is refusing to process a request because the request media is larger than allowed for given content type.~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Deprecated.<br/>Use -40000
-~~-60103~~        | ~~Operation Failed~~       | ~~No media supplied~~                         | ~~Media not supplied in the request or empty.~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Deprecated.<br/>Use -40000
 -602XX            | Operation Failed           | Invalid content type of PostFrame             | Error code pattern for PostFrame issues.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-~~-60200~~        | ~~Operation Failed~~       | ~~Invalid content type of PostFrame~~         | ~~The content type of the PostFrame could not be recognized by the application.<br/> (Methods with post_frame only).<br/>Will be used in future versions, not in use now.~~                                                                                                                                                                                                                                                                                                                                                                                                                                                            | Deprecated.<br/>Use -40000
-~~-60201~~        | ~~Operation Failed~~       | ~~Unsupported content type of PostFrame~~     | ~~The application is refusing to process the request because the content type of the PostFrame is in a format not supported by the requested resource for the requested method.<br/>(Methods with post_frame only).~~                                                                                                                                                                                                                                                                                                                                                                                                                  | Deprecated.<br/>Use -40000
-~~-60202~~        | ~~Operation Failed~~       | ~~PostFrame too large~~                       | ~~The application is refusing to process a request because the request PostFrame is larger than allowed for given content type.<br/>(Methods with post_frame only).~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | Deprecated.<br/>Use -40000
-~~-60203~~        | ~~Operation Failed~~       | ~~No PostFrame supplied~~                     | ~~PostFrame not supplied in the request or empty.<br/>(Methods with post_frame only).~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | Deprecated.<br/>Use -40000
 -603XX            | Operation Failed           | Invalid Business case                         | Invalid business cases                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 -60301            | Operation Failed           | GroupsLimitExceeded                           | The given user has created limit number of groups                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 -60302            | Operation Failed           | UserIdNotAvailable                            | User trying to perform registration with ooVooId already exists                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
