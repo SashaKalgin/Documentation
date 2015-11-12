@@ -103,21 +103,23 @@ In order to get up and running just open the demo.html file in any text editor o
 
 and make sure to define the necessary variables as is referenced in the demo.html file.
 
-### How do I deploy and run the ooVoo WebRTC sample app included in the SDK download package?
-To run the WebRTC sample app, just place the files in a directory that is accessible from the document root of your web server. Make sure you edit the demo.html file or your own code to include your AppID , APP Token & conference ID (roomID), the following parameters are optional, (get default value): frame per second, resolution level and your name. Please follow the example below:
+### How do I deploy and run the ooVoo WebRTC sample apps (Video and Text Chat) included in the SDK download package?
+To run the WebRTC sample apps, just place the files in a directory that is accessible from the document root of your web server. Make sure you edit the .html files or your own code to include your AppID , APP Token & conference ID (roomID), the following parameters are optional, (get default value): frame per second, resolution level and your name. Please follow the examples below.
+
+#### Video Chat Sample
 
 ````html
 <!DOCTYPE html>
+
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
     <title></title>
-```javascript
-<script src="https://code.oovoo.com/webrtc/oovoosdk-2.0.0.min.js"></script>
+    <script src="https://code.oovoo.com/webrtc/oovoosdk-2.1.0.min.js"></script>
     <script type="text/javascript">
-        var conference = null;
+        var avchatObj = null;
         var conferenceId = "OOVOO_WEB_RTC";
-        var appToken = "PUT APPLICATION TOKEN HERE";
+        var appToken = "PUT HERE APPLICATION TOKEN";
         var sessionToken = getQSParam("t");
         var participantId = getQSParam("pid");
 
@@ -129,7 +131,7 @@ To run the WebRTC sample app, just place the files in a directory that is access
 
             var redirectUrl = "url to send response with the session token"
             redirectUrl = location.href + "?pid=" + participantId;
-            ooVoo.API.connect({
+            ooVooClient.authorization({
                 token: appToken,
                 isSandbox: false,
                 userId: participantId,
@@ -137,36 +139,31 @@ To run the WebRTC sample app, just place the files in a directory that is access
             });
         }
         else {
-            ooVoo.API.init({
+            ooVooClient.connect({
+                userId: participantId,
                 userToken: sessionToken
-            }, onAPI_init);
+            }, onClientConnected);
         }
 
-        function onAPI_init(res) {
-            conference = ooVoo.API.Conference.init({ video: true, audio: true }, onConference_init);
+        function onClientConnected(res) {
+            //init conference
+            avchatObj = ooVooClient.AVChat.init({
+                video: true,
+                audio: true,
+                videoResolution: ooVooClient.VideoResolution["HIGH"],
+                videoFrameRate: new Array(5, 15)
+            }, onAVChatInit);
         }
-        function onConference_init(res) {
+
+        function onAVChatInit(res) {
             if (!res.error) {
                 //register to conference events
-                conference.onParticipantJoined = onParticipantJoined;
-                conference.onParticipantLeft = onParticipantLeft;
-                conference.onLocalStreamPublished = onStreamPublished;
-                conference.onConferenceStateChanged = onConferenceStateChanged;
-                conference.onRemoteVideoStateChanged = onRemoteVideoStateChanged
-
-                conference.setConfig({
-                    videoResolution: ooVoo.API.VideoResolution["HIGH"],
-                    videoFrameRate: new Array(5, 15)
-                }, function (res) {
-                    if (!res.error) {
-                        conference.join(conferenceId, participantId, sessionToken, "participant name", function (result) { });
-                    }
-                });
+                avchatObj.onParticipantJoined = onParticipantJoined;
+                avchatObj.onParticipantLeft = onParticipantLeft;
+                avchatObj.onConferenceStateChanged = onConferenceStateChanged;
+                avchatObj.onRemoteVideoStateChanged = onRemoteVideoStateChanged
+                avchatObj.join(conferenceId, participantId, "participant name", function (result) { });
             }
-        }
-
-        function onStreamPublished(stream) {
-            document.getElementById("localVideo").src = URL.createObjectURL(stream.stream);
         }
 
         function onParticipantLeft(evt) {
@@ -176,11 +173,16 @@ To run the WebRTC sample app, just place the files in a directory that is access
         }
         function onParticipantJoined(evt) {
             if (evt.stream && evt.uid != null) {
-                var videoElement = document.createElement("video");
-                videoElement.id = "vid_" + evt.uid;
-                videoElement.src = URL.createObjectURL(evt.stream);
-                videoElement.setAttribute("autoplay", true);
-                document.body.appendChild(videoElement);
+                if (evt.uid == participantId) { //me
+                    document.getElementById("localVideo").src = URL.createObjectURL(evt.stream);
+                }
+                else { //participants
+                    var videoElement = document.createElement("video");
+                    videoElement.id = "vid_" + evt.uid;
+                    videoElement.src = URL.createObjectURL(evt.stream);
+                    videoElement.setAttribute("autoplay", true);
+                    document.body.appendChild(videoElement);
+                }
             }
         }
         function onConferenceStateChanged(evt) {
@@ -201,7 +203,152 @@ To run the WebRTC sample app, just place the files in a directory that is access
 </body>
 </html>
 ````
+#### Text Chat Sample
+````html
 
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        input {
+            margin: 20px;
+        }
+
+            input[type=text] {
+                width: 300px;
+            }
+
+        textarea {
+            width: 300px;
+            height: 160px;
+            margin: 20px;
+        }
+
+        p {
+            border: solid 1px gray;
+            width: 450px;
+            height: 210px;
+            overflow-y: auto;
+        }
+    </style>
+    <script src="https://code.oovoo.com/webrtc/oovoosdk-2.1.0.min.js"></script>
+    <script type="text/javascript">
+        var appToken = "PUT HERE APPLICATION TOKEN";
+        var sessionToken = getQSParam("t");
+        var participantId = getQSParam("pid");
+
+        if (!sessionToken) {
+            //login to get session token
+            participantId = "participant uniqe id";
+            //for example (get random id)
+            participantId = Math.floor(Math.random() * 9999999999) + 1000000000;
+
+            var redirectUrl = "url to send response with the session token"
+            redirectUrl = location.href + "?pid=" + participantId;
+            ooVooClient.authorization({
+                token: appToken,
+                isSandbox: false,
+                userId: participantId,
+                callbackUrl: redirectUrl
+            });
+        }
+        else {
+            ooVooClient.connect({
+                userId: participantId,
+                userToken: sessionToken,
+                enableMesagging: true
+            }, onClientConnected);
+        }
+
+        function onClientConnected(res) {
+            //register to message events
+            ooVooClient.Messaging.onReciveMessage = onReciveMessage;
+            ooVooClient.Messaging.onReciveAcknowledgement = onReciveAcknowledgement;
+        }
+
+
+        function onReciveMessage(evt) {
+            var from = evt.from;
+            if (from == participantId) {//me
+                return;
+            }
+            ooVooClient.Messaging.sendAcknowledgement({ to: [evt.from], msg_id: evt.msg_id, state: ooVooClient.Messaging.AcknowledgeState.Delivered }, function (res) {
+                console.log(res);
+            })
+
+            document.getElementsByTagName("p")[0].innerText += from + ": " + evt.body + "\n";
+
+            ooVooClient.Messaging.sendAcknowledgement({ to: [evt.from], msg_id: evt.msg_id, state: ooVooClient.Messaging.AcknowledgeState.Read }, function (res) {
+                console.log(res);
+            })
+        }
+
+        function onReciveAcknowledgement(evt) {
+            var from = evt.from;
+            if (from == participantId) {
+                from = "me";
+            }
+
+            var txt = "";
+            if (evt.state == ooVooClient.Messaging.AcknowledgeState.Delivered) {
+                txt = "Message delivered to " + from + "\n";
+            }
+            if (evt.state == ooVooClient.Messaging.AcknowledgeState.Read) {
+                txt = "Message read by " + from + "\n";
+            }
+            document.getElementsByTagName("p")[0].innerText += txt;
+        }
+
+
+        function sendMessage() {
+            var message_body = document.getElementsByTagName('textarea')[0].value;
+            var user_ids = document.getElementById('uids').value.split(",");
+            if (!user_ids || !message_body) {
+                return;
+            }
+            ooVooClient.Messaging.send({ to: user_ids, body: message_body }, function (res) {
+                console.log(res);
+            });
+        }
+
+        function pushMessage() {
+            var message_body = document.getElementsByTagName('textarea')[0].value;
+            var user_ids = document.getElementById('uids').value.split(",");
+            if (!user_ids || !message_body) {
+                return;
+            }
+            ooVooClient.Push.send({ to: user_ids, body: message_body }, function (push_res) {
+                console.log(push_res);
+            });
+        }
+
+        function getQSParam(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                results = regex.exec(location.search);
+            return results === null ? "" : results[1].replace(/\+/g, " ");
+        }
+    </script>
+</head>
+<body>
+    <div style="float:left;">
+        <input id="uids" type="text" placeholder="type participant ids delimited by ','" />
+        <br />
+        <textarea placeholder="message here"></textarea>
+        <br />
+        <input type="button" value="Send Message" onclick="sendMessage()" />
+        <input type="button" value="Push Message" onclick="pushMessage()" />
+    </div>
+    <div style=" float: left; margin-left: 20px;">
+        Log:
+        <p></p>
+    </div>
+</body>
+</html>
+````
 Then browse to the page using either Chrome, Firefox Or Opera. [http://{your-website}/demo.html](http://{your-website}/demo.html)
 
 ## Developing With the WebRTC SDK
