@@ -915,6 +915,9 @@ The method allows to register a custom plugin implementation for use in AVChat.
 Type          | Name   | Description
 ------------- | ------ | --------------------------------------------------------------------
 **PluginFactory** | plugin | The interface allow transfer custom plugin implementation to our SDK
+**ooVooSdkResultListener**|completion|The calback interface for passing register plugin result
+
+
 
 **Return a value:** no result.
 

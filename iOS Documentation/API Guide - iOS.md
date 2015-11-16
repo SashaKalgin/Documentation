@@ -486,9 +486,10 @@ Attribute  | Type         | Description
 
 **Parameters**:
 
-Attribute  | Type         | Description
----------- | ------------ | ------------------------
-**plugin** | `ooVooPluginFactory` | Plugin for registration.
+Attribute     | Type                 | Description
+--------------| -------------------- | ------------------------
+**plugin**    | `ooVooPluginFactory` | Plugin for registration.
+**completion**| `CompletionHandler`  | Completion handler for receive result of register plugin
 
 **Result**: no result
 
