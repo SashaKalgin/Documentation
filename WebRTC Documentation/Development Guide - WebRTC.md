@@ -15,21 +15,26 @@
 	- [Getting Started With the WebRTC SDK Package](#getting-started-with-the-webrtc-sdk-package)
 		- [What browsers are supported by the ooVoo WebRTC SDK?](#what-browsers-are-supported-by-the-oovoo-webrtc-sdk)
 		- [How do I setup the ooVoo WebRTC SDK in my development environment?](#how-do-i-setup-the-oovoo-webrtc-sdk-in-my-development-environment)
-		- [How do I deploy and run the ooVoo WebRTC sample app included in the SDK download package?](#how-do-i-deploy-and-run-the-oovoo-webrtc-sample-app-included-in-the-sdk-download-package)
+		- [How do I deploy and run the ooVoo WebRTC sample apps (Video and Text Chat) included in the SDK download package?](#how-do-i-deploy-and-run-the-oovoo-webrtc-sample-apps-video-and-text-chat-included-in-the-sdk-download-package)
+			- [Video Chat Sample](#video-chat-sample)
+			- [Text Chat Sample](#text-chat-sample)
 	- [Developing With the WebRTC SDK](#developing-with-the-webrtc-sdk)
 		- [How can I get Application ID and Application Token?](#how-can-i-get-application-id-and-application-token)
 		- [How do I connect my users in a video call?](#how-do-i-connect-my-users-in-a-video-call)
 		- [How do I Initialize the SDK/Client Side Login?](#how-do-i-initialize-the-sdkclient-side-login)
-		- [Client Side Login:](#client-side-login)
+		- [Client Side Login](#client-side-login)
 		- [Initialization](#initialization)
 		- [Conference Creation](#conference-creation)
-		- [How do I configure my local media stream?](#how-do-i-configure-my-local-media-stream)
 		- [How do I join a conference?](#how-do-i-join-a-conference)
 		- [How do I control my local audio stream in a conference?](#how-do-i-control-my-local-audio-stream-in-a-conference)
 		- [How do I control remote participants audio stream in a conference?](#how-do-i-control-remote-participants-audio-stream-in-a-conference)
 		- [How do I control my local video stream in a conference?](#how-do-i-control-my-local-video-stream-in-a-conference)
 		- [How do I control remote participants video stream in a conference?](#how-do-i-control-remote-participants-video-stream-in-a-conference)
 		- [How can I send messages while in a conference?](#how-can-i-send-messages-while-in-a-conference)
+		- [How do I leave a conference? You can disconnect from a conference by calling `avchatObj.leave():`](#how-do-i-leave-a-conference-you-can-disconnect-from-a-conference-by-calling-avchatobjleave)
+		- [How do I utilize client messaging?](#how-do-i-utilize-client-messaging)
+		- [How can I check if a message was sent/delivered?](#how-can-i-check-if-a-message-was-sentdelivered)
+		- [How can I send Push notifications?](#how-can-i-send-push-notifications)
 	- [Events](#events)
 		- [onConferenceStateChanged ( evt )](#onconferencestatechanged-evt-)
 		- [onParticipantJoined ( evt )](#onparticipantjoined-evt-)
@@ -37,9 +42,10 @@
 		- [onRemoteVideoStateChanged ( evt )](#onremotevideostatechanged-evt-)
 		- [onVideoRotate( evt )](#onvideorotate-evt-)
 		- [onRecvData ( evt )](#onrecvdata-evt-)
+		- [onReciveMessage ( evt )](#onrecivemessage-evt-)
+		- [onReciveAcknowledgement ( evt )](#onreciveacknowledgement-evt-)
 	- [Error Codes](#error-codes)
 	- [Server-to-Server Login](#server-to-server-login)
-
 <!-- /TOC -->
 
 ## Introduction
@@ -609,13 +615,92 @@ data|String|Data to Send|required
 Triggered Events:
 - onRecvData
 
-How do I leave a conference? You can disconnect from a conference by calling `avchatObj.leave():`
+### How do I leave a conference? You can disconnect from a conference by calling `avchatObj.leave():`
 
 `avchatObj.leave();`
 
 Triggered Events:
 - onConferenceStateChanged
 - onParticipantLeft
+
+### How do I utilize client messaging?
+`ooVooClient.Messaging.send(params, onMessageSent)`
+
+Parameters:
+
+Name | Type   | Description                       | Default
+---- | ------ | --------------------------------- | --------
+params | object |  A collection of initialization parameters that control the setup of the SDK. |
+to | array | |
+body | string | |
+onMessageSent | function |  |
+
+Triggered Events:
+- ooVooClient.Messaging.onReciveMessage
+
+Example:
+
+```javascript
+ooVooClient.Messaging.send({ to: user_ids, body: mesaage_body }, function (res) {
+	console.log(“message sent and return list of users that got the message or was offline”);
+
+});
+```
+
+### How can I check if a message was sent/delivered?
+
+`ooVooClient.Messaging.sendAcknowledgement(params, onAcknowledgementSent)
+`
+
+Parameters:
+
+Name | Type   | Description                       | Default
+---- | ------ | --------------------------------- | --------
+params | object |  A collection of initialization parameters that control the setup of the SDK. |
+to | array | |
+msg_id | string | |
+state | ooVooClient.Messaging.AcknowledgeState| ooVooClient.Messaging.AcknowledgeState.Delivered<br/>ooVooClient.Messaging.AcknowledgeState.Read|
+onAcknowledgementSent | function | |
+
+Triggered Events:
+
+- ooVooClient.Messaging.onReciveAcknowledgement
+
+Example:
+
+```javascript
+ooVooClient.Messaging.sendAcknowledgement({ to: user_ids, msg_id: mesaage_ID, state: acknowledge_state}, function (res) {
+console.log(“Acknowledge sent”);
+
+});
+```
+
+### How can I send Push notifications?
+
+`ooVooClient.Push.send(params, onPushSent)
+`
+Parameters:
+
+Name | Type   | Description                       | Default
+---- | ------ | --------------------------------- | --------
+params | object |  A collection of initialization parameters that control the setup of the SDK. |
+to | array | |
+body | string | |
+property | string | Free text – up to 1K (together with body)|
+onPushSent | function | Result (success = 0)|
+
+Triggered Events:
+- mobile events
+
+Example:
+```javascript
+ooVooClient.Push.send({ to: user_ids, body: mesaage_body }, function (res) {
+console.log(“push message sent”);
+
+});
+```
+
+
 
 ## Events
 The events your app may receive during a conference consist of the following categories:
@@ -638,7 +723,9 @@ evt.type     | Enum   | <ul><li>ooVoo.API.ConferenceStateEventType.ACCESS_ACCEPT
 evt.errorCode | string | Disconnect reason
 
 ### onParticipantJoined ( evt )
-Indicates that participant has joined to the conference Parameters:
+Indicates that participant has joined to the conference
+
+Parameters:
 
 Name          | Type   | Description
 ------------- | ------ | ------------------------------------
@@ -691,6 +778,27 @@ Name     | Type   | Description
 evt      | object | Contains information about the event
 evt.uid  | string | From participant id
 evt.data | string | Sent application data
+
+### onReciveMessage ( evt )
+Indicates the incoming text, sent by remote participant
+
+Parameters:
+
+Name     | Type   | Description
+-------- | ------ | ------------------------------------
+evt | object | Contains information about the event
+evt.from | string | From participant id
+evt.body | string | Message body
+evt.msg_id | string | Message ID
+
+### onReciveAcknowledgement ( evt )
+Name     | Type   | Description
+-------- | ------ | ------------------------------------
+evt | object | Contains information about the event
+evt.from | string | From participant id
+evt.state | string | Message State:<br/>`ooVooClient.Messaging.AcknowledgeState.Delivered`<br/>`ooVooClient.Messaging.AcknowledgeState.Read`
+evt.msg_id | string | Message ID
+
 
 ## Error Codes
 The following is a list of error messages you may encounter:
