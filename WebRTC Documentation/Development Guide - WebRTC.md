@@ -450,10 +450,10 @@ Parameters:
 Name           | Type         | Description                                                                                                                                               | Default
 -------------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------
 params         | object       | A collection of initialization parameters that control the setup of the Conference.                                                                       | Can be null
--audio         | boolean      | Enable local audio stream on the conference For audio only session set false in addition to :params = null in setConfig                                   | true
+-audio         | boolean      | Enable local audio stream on the conference For audio only session set false.                                   | true
 -video         | boolean      | Enable local video stream on the conference                                                                                                               | true
-videoResolution | enum | Sets the video resolution of the conference, any resolution up to the following resolutions are supported depending on device.<br/>Enum values:<br/><ul><li>ooVoo.API.VideoResolution.NORMAL(352 x 288)</li><li>ooVoo.API.VideoResolution.HIGH(640 x 480)</li><li>ooVoo.API.VideoResolution.HD(1280 x 720)</li></ul><br/>For audio only session, set `Null` in addition to: `videoFrameRate` & `audio:false` in: `ooVoo.API.Conference.init(params,onInitComplete)` | required
-videoFrameRate | Int[] | Sets the minimum an maximum video frame rate of the conference. Value can be number between 5 and 30. For audio only session, set `Null` in addition to: `videoResolution` & `audio:false` in `ooVoo.API.Conference.init(params,onInitComplete)` | required
+videoResolution | enum | Sets the video resolution of the conference, any resolution up to the following resolutions are supported depending on device.<br/>Enum values:<br/><ul><li>ooVoo.API.VideoResolution.NORMAL(352 x 288)</li><li>ooVoo.API.VideoResolution.HIGH(640 x 480)</li><li>ooVoo.API.VideoResolution.HD(1280 x 720)</li></ul> | required
+videoFrameRate | Int[] | Sets the minimum an maximum video frame rate of the conference. Value can be number between 5 and 30. | required
 onInitComplete | InitDelegate | A function that will be called once ooVoo.API is initialized; any code that should synchronize with the Conference session should be in onInitComplete(). | none, required
 
 Example:
