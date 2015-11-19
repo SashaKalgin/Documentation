@@ -1,7 +1,7 @@
 # Changelog for Version 2.2
 ## Major Changes in this Release
-- Messaging API support
-- Push Notification API support​
+- Messaging API support (Beta)
+- Push Notification API support (Beta)
 - Custom video render
 
 =====================================================================================
