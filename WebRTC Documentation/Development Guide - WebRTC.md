@@ -104,7 +104,7 @@ Currently the WebRTC Standard is supported by the following browsers:
 In order to get up and running just open the demo.html file in any text editor or development environment. It is a barebones starting point which you can build around and in it you will find the necessary javascript libraries already included. If you'd like not to use the demo.html file then make sure you include the following lines in your own app:
 
 ```javascript
-<script src="https://code.oovoo.com/webrtc/oovoosdk-2.0.0.min.js"></script>
+<script src="https://code.oovoo.com/webrtc/oovoosdk-2.1.0.min.js"></script>
 ```
 
 and make sure to define the necessary variables as is referenced in the demo.html file.
