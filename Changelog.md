@@ -1,3 +1,11 @@
+# Changelog for Version 2.2
+## Major Changes in this Release
+- Messaging API support (Beta)
+- Push Notification API support (Beta)
+- Custom video render
+
+=====================================================================================
+
 # Changelog for Version 2.1
 ## Major Changes in this Release
 - iOS9 compatibility

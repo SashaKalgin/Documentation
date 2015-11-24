@@ -134,8 +134,8 @@ In ooVoo a video call is named as _"conference"_. Each conference is identified 
 The ooVoo SDK uses completion block extensively to notify your application to just about everything that is happening when exercising the functionalities provided by the SDK. For some of asyncronous events it is not possible so we provide you with protocols you need to implement and register with ooVoo SDK so it can notify you.
 
 ```objective-c
-self.sdk.ooVooAVChat.delegate = self;
-self.sdk.ooVooAccount.delegate = self;
+self.sdk.AVChat.delegate = self;
+self.sdk.Account.delegate = self;
 ```
 
 ## How do I initialize ooVoo SDK?
@@ -152,7 +152,7 @@ In order to initialize SDK you need to authorize your application token first:
 Then you need to login into ooVoo service with a participantId so that ooVoo's service can provide you with a unique session token. This token is hidden from you and not accesible but without it no other operation which requires usage of backend services will not work.
 
 ```objective-c
-    [[ooVooClient sharedInstance].ooVooAccount login: participantId.text
+    [[ooVooClient sharedInstance].Account login: participantId.text
          completion:^(SdkResult * result) {
            NSLog(@"result code=%d result description %@", result.Result, result.description);
 
@@ -169,7 +169,7 @@ All you need to do is to provide the same _Conference ID_ to all clients that yo
 
 If the Conference ID doesn't exist yet, a new conference will be created by the ooVoo video cloud service. If the Conference ID already exists, the user will be added to the existing conference identified by the Conference ID.
 
-Your app will be called on `didConferenceStateChange` in `ooVooooVooAVChatDelegate` protocol from the SDK indicating if the join conference action was successful.
+Your app will be called on `didConferenceStateChange` in `ooVooAVChatDelegate` protocol from the SDK indicating if the join conference action was successful.
 
 ```objective-c
     -(void)didConferenceStateChange:(ooVooAVChatState)state error:(sdk_error)code {
@@ -185,7 +185,7 @@ Your app will be called on `didConferenceStateChange` in `ooVooooVooAVChatDelega
     }
 ```
 
-If the join is successful, your application will be called with `didParticipantJoin` in `ooVooooVooAVChatDelegate` protocol when other participants join the conference.
+If the join is successful, your application will be called with `didParticipantJoin` in `ooVooAVChatDelegate` protocol when other participants join the conference.
 
 ```objective-c
     - (void)didParticipantJoin:(id<ooVooParticipant>)participant user_data:(NSString* )user_data;
@@ -199,7 +199,7 @@ Other participants in the conference will also get notified that a new user, ide
 ## How can I init audio ?
 
 ```objective-c
-    self.sdk.ooVooAVChat.AudioController initAudio:^(ooVooSdkResult init_Audio_result){
+    self.sdk.AVChat.AudioController initAudio:^(ooVooSdkResult init_Audio_result){
         if(init_Audio_result.result == sdk_error.OK)
         {
             // Audio inited
@@ -217,11 +217,11 @@ If audio was inited successful the means that audio capture and playback activat
    General difference between voice only and video chat mode are initial audio route direction.    For audio only conference the audio route on start set to earpice or one from headphones or bluetooth if the accessories    are connected to device. For video chat mode the initial audio route set to speakers or one from headphones or bluetooth     if the accessories are connected to the device.
 
 ```objective-c
-   [sdk.ooVooAVChat.AudioController setConfig:OOVOOAudioModeVoiceChat forKey:ooVooAudioControllerConfigKeyAudioSetMode];
+   [sdk.AVChat.AudioController setConfig:OOVOOAudioModeVoiceChat forKey:ooVooAudioControllerConfigKeyAudioSetMode];
 ```
 
 ## How do I use the VideoPanel object?
-  The `VideoPanel` object is our implementation for rendering a video stream for a participant, it is subclass of `UIView`. You can construct your own look and feel for by inheritance or aggregation of the object.
+  The `VideoPanel` object is our implementation for rendering a video stream for a participant, it is subclass of `UIView`.   You can construct your own look and feel for by inheritance or aggregation of the object.
 
 ## How do I display my local preview video in my app?
 There are separate API calls to turn the camera on/off, for preview control and video transmission. See below. In order to display preview you must turn on camera first.
@@ -229,7 +229,7 @@ There are separate API calls to turn the camera on/off, for preview control and 
 ```objective-c
     @property (retain, nonatomic) ooVooClient* sdk;
     self.sdk = [ooVooClient sharedInstance];
-    [self.sdk.ooVooAVChat.VideoController openCamera];
+    [self.sdk.AVChat.VideoController openCamera];
 ```
 
 Once you receive the proper notification that the camera has started (see diagram below) you can now call:
@@ -238,7 +238,7 @@ Once you receive the proper notification that the camera has started (see diagra
     -(void)didCameraStateChange:(BOOL)state devId:(NSString* )devId width:(const int)width height:(const int)height fps:(const int)fps error:(sdk_error)code {
         NSLog(@"didCameraStateChange -> state [%@], code = [%d]", state ? @"Opened" : @"Fail", code);
         if (state) {
-            [sdk.ooVooAVChat.VideoController openPreview];
+            [sdk.AVChat.VideoController openPreview];
         }
     }
 ```
@@ -248,23 +248,23 @@ to start the preview video.
 If you want to display the preview you need to create an `ooVooVideoView` object and add it to your layout as a view when you receive `OOVOOPreviewDidStartNotification` notification you should associate `ooVooVideoView` object with video channel by calling:
 
 ```objective-c
-    [self.sdk.ooVooAVChat.VideoController bindVideoRender:@"ParticipantID" render:self.videoView];
+    [self.sdk.AVChat.VideoController bindVideoRender:@"ParticipantID" render:self.videoView];
 ```
 
 To stop receiving the preview video, you may call:
 
 ```objective-c
-    [sdk.ooVooAVChat.VideoController closePreview];
+    [sdk.AVChat.VideoController closePreview];
 ```
 
 To stop the camera call:
 
-```objective-c  
-    [self.sdk.ooVooAVChat.VideoController closeCamera];
+```objective-c
+    [self.sdk.AVChat.VideoController closeCamera];
 ```
 
-This will stop preview too if it was displayed – you will also get notified about that.
-<!-- The sequence diagram below describes how to create video preview.
+This will stop preview too if it was displayed – you will also get notified about that. 
+<!-- The sequence diagram below describes how to create video preview. 
 [enter image description here](https://code.oovoo.com/native/docs/ios/7_flow.png)-->
 
 ## How do I start/stop sending my audio and video streams to a conference?
@@ -273,17 +273,17 @@ There are separate API calls to turn the camera on/off, for preview control and 
 To **start** sending your local AV stream:
 
 ```objective-c
-    [self.sdk.ooVooAVChat.VideoController startTransmitVideo];
-    [self.sdk.ooVooAVChat.AudioController setRecordMuted:NO];
-    [self.sdk.ooVooAVChat.AudioController setPlaybackMute:NO];
+    [self.sdk.AVChat.VideoController startTransmitVideo];
+    [self.sdk.AVChat.AudioController setRecordMuted:NO];
+    [self.sdk.AVChat.AudioController setPlaybackMute:NO];
 ```
 
 To **stop** sending your local AV stream:
 
 ```objective-c
-    [self.sdk.ooVooAVChat.VideoController stopTransmitVideo];
-    [self.sdk.ooVooAVChat.AudioController setRecordMuted:YES];
-    [self.sdk.ooVooAVChat.AudioController setPlaybackMute:YES];
+    [self.sdk.AVChat.VideoController stopTransmitVideo];
+    [self.sdk.AVChat.AudioController setRecordMuted:YES];
+    [self.sdk.AVChat.AudioController setPlaybackMute:YES];
 ```
 
 ## How do I start/stop receiving the video streams of remote participants in a conference?
@@ -292,8 +292,8 @@ When you are in a conference, you can decide whether to receive one, several, or
 ```objective-c
     - (void)didParticipantJoin:(id<ooVooParticipant>)participant user_data:(NSString *)user_data
     {
-        [self.sdk.ooVooAVChat.VideoController bindVideoRender:participant.participantID render:panel];
-        [self.sdk.ooVooAVChat.VideoController registerRemoteVideo:participant.participantID];
+        [self.sdk.AVChat.VideoController bindVideoRender:participant.participantID render:panel];
+        [self.sdk.AVChat.VideoController registerRemoteVideo:participant.participantID];
     }
 ```
 
@@ -310,12 +310,12 @@ Note that this API does not give you control over a remote participant's camera 
 To **stop** receiving a participant's video stream:
 
 ```objective-c
-    [self.sdk.ooVooAVChat.VideoController registerRemoteVideo:participant.participantID];
+    [self.sdk.AVChat.VideoController registerRemoteVideo:participant.participantID];
 ```
 
 ## How do I display a remote participant’s video in my app?
 To display a participant's video stream you should follow the same procedure as described in the previous section for displaying the preview video, with the only difference being that you should receive a participant id in the `OOVOOParticipantDidJoinNotification` notification you receive when a remote participant has connected to the conference.  You should connect this participant id to the desired `ooVooVideoRender` object.  
-<!--See the sequence diagram bellow.-->
+<!--See the sequence diagram bellow.--> 
 <!--![enter image description here](https://code.oovoo.com/native/docs/ios/9_flow2.png)-->
 
 ## Can I control the layout of the video windows?
@@ -325,60 +325,52 @@ In general video rendering is handled by object created within the ooVoo SDK. It
 The ooVoo SDK provides a single mixed audio stream for each video conference. To play the audio stream of the conference, you call the following API in the SDK.
 
 ```objective-c
-    [self.sdk.ooVooAVChat.AudioController setPlaybackMuted:NO];
+    [self.sdk.AVChat.AudioController setPlaybackMuted:NO];
 ```
 
 You can pause the audio in a conference.
 
 ```objective-c
-    [self.sdk.ooVooAVChat.AudioController setPlaybackMuted:YES];
+    [self.sdk.AVChat.AudioController setPlaybackMuted:YES];
 ```
 
 ## How do I select from multiple cameras?
 The ooVoo SDK allows you to enumerate a list of cameras available on your device, and select the desired one for video call. In case your device has only one camera it would be selected no matter what parameter you pass.
 
 ```objective-c
-    NSArray* arr_dev = [self.sdk.ooVooAVChat.VideoController getDevicesList];
+    NSArray* arr_dev = [self.sdk.AVChat.VideoController getDevicesList];
     ...
-    [self.sdk.ooVooAVChat.VideoController setConfig:strID forKey:ooVooVideoControllerConfigKeyCaptureDeviceId];
+    [self.sdk.AVChat.VideoController setConfig:strID forKey:ooVooVideoControllerConfigKeyCaptureDeviceId];
 ```
 
 ## How do I set camera video for a call?
-In the ooVoo SDK 4 video resolution levels are defined:
-
-•    Low – about 176x144 (some devices do not support this resolution so the closest one to this is selected)
-
-•    Medium – about 352*240 (some devices do not support this resolution so the closest one to this is selected)
-
-•    High – 640x480
-
-•    HD – 1280x720
+In the ooVoo SDK 4 video resolution levels are defined: •    Low – about 176x144 (some devices do not support this resolution so the closest one to this is selected) •    Medium – about 352*240 (some devices do not support this resolution so the closest one to this is selected) •    High – 640x480 •    HD – 1280x720
 
 Not all levels are available on every device, due to hardware capabilities. Some devices will only be capable of running at the "Low" resolution level. HD quality video is only available on devices which support hardware accelerated video encoding.
 
 ooVoo SDK provides API for setting the desired camera resolution level. Some examples are provided below.
 
 ```objective-c
-    [self.sdk.ooVooAVChat.VideoController setConfig:strID forKey:ooVooVideoControllerConfigKeyResolution];
+    [self.sdk.AVChat.VideoController setConfig:strID forKey:ooVooVideoControllerConfigKeyResolution];
 ```
 
 ## How can I use video filters within my app?
 Video filters provide overlays and other modifications to the user's video which allow you to modify the look of the video for special effects, fun, etc. You can get an array of all the available video filters using:
 
 ```objective-c
-    NSArray* arr_dev = [self.sdk.ooVooAVChat.VideoController getEffectsList];
+    NSArray* arr_dev = [self.sdk.AVChat.VideoController getEffectsList];
 ```
 
 Once you have a list of the available filters, you can turn on a specific video filter by calling:
 
 ```objective-c
-    [self.sdk.ooVooAVChat.VideoController setConfig:strID forKey:ooVooVideoControllerConfigKeyEffectId];
+    [self.sdk.AVChat.VideoController setConfig:strID forKey:ooVooVideoControllerConfigKeyEffectId];
 ```
 
 If you'd like to check which filter is currently active you can check:
 
 ```objective-c
-    [self.sdk.ooVooAVChat.VideoController getConfig:ooVooVideoControllerConfigKeyEffectId];
+    [self.sdk.AVChat.VideoController getConfig:ooVooVideoControllerConfigKeyEffectId];
 ```
 
 This will return an NSString with the name of the filter that is currently being used.
@@ -397,37 +389,29 @@ This returns a Boolean value of either YES or NO and will let you know if this c
 You can send messages by calling the controller in the following way and specifying which participantID you'd like to send a message to. If you'd like to send a message to all participants of a conference you can do so by calling the following with a nil participantID:
 
 ```objective-c
-    [self.sdk.ooVooAVChat.sendData  message: message completion:(CompletionHandler)completion;
+    [self.sdk.AVChat.sendData  message: message completion:(CompletionHandler)completion;
 ```
 
-The incaming messages you will received by ooVooAVChat delegate method
+The incaming messages you will received by AVChat delegate method
 
 ```objective-c
     -(void)didReceiveData:(NSString* )uid data:(NSData* )data;
 ```
 
 ## What events fired during a conference should my app pay attention to?
-The events your app may receive during a conference consist of the following categories:
-
-•    Conference status change: e.g., participant joins, leave the conference.
-
-•    Participant status change: e.g., participant's audio video stream turned on/off.
-
-•    Connection status change: e.g., reporting connection quality issues.
-
-•    Application status: e.g., ooVoo SDK errors. Check out the ooVoo SDK API documentation and header files for details.
+The events your app may receive during a conference consist of the following categories: •    Conference status change: e.g., participant joins, leave the conference. •    Participant status change: e.g., participant's audio video stream turned on/off. •    Connection status change: e.g., reporting connection quality issues. •    Application status: e.g., ooVoo SDK errors. Check out the ooVoo SDK API documentation and header files for details.
 
 ## How do I leave a conference?
 You can leave a conference by issuing the following API call:
 
 ```objective-c
-    [self.sdk.ooVooAVChat leave];
+    [self.sdk.AVChat leave];
 ```
 
 You will be notified if you have successfully disconnected from the conference.
 
 ```objective-c
-    -(void)didConferenceStateChange:(ooVooooVooAVChatState)state error:(sdk_error)code {
+    -(void)didConferenceStateChange:(ooVooAVChatState)state error:(sdk_error)code {
     ...
     }
 ```
@@ -477,13 +461,13 @@ To enable or bypass SSL certificates verification use property sslVerifyPeer. De
 To check if specific resolution would be available to display on all devices in conference call isResolutionSupported which returns YES if it enabled or NO in other case.
 
 ```objective-c
-    [[ooVooClient sharedInstance].ooVooAVChat isResolutionSupported:ResolutionLevelMed];
+    [[ooVooClient sharedInstance].AVChat isResolutionSupported:ResolutionLevelMed];
 ```
 
 ## How do I check if specific resolution level supported by my device?
 
 ```objective-c
-    [[ooVooClient sharedInstance].ooVooAVChat.VideoController.activeDevice isResultionSupported:ResolutionLevelMed] ;
+    [[ooVooClient sharedInstance].AVChat.VideoController.activeDevice isResultionSupported:ResolutionLevelMed] ;
 ```
 
 ## How do I change the output device for audio playback?

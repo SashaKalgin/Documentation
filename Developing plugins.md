@@ -78,7 +78,7 @@ Plugins are implemented through "factories." Create a factory which is used to r
 |			Method|		Description|
 |-------------|--------------------------------------|
 |`plugin::ptr create_plugin_instance(plugin_info::ptr info);`|Create your plugin instance.  Your plugin instance will be passed to the ooVoo sdk when the register process is triggered|
-|`sdk_error load(plugin_registrator::ptr registrator);`|Will be called by the SDK when a factory is registed/unregisted|
+|`sdk_error load(plugin_registrator::ptr registrator,const char* params);`|Will be called by the SDK when a factory is registed/unregisted|
 |`sdk_error unload();`|Will be called by the SDK when factory is registed/unregisted|
 |`const char* name() const;`|Provide factory info by implementing the following interfaces|
 |`const char* version() const;`|Provide factory info by implement the following interfaces|

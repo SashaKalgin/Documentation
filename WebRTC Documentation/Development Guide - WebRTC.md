@@ -15,21 +15,26 @@
 	- [Getting Started With the WebRTC SDK Package](#getting-started-with-the-webrtc-sdk-package)
 		- [What browsers are supported by the ooVoo WebRTC SDK?](#what-browsers-are-supported-by-the-oovoo-webrtc-sdk)
 		- [How do I setup the ooVoo WebRTC SDK in my development environment?](#how-do-i-setup-the-oovoo-webrtc-sdk-in-my-development-environment)
-		- [How do I deploy and run the ooVoo WebRTC sample app included in the SDK download package?](#how-do-i-deploy-and-run-the-oovoo-webrtc-sample-app-included-in-the-sdk-download-package)
+		- [How do I deploy and run the ooVoo WebRTC sample apps (Video and Text Chat) included in the SDK download package?](#how-do-i-deploy-and-run-the-oovoo-webrtc-sample-apps-video-and-text-chat-included-in-the-sdk-download-package)
+			- [Video Chat Sample](#video-chat-sample)
+			- [Text Chat Sample](#text-chat-sample)
 	- [Developing With the WebRTC SDK](#developing-with-the-webrtc-sdk)
 		- [How can I get Application ID and Application Token?](#how-can-i-get-application-id-and-application-token)
 		- [How do I connect my users in a video call?](#how-do-i-connect-my-users-in-a-video-call)
 		- [How do I Initialize the SDK/Client Side Login?](#how-do-i-initialize-the-sdkclient-side-login)
-		- [Client Side Login:](#client-side-login)
+		- [Client Side Login](#client-side-login)
 		- [Initialization](#initialization)
 		- [Conference Creation](#conference-creation)
-		- [How do I configure my local media stream?](#how-do-i-configure-my-local-media-stream)
 		- [How do I join a conference?](#how-do-i-join-a-conference)
 		- [How do I control my local audio stream in a conference?](#how-do-i-control-my-local-audio-stream-in-a-conference)
 		- [How do I control remote participants audio stream in a conference?](#how-do-i-control-remote-participants-audio-stream-in-a-conference)
 		- [How do I control my local video stream in a conference?](#how-do-i-control-my-local-video-stream-in-a-conference)
 		- [How do I control remote participants video stream in a conference?](#how-do-i-control-remote-participants-video-stream-in-a-conference)
 		- [How can I send messages while in a conference?](#how-can-i-send-messages-while-in-a-conference)
+		- [How do I leave a conference? You can disconnect from a conference by calling `avchatObj.leave():`](#how-do-i-leave-a-conference-you-can-disconnect-from-a-conference-by-calling-avchatobjleave)
+		- [How do I utilize client messaging?](#how-do-i-utilize-client-messaging)
+		- [How can I check if a message was sent/delivered?](#how-can-i-check-if-a-message-was-sentdelivered)
+		- [How can I send Push notifications?](#how-can-i-send-push-notifications)
 	- [Events](#events)
 		- [onConferenceStateChanged ( evt )](#onconferencestatechanged-evt-)
 		- [onParticipantJoined ( evt )](#onparticipantjoined-evt-)
@@ -37,9 +42,10 @@
 		- [onRemoteVideoStateChanged ( evt )](#onremotevideostatechanged-evt-)
 		- [onVideoRotate( evt )](#onvideorotate-evt-)
 		- [onRecvData ( evt )](#onrecvdata-evt-)
+		- [onReciveMessage ( evt )](#onrecivemessage-evt-)
+		- [onReciveAcknowledgement ( evt )](#onreciveacknowledgement-evt-)
 	- [Error Codes](#error-codes)
 	- [Server-to-Server Login](#server-to-server-login)
-
 <!-- /TOC -->
 
 ## Introduction
@@ -98,26 +104,28 @@ Currently the WebRTC Standard is supported by the following browsers:
 In order to get up and running just open the demo.html file in any text editor or development environment. It is a barebones starting point which you can build around and in it you will find the necessary javascript libraries already included. If you'd like not to use the demo.html file then make sure you include the following lines in your own app:
 
 ```javascript
-<script src="https://code.oovoo.com/webrtc/oovoosdk-2.0.0.min.js"></script>
+<script src="https://code.oovoo.com/webrtc/oovoosdk-2.1.0.min.js"></script>
 ```
 
 and make sure to define the necessary variables as is referenced in the demo.html file.
 
-### How do I deploy and run the ooVoo WebRTC sample app included in the SDK download package?
-To run the WebRTC sample app, just place the files in a directory that is accessible from the document root of your web server. Make sure you edit the demo.html file or your own code to include your AppID , APP Token & conference ID (roomID), the following parameters are optional, (get default value): frame per second, resolution level and your name. Please follow the example below:
+### How do I deploy and run the ooVoo WebRTC sample apps (Video and Text Chat) included in the SDK download package?
+To run the WebRTC sample apps, just place the files in a directory that is accessible from the document root of your web server. Make sure you edit the .html files or your own code to include your AppID , APP Token & conference ID (roomID), the following parameters are optional, (get default value): frame per second, resolution level and your name. Please follow the examples below.
+
+#### Video Chat Sample
 
 ````html
 <!DOCTYPE html>
+
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
     <title></title>
-```javascript
-<script src="https://code.oovoo.com/webrtc/oovoosdk-2.0.0.min.js"></script>
+    <script src="https://code.oovoo.com/webrtc/oovoosdk-2.1.0.min.js"></script>
     <script type="text/javascript">
-        var conference = null;
+        var avchatObj = null;
         var conferenceId = "OOVOO_WEB_RTC";
-        var appToken = "PUT APPLICATION TOKEN HERE";
+        var appToken = "PUT HERE APPLICATION TOKEN";
         var sessionToken = getQSParam("t");
         var participantId = getQSParam("pid");
 
@@ -129,7 +137,7 @@ To run the WebRTC sample app, just place the files in a directory that is access
 
             var redirectUrl = "url to send response with the session token"
             redirectUrl = location.href + "?pid=" + participantId;
-            ooVoo.API.connect({
+            ooVooClient.authorization({
                 token: appToken,
                 isSandbox: false,
                 userId: participantId,
@@ -137,36 +145,31 @@ To run the WebRTC sample app, just place the files in a directory that is access
             });
         }
         else {
-            ooVoo.API.init({
+            ooVooClient.connect({
+                userId: participantId,
                 userToken: sessionToken
-            }, onAPI_init);
+            }, onClientConnected);
         }
 
-        function onAPI_init(res) {
-            conference = ooVoo.API.Conference.init({ video: true, audio: true }, onConference_init);
+        function onClientConnected(res) {
+            //init conference
+            avchatObj = ooVooClient.AVChat.init({
+                video: true,
+                audio: true,
+                videoResolution: ooVooClient.VideoResolution["HIGH"],
+                videoFrameRate: new Array(5, 15)
+            }, onAVChatInit);
         }
-        function onConference_init(res) {
+
+        function onAVChatInit(res) {
             if (!res.error) {
                 //register to conference events
-                conference.onParticipantJoined = onParticipantJoined;
-                conference.onParticipantLeft = onParticipantLeft;
-                conference.onLocalStreamPublished = onStreamPublished;
-                conference.onConferenceStateChanged = onConferenceStateChanged;
-                conference.onRemoteVideoStateChanged = onRemoteVideoStateChanged
-
-                conference.setConfig({
-                    videoResolution: ooVoo.API.VideoResolution["HIGH"],
-                    videoFrameRate: new Array(5, 15)
-                }, function (res) {
-                    if (!res.error) {
-                        conference.join(conferenceId, participantId, sessionToken, "participant name", function (result) { });
-                    }
-                });
+                avchatObj.onParticipantJoined = onParticipantJoined;
+                avchatObj.onParticipantLeft = onParticipantLeft;
+                avchatObj.onConferenceStateChanged = onConferenceStateChanged;
+                avchatObj.onRemoteVideoStateChanged = onRemoteVideoStateChanged
+                avchatObj.join(conferenceId, participantId, "participant name", function (result) { });
             }
-        }
-
-        function onStreamPublished(stream) {
-            document.getElementById("localVideo").src = URL.createObjectURL(stream.stream);
         }
 
         function onParticipantLeft(evt) {
@@ -176,11 +179,16 @@ To run the WebRTC sample app, just place the files in a directory that is access
         }
         function onParticipantJoined(evt) {
             if (evt.stream && evt.uid != null) {
-                var videoElement = document.createElement("video");
-                videoElement.id = "vid_" + evt.uid;
-                videoElement.src = URL.createObjectURL(evt.stream);
-                videoElement.setAttribute("autoplay", true);
-                document.body.appendChild(videoElement);
+                if (evt.uid == participantId) { //me
+                    document.getElementById("localVideo").src = URL.createObjectURL(evt.stream);
+                }
+                else { //participants
+                    var videoElement = document.createElement("video");
+                    videoElement.id = "vid_" + evt.uid;
+                    videoElement.src = URL.createObjectURL(evt.stream);
+                    videoElement.setAttribute("autoplay", true);
+                    document.body.appendChild(videoElement);
+                }
             }
         }
         function onConferenceStateChanged(evt) {
@@ -201,7 +209,152 @@ To run the WebRTC sample app, just place the files in a directory that is access
 </body>
 </html>
 ````
+#### Text Chat Sample
+````html
 
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        input {
+            margin: 20px;
+        }
+
+            input[type=text] {
+                width: 300px;
+            }
+
+        textarea {
+            width: 300px;
+            height: 160px;
+            margin: 20px;
+        }
+
+        p {
+            border: solid 1px gray;
+            width: 450px;
+            height: 210px;
+            overflow-y: auto;
+        }
+    </style>
+    <script src="https://code.oovoo.com/webrtc/oovoosdk-2.1.0.min.js"></script>
+    <script type="text/javascript">
+        var appToken = "PUT HERE APPLICATION TOKEN";
+        var sessionToken = getQSParam("t");
+        var participantId = getQSParam("pid");
+
+        if (!sessionToken) {
+            //login to get session token
+            participantId = "participant uniqe id";
+            //for example (get random id)
+            participantId = Math.floor(Math.random() * 9999999999) + 1000000000;
+
+            var redirectUrl = "url to send response with the session token"
+            redirectUrl = location.href + "?pid=" + participantId;
+            ooVooClient.authorization({
+                token: appToken,
+                isSandbox: false,
+                userId: participantId,
+                callbackUrl: redirectUrl
+            });
+        }
+        else {
+            ooVooClient.connect({
+                userId: participantId,
+                userToken: sessionToken,
+                enableMesagging: true
+            }, onClientConnected);
+        }
+
+        function onClientConnected(res) {
+            //register to message events
+            ooVooClient.Messaging.onReciveMessage = onReciveMessage;
+            ooVooClient.Messaging.onReciveAcknowledgement = onReciveAcknowledgement;
+        }
+
+
+        function onReciveMessage(evt) {
+            var from = evt.from;
+            if (from == participantId) {//me
+                return;
+            }
+            ooVooClient.Messaging.sendAcknowledgement({ to: [evt.from], msg_id: evt.msg_id, state: ooVooClient.Messaging.AcknowledgeState.Delivered }, function (res) {
+                console.log(res);
+            })
+
+            document.getElementsByTagName("p")[0].innerText += from + ": " + evt.body + "\n";
+
+            ooVooClient.Messaging.sendAcknowledgement({ to: [evt.from], msg_id: evt.msg_id, state: ooVooClient.Messaging.AcknowledgeState.Read }, function (res) {
+                console.log(res);
+            })
+        }
+
+        function onReciveAcknowledgement(evt) {
+            var from = evt.from;
+            if (from == participantId) {
+                from = "me";
+            }
+
+            var txt = "";
+            if (evt.state == ooVooClient.Messaging.AcknowledgeState.Delivered) {
+                txt = "Message delivered to " + from + "\n";
+            }
+            if (evt.state == ooVooClient.Messaging.AcknowledgeState.Read) {
+                txt = "Message read by " + from + "\n";
+            }
+            document.getElementsByTagName("p")[0].innerText += txt;
+        }
+
+
+        function sendMessage() {
+            var message_body = document.getElementsByTagName('textarea')[0].value;
+            var user_ids = document.getElementById('uids').value.split(",");
+            if (!user_ids || !message_body) {
+                return;
+            }
+            ooVooClient.Messaging.send({ to: user_ids, body: message_body }, function (res) {
+                console.log(res);
+            });
+        }
+
+        function pushMessage() {
+            var message_body = document.getElementsByTagName('textarea')[0].value;
+            var user_ids = document.getElementById('uids').value.split(",");
+            if (!user_ids || !message_body) {
+                return;
+            }
+            ooVooClient.Push.send({ to: user_ids, body: message_body }, function (push_res) {
+                console.log(push_res);
+            });
+        }
+
+        function getQSParam(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                results = regex.exec(location.search);
+            return results === null ? "" : results[1].replace(/\+/g, " ");
+        }
+    </script>
+</head>
+<body>
+    <div style="float:left;">
+        <input id="uids" type="text" placeholder="type participant ids delimited by ','" />
+        <br />
+        <textarea placeholder="message here"></textarea>
+        <br />
+        <input type="button" value="Send Message" onclick="sendMessage()" />
+        <input type="button" value="Push Message" onclick="pushMessage()" />
+    </div>
+    <div style=" float: left; margin-left: 20px;">
+        Log:
+        <p></p>
+    </div>
+</body>
+</html>
+````
 Then browse to the page using either Chrome, Firefox Or Opera. [http://{your-website}/demo.html](http://{your-website}/demo.html)
 
 ## Developing With the WebRTC SDK
@@ -224,10 +377,10 @@ In ooVoo a video call is technically named as "conference". Each conference is i
 
 When trying to create or join a conference, you must first login in from either the server or client side to authenticate.
 
-Afterwards, the starting point for your app will be to call the initialization function `ooVoo.API.init` as described below. This method is used to initialize and setup the SDK. You won't need to re-use this method, but you may want to customize the parameters used. All other SDK related function calls must be called after this one, since they won't exist until you do.
+Afterwards, the starting point for your app will be to call the initialization function `ooVooClient.authorization` as described below. This method is used to initialize and setup the SDK. You won't need to re-use this method, but you may want to customize the parameters used. All other SDK related function calls must be called after this one, since they won't exist until you do.
 
-### Client Side Login:
-`ooVoo.API.connect (params)``
+### Client Side Login
+`ooVooClient.authorization(params)`
 
 Parameters:
 
@@ -242,7 +395,7 @@ callbackUrl | string  | The URL you will be redirect post login success. (this u
 Example:
 
 ```javascript
-  ooVoo.API.connect({
+  ooVooClient.authorization({
                 token: “your app token”,
                 isSandbox:true,
                 userId: “unique user ID”,
@@ -258,7 +411,7 @@ For examples of Server-to-Server login please click here:
 Function:
 
 ```javascript
-ooVoo.API.init(params,onInitComplete)
+ooVooClient.connect(params,onInitComplete)
 ```
 
 Parameters:
@@ -266,27 +419,30 @@ Parameters:
 Name           | Type         | Description                                                                                                                                                                                                                | Default
 -------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------
 params         | object       | A collection of initialization parameters that control the setup of the SDK.                                                                                                                                               | required
-userapp_token  | string       | Login using App Token(WEB) to retrieve user session token.<br/>Init from client side – using user session tokenYour application Token. If you don't have one find it in the App dashboard or go there to create a new app. | required
-onInitComplete | InitDelegate | A function that will be called once all data structures in the SDK are initialized; any code that should synchronize with the ooVoo/Conference session should be in onInitComplete().                                      | none, required
+userToken  | string       | Login using App Token(WEB) to retrieve user session token. Init from client side – using user session token Your application Token. If you don't have one find it in the App dashboard or go there to create a new app. | required
+userId | string | application unique participant ID | required
+enableMessaging | bool | Enable messaging | optional
+onInitComplete | InitDelegate | A function that will be called once all data structures in the SDK are initialized; any code that should synchronize with the ooVoo/Conference session should be in onInitComplete(). | none, required
 
 Example:
 
 ```javascript
-ooVoo.API.init {
-     userToken   : '{your-user-session-token}',
-  }}, function(res) {
+ooVooClient.connect({
+                userId: “unique user ID”,
+	              userToken: '{your-user-session-token}',
+                enableMesagging: true/false }, function(res) {
   if(!res.error) {
-     console.log("Api initialize succeeded, now you can initialize new conference");
+   console.log("Api initialize succeeded, now you can initialize new conference");
  }});
 ```
 
 ### Conference Creation
 Once you have initialized the SDK you are ready to create a conference object. The Conference Object provides connection, local stream publication and remote video stream registration  which will be used to manage the conference along with the local/remote AV streams and browser event handling.
 
-`ooVoo.API.Conference.init` creates a new conference object.
+`ooVooClient.AVChat.init` creates a new conference object.
 
 ```javascript
-var conferenceObj = ooVoo.API.Conference.init(params,onInitComplete)
+var avchatObj= ooVooClient.AVChat.init(params,onInitComplete)
 ```
 
 Parameters:
@@ -294,60 +450,38 @@ Parameters:
 Name           | Type         | Description                                                                                                                                               | Default
 -------------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------
 params         | object       | A collection of initialization parameters that control the setup of the Conference.                                                                       | Can be null
--audio         | boolean      | Enable local audio stream on the conference For audio only session set false in addition to :params = null in setConfig                                   | true
+-audio         | boolean      | Enable local audio stream on the conference For audio only session set false.                                   | true
 -video         | boolean      | Enable local video stream on the conference                                                                                                               | true
-onInitComplete | InitDelegate | A function that will be called once ooVoo.API is initialized; any code that should synchronize with the Conference session should be in onInitComplete(). | none, required
+videoResolution | enum | Sets the video resolution of the conference, any resolution up to the following resolutions are supported depending on device.<br/>Enum values:<br/><ul><li>ooVooClient.VideoResolution.NORMAL(352 x 288)</li><li>ooVooClient.VideoResolution.HIGH(640 x 480)</li><li>ooVooClient.VideoResolution.HD(1280 x 720)</li></ul> | required
+videoFrameRate | Int[] | Sets the minimum an maximum video frame rate of the conference. Value can be number between 5 and 30. | required
+onInitComplete | InitDelegate | A function that will be called once ooVooClient is initialized; any code that should synchronize with the Conference session should be in onInitComplete(). | none, required
 
 Example:
 
 ```javascript
-var conferenceObj = null;
-conferenceObj = ooVoo.API.Conference.init({ video: true, audio: true }, onConference_init);
-function onConference_init (res) {
+var avchatObj = null;
+avchatObj= ooVooClient.AVChat.init({
+                video: true,
+                audio: true,
+                videoResolution: ooVooClient.VideoResolution["HIGH"],
+                videoFrameRate: new Array(5, 15)
+            }, onAVChatInit);
+function onAVChatInit _init (res) {
 if(!res.error) {
 console.log("Conference initialize succeeded, now it’s a good time to register the conference events");
-   conferenceObj.onParticipantJoined = onParticipantJoined;
-   conferenceObj.onParticipantLeft = onParticipantLeft;
-   conferenceObj.onRecvData = onRecieveData;
-   conferenceObj.onConferenceStateChanged = onConferenceStateChanged
+   avchatObj.onParticipantJoined = onParticipantJoined;
+   avchatObj.onParticipantLeft = onParticipantLeft;
+   avchatObj.onRecvData = onRecieveData;
+   avchatObj.onConferenceStateChanged = onConferenceStateChanged
  }
 }
-```
-
-### How do I configure my local media stream?
-Once you have instantiated a Conference Object you can now use `Conference.setConfig()` to configure your local stream.
-
-```javascript
-conferenceObj.setConfig(params,onConfigComplete);
-```
-
-Parameters:
-
-Name             | Type           | Description                                                                                                                                                                                                                                                                                                                                                                                                                                            | Default
----------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------
-params           | object         | A collection of initialization parameters that control the setup of the Conference.                                                                                                                                                                                                                                                                                                                                                                    | null
-videoResolution  | enum           | Sets the video resolution of the conference, any resolution up to the following resolutions are supported depending on device.<br/>Enum values:<ul><li>ooVoo.API.VideoResolution.NORMAL(352\*288)</li><li>ooVoo.API.VideoResolution.HIGH(640\*480)</li><li>ooVoo.API.VideoResolution.HD(1280\*720)</li></ul>For audio only session, set `Null` in addition to: `videoFrameRate` & `audio:false` in: `ooVoo.API.Conference.init(params,onInitComplete)` | required
-videoFrameRate   | Int[]          | Sets the minimum an maximum video frame rate of the conference. Value can be number between 5 and 30. For audio only session, set `Null` in addition to: `videoResolution` & `audio:false` in `ooVoo.API.Conference.init(params,onInitComplete)`                                                                                                                                                                                                       | 15
-onConfigComplete | ConfigDelegate | A function that will be called once ooVoo.API is initialized; any code that should synchronize with the Conference session should be in onConfigComplete().                                                                                                                                                                                                                                                                                            | none, required
-
-Example:
-
-```javascript
-conferenceObj.setConfig({
-    videoResolution: ooVoo.API.VideoResolution.HIGH,
-    videoFrameRate: 15
-}, function(res) {
-  if(!res.error) {
-     console.log("Video Configuration succeeded, now all set to join a conference session");
- }
-});
 ```
 
 ### How do I join a conference?
 You can join a conference by calling `Conference.join()` as shown below. Calling this function will also trigger some events. We will discuss events more in detail later in this document.
 
 ```javascript
-conferenceObj.join(confid,uid,user_data);
+avchatObj.join(confid,uid,user_data);
 ```
 
 Parameters:
@@ -365,7 +499,7 @@ Triggered Events:
 Example:
 
 ```javascript
-conferenceObj.join('{unique-session-id}', '{unique-user-id}',
+avchatObj.join('{unique-session-id}', '{unique-user-id}',
 {data-to-pass}, function (res) {
   if(res.error) {
      console.log("Error occurred");
@@ -378,7 +512,7 @@ You can control the muting/unmuting of you audio in a conference and also check 
 
 Muting/Unmuting:
 
-`conferenceObj.setLocalAudioMute(bool);`
+`avchatObj.AudioController.setRecorderMute(bool);`
 
 Parameters:
 
@@ -388,7 +522,7 @@ Val  | boolean | true - muted, false - unmuted | required
 
 Checking Status:
 
-`conferenceObj.getLocalAudioMute();`
+`avchatObj.AudioController.isRecorderMuted();`
 
 Returns:
 
@@ -399,7 +533,7 @@ You can control the muting/unmuting of a remote participants audio in a conferen
 
 Muting/Unmuting:
 
-`conferenceObj.setRemoteAudioMute(bool);`
+`avchatObj.AudioController.setPlaybackMute(bool);`
 
  Parameters:
 
@@ -409,7 +543,7 @@ val  | boolean true - muted, false - unmuted | required    |
 
 Checking Status:
 
-`conferenceObj.getRemoteAudioMute();`
+`avchatObj.AudioController.isPlaybackMuted();`
 
 Returns:
 
@@ -418,21 +552,21 @@ Boolean, true - muted, false – unmuted
 ### How do I control my local video stream in a conference?
 You can control the publishing/unpublishing of your video in a conference and also check the status of your own video in a conference using the following functions:
 
-Publish video:  `conferenceObj.playLocalVideo();`
+Start video:  `avchatObj.VideoController.startTransmit();`
 
 Triggered Events:
 - onRemoteVideoStateChanged
 
-Stop publishing:
+Stop video:
 
-`conferenceObj.stopLocalVideo();`
+`avchatObj.VideoController.stopTransmit();`
 
 Triggered Events:
 - onRemoteVideoStateChanged
 
 Check Status:
 
-`conferenceObj.getLocalVideoState();`
+`avchatObj.VideoController.isTransmitted();`
 
 Returns Boolean, true - stopped, false - play
 
@@ -441,7 +575,7 @@ You can control the publishing/unpublishing of participants video in a conferenc
 
 Start Video:
 
-`conferenceObj.registerRemoteVideo(uid);`
+`avchatObj.VideoController.registerRemote(uid);`
 
 Parameters:
 
@@ -454,7 +588,7 @@ uid  | string | Application unique participant id | required
 
 Stop Video:
 
-`conferenceObj.unRegisterRemoteVideo(uid);`
+`avchatObj.VideoController.unRegisterRemote(uid);`
 
 Parameters:
 
@@ -466,22 +600,107 @@ Triggered Events:
 - onRemoteVideoStateChanged
 
 ### How can I send messages while in a conference?
-You can send messages while in a conference by calling the `Conference.sendData()` function.
+You can send messages while in a conference by calling the `avchatObj.sendData()` function.
 
-`conferenceObj.sendData(uid,to_uid,data);`
+`avchatObj.sendData(uid,to_uid,data);`
 
-Parameters: |Name|Type|Description|Default| |-|-|-|-| |uid|String|Application unique sender id|required| |to_uid|String|Application unique participant id or  "" (empty string) value to send for all participants|required| |data|String|Data to Send|required
+Parameters:
+
+Name | Type   | Description                       | Default
+---- | ------ | --------------------------------- | --------
+uid|String|Application unique sender id|required
+to_uid|String|Application unique participant id or  "" (empty string) value to send for all participants|required
+data|String|Data to Send|required
 
 Triggered Events:
 - onRecvData
 
-How do I leave a conference? You can disconnect from a conference by calling `Conference.disconnect()`:
+### How do I leave a conference? You can disconnect from a conference by calling `avchatObj.leave():`
 
-`conferenceObj.disconnect();`
+`avchatObj.leave();`
 
 Triggered Events:
 - onConferenceStateChanged
 - onParticipantLeft
+
+### How do I utilize client messaging?
+`ooVooClient.Messaging.send(params, onMessageSent)`
+
+Parameters:
+
+Name | Type   | Description                       | Default
+---- | ------ | --------------------------------- | --------
+params | object |  A collection of initialization parameters that control the setup of the SDK. |
+to | array | |
+body | string | |
+onMessageSent | function |  |
+
+Triggered Events:
+- ooVooClient.Messaging.onReciveMessage
+
+Example:
+
+```javascript
+ooVooClient.Messaging.send({ to: user_ids, body: mesaage_body }, function (res) {
+	console.log(“message sent and return list of users that got the message or was offline”);
+
+});
+```
+
+### How can I check if a message was sent/delivered?
+
+`ooVooClient.Messaging.sendAcknowledgement(params, onAcknowledgementSent)
+`
+
+Parameters:
+
+Name | Type   | Description                       | Default
+---- | ------ | --------------------------------- | --------
+params | object |  A collection of initialization parameters that control the setup of the SDK. |
+to | array | |
+msg_id | string | |
+state | ooVooClient.Messaging.AcknowledgeState| ooVooClient.Messaging.AcknowledgeState.Delivered<br/>ooVooClient.Messaging.AcknowledgeState.Read|
+onAcknowledgementSent | function | |
+
+Triggered Events:
+
+- ooVooClient.Messaging.onReciveAcknowledgement
+
+Example:
+
+```javascript
+ooVooClient.Messaging.sendAcknowledgement({ to: user_ids, msg_id: mesaage_ID, state: acknowledge_state}, function (res) {
+console.log(“Acknowledge sent”);
+
+});
+```
+
+### How can I send Push notifications?
+
+`ooVooClient.Push.send(params, onPushSent)
+`
+Parameters:
+
+Name | Type   | Description                       | Default
+---- | ------ | --------------------------------- | --------
+params | object |  A collection of initialization parameters that control the setup of the SDK. |
+to | array | |
+body | string | |
+property | string | Free text – up to 1K (together with body)|
+onPushSent | function | Result (success = 0)|
+
+Triggered Events:
+- mobile events
+
+Example:
+```javascript
+ooVooClient.Push.send({ to: user_ids, body: mesaage_body }, function (res) {
+console.log(“push message sent”);
+
+});
+```
+
+
 
 ## Events
 The events your app may receive during a conference consist of the following categories:
@@ -500,11 +719,13 @@ Parameters:
 Name          | Type   | Description
 ------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 evt           | object | Contains information about the event
-evt.type     | Enum   | <ul><li>ooVoo.API.ConferenceStateEventType.ACCESS_ACCEPTED<br/>(Indicates user has agreed to open his camera and microphone)</li><li>ooVoo.API.ConferenceStateEventType.JOINED<br/>(Joined to conference)</li><li>ooVoo.API.ConferenceStateEventType.ACCESS_DENIED<br/>(Indicates user has denied to open his camera and microphone.)</li><li>ooVoo.API.ConferenceStateEventType.CONNECTED<br/>(Connected to conference server.)</li><li>ooVoo.API.ConferenceStateEventType.DISCONNECTED<br/>(Disconnected form conference on connection)</li><li>ooVoo.API.ConferenceStateEventType.RECONNECTING<br/>(Reconnecting to conference server.)</li><li>ooVoo.API.ConferenceStateEventType.RECONNECTED<br/>(Reconnected to conference server.)</li><li>ooVoo.API.ConferenceStateEventType.DEVICE_NOT_FOUND<br/>(Indicates that a selected cam/mic device has not been found)</li><li>ooVoo.API.ConferenceStateEventType.CAM_RES_NOT_SUPPORTED<br/>(Selected camera resolution is not supported by the hardware)</li></ul>
+evt.type     | Enum   | <ul><li>ooVooClient.ConferenceStateType.ACCESS_ACCEPTED<br/>(Indicates user has agreed to open his camera and microphone)</li><li>ooVooClient.ConferenceStateType.JOINED<br/>(Joined to conference)</li><li>ooVooClient.ConferenceStateType.ACCESS_DENIED<br/>(Indicates user has denied to open his camera and microphone.)</li><li>ooVooClient.ConferenceStateType.CONNECTED<br/>(Connected to conference server.)</li><li>ooVooClient.ConferenceStateType.DISCONNECTED<br/>(Disconnected form conference on connection)</li><li>ooVooClient.ConferenceStateType.RECONNECTING<br/>(Reconnecting to conference server.)</li><li>ooVooClient.ConferenceStateType.RECONNECTED<br/>(Reconnected to conference server.)</li><li>ooVooClient.ConferenceStateType.DEVICE_NOT_FOUND<br/>(Indicates that a selected cam/mic device has not been found)</li><li>ooVooClient.ConferenceStateType.CAM_RES_NOT_SUPPORTED<br/>(Selected camera resolution is not supported by the hardware)</li></ul>
 evt.errorCode | string | Disconnect reason
 
 ### onParticipantJoined ( evt )
-Indicates that participant has joined to the conference Parameters:
+Indicates that participant has joined to the conference
+
+Parameters:
 
 Name          | Type   | Description
 ------------- | ------ | ------------------------------------
@@ -558,6 +779,27 @@ evt      | object | Contains information about the event
 evt.uid  | string | From participant id
 evt.data | string | Sent application data
 
+### onReciveMessage ( evt )
+Indicates the incoming text, sent by remote participant
+
+Parameters:
+
+Name     | Type   | Description
+-------- | ------ | ------------------------------------
+evt | object | Contains information about the event
+evt.from | string | From participant id
+evt.body | string | Message body
+evt.msg_id | string | Message ID
+
+### onReciveAcknowledgement ( evt )
+Name     | Type   | Description
+-------- | ------ | ------------------------------------
+evt | object | Contains information about the event
+evt.from | string | From participant id
+evt.state | string | Message State:<br/>`ooVooClient.Messaging.AcknowledgeState.Delivered`<br/>`ooVooClient.Messaging.AcknowledgeState.Read`
+evt.msg_id | string | Message ID
+
+
 ## Error Codes
 The following is a list of error messages you may encounter:
 
@@ -568,35 +810,18 @@ Code              | Group                      | Name                           
 -30xxx            | **Authentication Failed**  |                                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 -30000            | Authentication             | AuthenticationFailed                          | Login                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 -30001            | Authentication             | InvalidToken                                  | Session Token not provided or invalid<br/><ul><li>Token was not provided</li><li>Token is invalid (or expired, blocked etc) and a new one needs to be requested.                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | Renew Token or Login required
-~~-30002~~        | ~~Authentication~~         | ~~Expired token~~                             | ~~Token has expired and a new one needs to be requested~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | Deprecated. Use -30001
 -30003            | Authentication             | InvalidAvsKey                                 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 -30004            | Authentication             | BlockedAppId                                  | ApplicationId is blocked                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 -30005            | Authentication             | InvalidEnvironment                            | Application reached wrong URL environment                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 -35xxx            | **Authorization Failed**   |                                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 -35001            | Authorization Failed       | NotAuthorized                                 | Authentication succeeded, but Application does not have permission for this action.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-~~-36001~~        | ~~Authorization Failed~~   | ~~ThrottledDown~~                             | ~~User is on blacklist by AppId or ip~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | mistake
 -40xxx<br/>-50xxx | Bad Request                |                                               |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 -40000            | Bad Request                | BadRequest                                    | <ul><li>The request could not be understood by the application due to malformed syntax or required parameter was missing.</li><li>This is also used if the resource ID in the path is incorrect or parameter in QueryString is incorrect or missing.</li><li>The application is refusing to process the request because the content type of the media is in a format not supported by the requested resource for the requested method.</li><li>Media not supplied in the request or empty.</li><li>The application is refusing to process a request because the request media is larger than allowed for given content type.</li></ul> |
-~~-40001~~        | ~~Bad Request~~            | ~~No content found~~                          | ~~No content found in a body of the request (POST method only).~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Deprecated.<br/>Use -40000
-~~-40002~~        | ~~Bad Request~~            | ~~Missing required parameter in payload.~~    | ~~No parameter found in a body of the request (POST method only).~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Deprecated.<br/>Use -40000
-~~-40003~~        | ~~Bad Request~~            | ~~Missing required parameter in QueryString~~ | ~~No parameter found in a QueryString of the request.~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | Deprecated.<br/>Use -40000
-~~-40004~~        | ~~Bad Request~~            | ~~Invalid value in payload~~                  | ~~One of the arguments provided to method is not valid~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | Deprecated.<br/>Use -40000
-~~-40005~~        | ~~Bad Request~~            | ~~Invalid value in QueryString~~              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Deprecated.<br/>Use -40000
 -50000            | Not Found                  | InvalidApiVersion                             | Requested API version not supported                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 -50001            | Not Found                  | InvalidResource                               | The resource not was found.<br/>Example: given ooVooId doesn't exist.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
--50002            | Not Found                  | InvalidEndpoint                               | Example: trying to access the wrong URI.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-~~-60000~~        | ~~Operation Failed~~       | ~~Requested Entity too large~~                |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Deprecated.<br/>Use -40000
--60001            | Operation Failed           | InvalidOperation                              | Invalid operation                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+-50002            | Not Found                  | InvalidEndpoint                               | Example: trying to access the wrong URI.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 -601XX            | Operation Failed           | Invalid content type of media                 | Error code pattern for media issues.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-~~-60100~~        | ~~Operation Failed~~       | ~~Invalid content type of media~~             | ~~The content type of the media could not be recognized by the application.~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Deprecated.<br/>Use -40000
-~~-60101~~        | ~~Operation Failed~~       | ~~Unsupported Content type of media~~         | ~~The application is refusing to process the request because the content type of the media is in a format not supported by the requested resource for the requested method.~~                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Deprecated.<br/>Use -40000
-~~-60102~~        | ~~Operation Failed~~       | ~~Media too large~~                           | ~~The application is refusing to process a request because the request media is larger than allowed for given content type.~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Deprecated.<br/>Use -40000
-~~-60103~~        | ~~Operation Failed~~       | ~~No media supplied~~                         | ~~Media not supplied in the request or empty.~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Deprecated.<br/>Use -40000
 -602XX            | Operation Failed           | Invalid content type of PostFrame             | Error code pattern for PostFrame issues.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-~~-60200~~        | ~~Operation Failed~~       | ~~Invalid content type of PostFrame~~         | ~~The content type of the PostFrame could not be recognized by the application.<br/> (Methods with post_frame only).<br/>Will be used in future versions, not in use now.~~                                                                                                                                                                                                                                                                                                                                                                                                                                                            | Deprecated.<br/>Use -40000
-~~-60201~~        | ~~Operation Failed~~       | ~~Unsupported content type of PostFrame~~     | ~~The application is refusing to process the request because the content type of the PostFrame is in a format not supported by the requested resource for the requested method.<br/>(Methods with post_frame only).~~                                                                                                                                                                                                                                                                                                                                                                                                                  | Deprecated.<br/>Use -40000
-~~-60202~~        | ~~Operation Failed~~       | ~~PostFrame too large~~                       | ~~The application is refusing to process a request because the request PostFrame is larger than allowed for given content type.<br/>(Methods with post_frame only).~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | Deprecated.<br/>Use -40000
-~~-60203~~        | ~~Operation Failed~~       | ~~No PostFrame supplied~~                     | ~~PostFrame not supplied in the request or empty.<br/>(Methods with post_frame only).~~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | Deprecated.<br/>Use -40000
 -603XX            | Operation Failed           | Invalid Business case                         | Invalid business cases                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 -60301            | Operation Failed           | GroupsLimitExceeded                           | The given user has created limit number of groups                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 -60302            | Operation Failed           | UserIdNotAvailable                            | User trying to perform registration with ooVooId already exists                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
