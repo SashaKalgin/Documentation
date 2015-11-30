@@ -175,71 +175,143 @@ func authorize()
 If you have different views of the UI when you login again you should perform:
 
 ```objective-c
-  self.sdk = ooVooClient.sharedInstance()
-  self.sdk.AVChat!.delegate=self;
-  self.sdk.AVChat.VideoController.delegate = self;
-  self.sdk.AVChat.VideoController.bindVideoRender(nil, render: viewPanel)
-  self.sdk.AVChat.VideoController.openCamera()
+ import UIKit
 
-  func actJoin(){
-
-        if self.navigationItem.rightBarButtonItem?.title == "Join"
+class VideoConference: UIViewController,ooVooAVChatDelegate,ooVooVideoControllerDelegate{
+    
+    // declare objects and variable
+    var sdk : ooVooClient!
+    var isConnectedToVideoConference : Bool = false  // are we connected to video conference ?
+    let videoPanel = ooVooVideoPanel()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.addVideoPanelOnView()
+        initializeAVChat()
+        addNavigationRightButton()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        self.navigationItem.title="Video Conference"
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    // add the ooVoo Videopanel View On Self.View
+    func addVideoPanelOnView()
+    {
+        videoPanel.frame=self.view.frame
+        self.view.addSubview(videoPanel)
+    }
+    
+    // initialize Audio and Video sdk
+    func initializeAVChat(){
+        self.sdk = ooVooClient.sharedInstance()
+        self.sdk.AVChat!.delegate=self;
+        self.sdk.AVChat.VideoController.delegate = self;
+        // viewPanel is an sdk view object for displaying the video
+        // viewPanel can be allocated by code or with IBOutlet reference
+        self.sdk.AVChat.VideoController.bindVideoRender(nil, render: videoPanel)
+        self.sdk.AVChat.VideoController.openCamera() // -> will return  didCameraStateChange Delegate 
+    }
+    
+    // create a join confference button on the navigation bar ( right button )
+    func addNavigationRightButton(){
+        let btn = UIBarButtonItem(title: "Join", style: .Plain, target: self, action: "actJoin")
+        self.navigationItem.rightBarButtonItem=btn
+    }
+    
+    // click on navigation bar right button
+    func actJoin()
+    {
+        
+        if (isConnectedToVideoConference == false)
         {
-            self.sdk.AVChat.join("ConferenceID", user_data: "DisplayName");
+            self.navigationItem.rightBarButtonItem?.enabled=false;
+            self.sdk.AVChat.join("ConferenceID", user_data: "DisplayName"); // connect conference
         }
         else
         {
-            self.sdk.AVChat.leave();
+            self.navigationItem.rightBarButtonItem?.enabled=false;
+            self.sdk.AVChat.leave(); // disconnect conference
         }
     }
-
-
+    
+    
     // oovooAVChat Delegate
-
+    
     func didParticipantJoin(participant: ooVooParticipant!, user_data: String!) {
-
+        
     }
-
+    
     func didParticipantLeave(participant: ooVooParticipant!) {
-
+        
     }
-
+    
+    // after calling the join method in " func actJoin " this method return from the delegate
     func didConferenceStateChange(state: ooVooAVChatState, error code: sdk_error) {
+        
+        
+        if(state.rawValue == ooVooAVChatState.Joined.rawValue && code.rawValue == sdk_error.OK.rawValue )
+        { // connection success
+            self.isConnectedToVideoConference=true
+            self.navigationItem.rightBarButtonItem?.title = "Leave" ;
+            self.navigationItem.rightBarButtonItem?.enabled=true;
+        }
+        else
+        { // leave or connection fail for some reason
+            self.isConnectedToVideoConference=false
+            self.navigationItem.rightBarButtonItem?.title = "Join" ;
+            self.navigationItem.rightBarButtonItem?.enabled=true;
+        }
+        
     }
-
+    
     func didReceiveData(uid: String!, data: NSData!) {
-
+        
     }
-
+    
     func didConferenceError(code: sdk_error) {
-
+        
     }
-
+    
     func didNetworkReliabilityChange(score: NSNumber!) {
-
+        
     }
-
+    
     func didSecurityState(is_secure: Bool) {
-
+        
     }
-
+    
+    
     // ooVooVideoControllerDelegate
-
+    
     func didRemoteVideoStateChange(uid: String!, state: ooVooAVChatRemoteVideoState, width: Int32, height: Int32, error code: sdk_error) {
-
+        
     }
-
+    
     func didCameraStateChange(state: ooVooDeviceState, devId: String!, width: Int32, height: Int32, fps: Int32, error code: sdk_error) {
-
+        
+        if(state.rawValue == ooVooAVChatState.Joined.rawValue && code.rawValue == sdk_error.OK.rawValue )
+        {
+            // camera opened
+        }
+        else
+        {
+            // camera close or some error
+        }
+        
     }
-
+    
     func didVideoTransmitStateChange(state: Bool, devId: String!, error code: sdk_error) {
-
-        self.navigationItem.rightBarButtonItem?.title = state ? "Leave" : "Join";
-
     }
-
+    
     func didVideoPreviewStateChange(state: Bool, devId: String!, error code: sdk_error) {
-
+        
     }
+    
+}
 ```
