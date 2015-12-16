@@ -41,7 +41,7 @@
 		- [onParticipantLeft ( evt )](#onparticipantleft-evt-)
 		- [onRemoteVideoStateChanged ( evt )](#onremotevideostatechanged-evt-)
 		- [onVideoRotate( evt )](#onvideorotate-evt-)
-		- [onRecvData ( evt )](#onrecvdata-evt-)
+		- [onReceiveData ( evt )](#onreceivedata-evt-)
 		- [onReciveMessage ( evt )](#onrecivemessage-evt-)
 		- [onReciveAcknowledgement ( evt )](#onreciveacknowledgement-evt-)
 	- [Error Codes](#error-codes)
@@ -471,7 +471,7 @@ if(!res.error) {
 console.log("Conference initialize succeeded, now it’s a good time to register the conference events");
    avchatObj.onParticipantJoined = onParticipantJoined;
    avchatObj.onParticipantLeft = onParticipantLeft;
-   avchatObj.onRecvData = onRecieveData;
+   avchatObj.onReceiveData = onRecieveData;
    avchatObj.onConferenceStateChanged = onConferenceStateChanged
  }
 }
@@ -613,7 +613,7 @@ to_uid|String|Application unique participant id or  "" (empty string) value to s
 data|String|Data to Send|required
 
 Triggered Events:
-- onRecvData
+- onReceiveData
 
 ### How do I leave a conference? You can disconnect from a conference by calling `avchatObj.leave():`
 
@@ -768,7 +768,7 @@ evt.uid | string | Application unique participant id
 evt.deg | int    | The Rotation Angle
 evt.mrr | bool   | Is Mirrored
 
-### onRecvData ( evt )
+### onReceiveData ( evt )
 Indicates the incoming data, sent by remote participant  
 
 Parameters:
