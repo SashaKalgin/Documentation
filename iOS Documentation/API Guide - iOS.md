@@ -80,7 +80,7 @@ Table Of Contents
 		- [setActiveDevice](#setactivedevice)
 		- [delegate](#delegate)
 	- [ooVooVideoControllerDelegate Protocol](#oovooVideoControllerdelegate-protocol)
-		- [didCameraStateChanged](#didcamerastatechanged)
+		- [didCameraStateChange](#didcamerastatechange)
 		- [didVideoTransmitStateChanged](#didvideotransmitstatechanged)
 		- [didRemoteVideoStateChanged](#didremotevideostatechanged)
 		- [didVideoPreviewStateChanged](#didvideopreviewstatechanged)
